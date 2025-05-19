@@ -1,0 +1,36 @@
+<div class="container my-4">
+  <h3 class="alert alert-dark text-center">
+    Sistema de Gestion para el Arma de Ingenieros
+  </h3>
+
+  <div class="row">
+    <div class="col-2">
+      <div class="sidebar sticky-top">
+        <side-menu></side-menu>
+      </div>
+    </div>
+
+    <div class="col-10">
+      <h3 class="alert alert-success text-center">{{ title }}</h3>
+
+      <maquina
+        [maquinas]="maquinas"
+        (idMaquinaEmitter)="removeMaquina($event)"
+        (selectedMaquinaEventEmitter)="setSelectedMaquina($event)"
+      />
+      <button (click)="setNew()" class="btn btn-success m-2">
+        <!-- {{ open ? "Cerrar Form" : "Abrir Form" }} -->Nueva maquina
+      </button>
+    </div>
+  </div>
+</div>
+
+@if(open){
+<div class="abrir-modal animacion fadeIn">
+  <maquina-form
+    [maquina]="maquinaSelected"
+    (newMaquinaEventEmitter)="addMaquina($event)"
+    (openEventEmitter)="setOpen()"
+  />
+</div>
+}
