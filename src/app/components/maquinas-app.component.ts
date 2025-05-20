@@ -5,11 +5,12 @@ import { MaquinaComponent } from './maquina/maquina.component';
 import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
 import Swal from 'sweetalert2';
 import { SideMenuComponent } from './side-menu/side-menu.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'maquinas-app',
   standalone:true,
-  imports: [MaquinaComponent, MaquinaFormComponent, SideMenuComponent],
+  imports: [RouterOutlet ,MaquinaComponent, MaquinaFormComponent, SideMenuComponent],
   templateUrl: './maquinas-app.component.html',
   styleUrls:['./maquinas-app.component.css'],
 })

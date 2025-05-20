@@ -1,17 +1,17 @@
 <div class="list-group">
   <a
-    href="#"
     class="list-group-item list-group-item-action list-group-item-dark"
-    >Panel principal</a
-  >
+    [routerLink]="['/home']"
+    >Panel principal
+  </a>
   <a
     href="#"
     class="list-group-item list-group-item-action list-group-item-dark"
     >Tipo de maquinaria</a
   >
   <a
-    href="#"
     class="list-group-item list-group-item-action list-group-item-dark"
+    [routerLink]="['/maquinas']"
     >Maquinaria</a
   >
   <a
@@ -41,4 +41,9 @@
     Notificaciones
     <span class="badge text-bg-danger rounded-pill">2</span>
   </a>
+  <a
+    href="#"
+    class="list-group-item list-group-item-action list-group-item-dark"
+    >Salir</a
+  >
 </div>

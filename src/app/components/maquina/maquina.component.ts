@@ -24,5 +24,6 @@ export class MaquinaComponent {
   onSelectedMaquina(maquina:Maquina):void{
     this.selectedMaquinaEventEmitter.emit(maquina);
   }
+  newMaquina(){}
 
 }
