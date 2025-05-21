@@ -1,0 +1,21 @@
+import {Component} from '@angular/core';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+
+
+@Component({
+  selector: 'usuarios',
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule],
+  templateUrl: './usuarios.component.html',
+  styleUrl: './usuarios.component.css'
+})
+export class UsuariosComponent {
+  displayedColumns: string[] = ['Grado', 'Nombre', 'Unidad', 'Rol'];
+  dataSource = new MatTableDataSource();
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+}

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { MaquinaComponent } from './components/maquina/maquina.component';
 import { MaquinaFormComponent } from './components/maquina-form/maquina-form.component';
 import { HomeComponent } from './components/home/home.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
 
 export const routes: Routes = [
     {
@@ -17,8 +18,8 @@ export const routes: Routes = [
         path: 'home',
         component: HomeComponent,
     },
-    // {
-    //     path: 'maquinas/edit/:id',
-    //     component: MaquinaFormComponent,
-    // },
+    {
+        path: 'usuarios',
+        component: UsuariosComponent,
+    },
 ];

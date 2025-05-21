@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Maquina } from '../../models/maquina';
-import { NgFor } from '@angular/common';
+
 
 @Component({
   selector: 'maquina-form',
@@ -23,10 +23,9 @@ export class MaquinaFormComponent {
     
     if(maquinaForm.valid){
       this.newMaquinaEventEmitter.emit(this.maquina);
-      console.log(this.maquina);
     }
     maquinaForm.reset();
-    maquinaForm.resetForm();
+    this.onOpen();
   }
   
   onOpen(){
