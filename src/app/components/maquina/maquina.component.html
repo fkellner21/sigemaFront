@@ -1,3 +1,4 @@
+<div class="alert alert-dark text-center">Listado de equipos</div>
 @if(maquinas.length==0){
 <div class="alert alert-warning">No hay registros</div>
 }@else{
@@ -27,7 +28,7 @@
         </button>
       </td>
       <td>
-        <button class="btn btn-info" (click)="onSelectedMaquina(una)">
+        <button class="btn btn-info" (click)="setSelectedMaquina(una)">
           Modificar
         </button>
       </td>
@@ -36,6 +37,13 @@
   </tbody>
 </table>
 }
-<button (click)="newMaquina()" class="btn btn-success m-2">
-  Nueva maquina
-</button>
+<button (click)="setNew()" class="btn btn-success m-2">Nueva maquina</button>
+@if(open){
+<div class="abrir-modal animacion fadeIn">
+  <maquina-form
+    [maquina]="maquinaSelected"
+    (newMaquinaEventEmitter)="addMaquina($event)"
+    (openEventEmitter)="setOpen()"
+  />
+</div>
+}
