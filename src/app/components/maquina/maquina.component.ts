@@ -3,11 +3,14 @@ import { Maquina } from '../../models/maquina';
 import { MaquinaService } from '../../services/maquina.service';
 import Swal from 'sweetalert2';
 import { MaquinaFormComponent } from '../maquina-form/maquina-form.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'maquina',
   standalone:true,
-  imports: [MaquinaFormComponent],
+  imports: [MaquinaFormComponent, MatFormFieldModule, MatInputModule, MatTableModule],
   templateUrl: './maquina.component.html',
 })
 export class MaquinaComponent implements OnInit{
@@ -15,6 +18,8 @@ export class MaquinaComponent implements OnInit{
   maquinas:Maquina[]=[];
   maquinaSelected: Maquina = new Maquina;
   open:boolean=false;
+  dataSource!: MatTableDataSource<any>;
+
 
   @Output() idMaquinaEmitter = new EventEmitter();
 
@@ -25,6 +30,7 @@ export class MaquinaComponent implements OnInit{
   }
   ngOnInit(): void {
     this.service.findAll().subscribe(maquinas => this.maquinas = maquinas);
+    this.dataSource = new MatTableDataSource(this.maquinas);
   }
 
   onRemoveMaquina(id:number):void{
@@ -39,6 +45,7 @@ export class MaquinaComponent implements OnInit{
     }).then((result) => {
     if (result.isConfirmed) {
       this.maquinas = this.maquinas.filter(maquina => maquina.id != id);
+      this.dataSource.data= this.maquinas;
         Swal.fire({
           title: "Eliminado!",
           text: "Borrado.",
@@ -59,6 +66,7 @@ export class MaquinaComponent implements OnInit{
           maquina.id=id+1;
           this.maquinas=[... this.maquinas, {...maquina}];
         }
+        this.dataSource.data = this.maquinas;
         Swal.fire({
         title: "Guardado!",
         text: "Maquina guardada!",
@@ -76,5 +84,13 @@ export class MaquinaComponent implements OnInit{
   }
     setOpen(){
     this.open=!this.open;
+  }
+
+  displayedColumns: string[] = ['Matricula', 'Marca', 'Modelo', 'Capacidad','Eliminar','Modificar' ];
+
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

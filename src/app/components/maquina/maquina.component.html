@@ -1,43 +1,82 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+/>
+
 <div class="alert alert-dark text-center">Listado de equipos</div>
-@if(maquinas.length==0){
-<div class="alert alert-warning">No hay registros</div>
-}@else{
-<table class="table table-striped table-hover">
-  <Thead class="table-dark">
-    <tr>
-      <th>Id</th>
-      <th>Matricula</th>
-      <th>Marca</th>
-      <th>Modelo</th>
-      <th>Capacidad</th>
-      <th>Eliminar</th>
-      <th>Modificar</th>
-    </tr>
-  </Thead>
-  <tbody>
-    @for (una of maquinas; track $index) {
-    <tr>
-      <td>{{ una.id }}</td>
-      <td>{{ una.matricula }}</td>
-      <td>{{ una.marca }}</td>
-      <td>{{ una.modelo }}</td>
-      <td>{{ una.capacidad }}</td>
-      <td>
-        <button class="btn btn-danger" (click)="onRemoveMaquina(una.id)">
-          Eliminar
-        </button>
-      </td>
-      <td>
-        <button class="btn btn-info" (click)="setSelectedMaquina(una)">
-          Modificar
-        </button>
-      </td>
-    </tr>
-    }
-  </tbody>
+
+<div class="row">
+  <div class="col-4">
+    <mat-form-field>
+      <mat-label>Buscar</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input />
+    </mat-form-field>
+  </div>
+</div>
+<table
+  mat-table
+  [dataSource]="dataSource"
+  class="mat-elevation-z8 table table-striped table-hover"
+>
+  <!-- Position Column -->
+  <ng-container matColumnDef="Matricula">
+    <th mat-header-cell *matHeaderCellDef>Matricula</th>
+    <td mat-cell *matCellDef="let element">{{ element.matricula }}</td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="Marca">
+    <th mat-header-cell *matHeaderCellDef>Marca</th>
+    <td mat-cell *matCellDef="let element">{{ element.marca }}</td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="Modelo">
+    <th mat-header-cell *matHeaderCellDef>Modelo</th>
+    <td mat-cell *matCellDef="let element">{{ element.modelo }}</td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="Capacidad">
+    <th mat-header-cell *matHeaderCellDef>Capacidad</th>
+    <td mat-cell *matCellDef="let element">{{ element.capacidad }}</td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="Eliminar">
+    <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+    <td mat-cell *matCellDef="let element">
+      <button class="btn btn-danger" (click)="onRemoveMaquina(element.id)">
+        <i class="bi bi-trash"></i>
+      </button>
+    </td>
+  </ng-container>
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="Modificar">
+    <th mat-header-cell *matHeaderCellDef>Modificar</th>
+    <td mat-cell *matCellDef="let element">
+      <button
+        class="btn btn-dark"
+        (click)="setSelectedMaquina(element)"
+        title="Modificar"
+      >
+        <i class="bi bi-pencil"></i>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+  <!-- Row shown when there is no matching data. -->
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">
+      No existen datos para la consulta "{{ input.value }}"
+    </td>
+  </tr>
 </table>
-}
-<button (click)="setNew()" class="btn btn-success m-2">Nueva maquina</button>
+<button (click)="setNew()" class="btn btn-primary m-2">Nueva maquina</button>
+
 @if(open){
 <div class="abrir-modal animacion fadeIn">
   <maquina-form

@@ -43,8 +43,8 @@
 .banner-header {
   background-image: url("../img/banner.jpeg");
   background-size: cover;
-  background-attachment: fixed;
   background-position: bottom;
+  background-attachment: fixed;
   background-blend-mode: darken;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
@@ -52,4 +52,5 @@
   font-family: "Ancizar Serif";
   font-weight: bold;
   font-size: xx-large;
+  text-align: center;
 }
