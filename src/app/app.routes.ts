@@ -3,6 +3,7 @@ import { MaquinaComponent } from './components/maquina/maquina.component';
 import { MaquinaFormComponent } from './components/maquina-form/maquina-form.component';
 import { HomeComponent } from './components/home/home.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { TipoEquipoComponent } from './components/maquina/tipo/tipo-equipo.component';
 
 export const routes: Routes = [
     {
@@ -21,5 +22,9 @@ export const routes: Routes = [
     {
         path: 'usuarios',
         component: UsuariosComponent,
+    },
+        {
+        path: 'tipos',
+        component: TipoEquipoComponent,
     },
 ];
