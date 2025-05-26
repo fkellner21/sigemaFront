@@ -2,5 +2,5 @@
          id!:number;
          codigo!:string;
          nombre!:string;
-         activo!:boolean;
+         activo:boolean = true;
     }

@@ -5,7 +5,7 @@ import { MaquinasAppComponent } from './components/maquinas-app.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,MaquinasAppComponent],
+  imports: [MaquinasAppComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

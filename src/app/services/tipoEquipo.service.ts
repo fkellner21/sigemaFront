@@ -13,4 +13,11 @@ export class tipoEquipoService{
       findAll():Observable<TipoEquipo[]>{
         return this.http.get<TipoEquipo[]>('http://localhost:8080/api/tiposEquipos/activos/true');
       }
+
+      addNew(tipoEquipo: TipoEquipo): Observable<TipoEquipo> {
+        return this.http.post<TipoEquipo>('http://localhost:8080/api/tiposEquipos/', tipoEquipo);
+      }
+      edit(id: number, tipoEquipo: TipoEquipo): Observable<TipoEquipo> {
+        return this.http.put<TipoEquipo>(`http://localhost:8080/api/tiposEquipos/${id}`, tipoEquipo);
+      }
     }
