@@ -41,12 +41,12 @@
   }
 }
 .banner-header {
-  background-image: url("../img/banner.jpeg");
+  background-image: url("../../assets/img/banner.jpeg");
   background-size: cover;
   background-position: bottom;
   background-attachment: fixed;
   background-blend-mode: darken;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   color: white;
   padding: 8rem;
   font-family: "Ancizar Serif";
