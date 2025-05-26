@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Maquina } from '../../../../models/maquina';
-import { MaquinaService } from '../../../../services/maquina.service';
+import { Equipo } from '../../../../models/equipo';
+import { MaquinaService } from '../../../../services/equipo.service';
 import Swal from 'sweetalert2';
 import { MaquinaFormComponent } from '../../maquina-form/maquina-form.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,8 +15,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 })
 export class MaquinaComponent implements OnInit{
 
-  maquinas:Maquina[]=[];
-  maquinaSelected: Maquina = new Maquina;
+  maquinas:Equipo[]=[];
+  maquinaSelected: Equipo = new Equipo;
   open:boolean=false;
   dataSource!: MatTableDataSource<any>;
 
@@ -55,7 +55,7 @@ export class MaquinaComponent implements OnInit{
     });
   }
 
-  addMaquina(maquina:Maquina){
+  addMaquina(maquina:Equipo){
         if(maquina.id>0){ 
           this.maquinas = this.maquinas.map(m => (m.id==maquina.id)?{...maquina}:m);
         }else{
@@ -72,13 +72,13 @@ export class MaquinaComponent implements OnInit{
         text: "Maquina guardada!",
         icon: "success"
           });
-        this.maquinaSelected=new Maquina();
+        this.maquinaSelected=new Equipo();
   }
   setNew(){
-    this.maquinaSelected=new Maquina;
+    this.maquinaSelected=new Equipo;
     this.open=true;
   }
-    setSelectedMaquina(maquina:Maquina):void{
+    setSelectedMaquina(maquina:Equipo):void{
     this.maquinaSelected={...maquina}; //esa notacion crea una copia del dato que vino
     this.setOpen();
   }

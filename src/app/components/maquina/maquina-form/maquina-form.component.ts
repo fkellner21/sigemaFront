@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Maquina } from '../../../models/maquina';
+import { Equipo } from '../../../models/equipo';
 
 
 @Component({
@@ -11,12 +11,12 @@ import { Maquina } from '../../../models/maquina';
 })
 export class MaquinaFormComponent {
 
-  @Input() maquina:Maquina;
+  @Input() maquina:Equipo;
   @Output() openEventEmitter = new EventEmitter();  
-  @Output() newMaquinaEventEmitter: EventEmitter<Maquina>=new EventEmitter();
+  @Output() newMaquinaEventEmitter: EventEmitter<Equipo>=new EventEmitter();
   
   constructor(){
-    this.maquina = new Maquina();
+    this.maquina = new Equipo();
   }
 
   onSubmit(maquinaForm:NgForm):void{
