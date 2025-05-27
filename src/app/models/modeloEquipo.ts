@@ -1,26 +1,15 @@
-//  @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
-
-//     @Column(nullable = false)
-//     private int anio;
-
-//     @Column(nullable = false)
-//     private String modelo;
-
-//     @Column(nullable = false)
-//     private double capacidad;
-
-//     @Column(nullable = false)
-//     @ManyToOne
-//     private Marca marca;
-
-//     @OneToMany(mappedBy = "equipos")
-//     private ArrayList<Equipo> equipos = new ArrayList<>();
-
-//     @ManyToMany
-//     private ArrayList<Repuesto> repuestos = new ArrayList<>();
+import { Equipo } from "./equipo";
+import { Marca } from "./marca";
+import { Repuesto } from "./Repuesto";
+import { TipoEquipo } from "./tipoEquipo";
 
     export class modeloEquipo{
         id!:number;
+        anio!:number;
+        modelo!:string;
+        capacidad!:number;
+        marca!:Marca;
+        tipoEquipo!:TipoEquipo;
+        equipos!:Array<Equipo>;
+        repuestos!:Array<Repuesto>;
     }

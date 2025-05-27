@@ -1,0 +1,128 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+/>
+<link rel="stylesheet" href="modelo.component.css" />
+
+<div class="titulo text-center my-1">Listado de modelos existentes</div>
+
+<div class="row me-0">
+  <div class="col-3"></div>
+  <div class="col-4">
+    <mat-form-field>
+      <mat-label>Buscar</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input />
+    </mat-form-field>
+  </div>
+  <div class="col-4 my-2">
+    <button (click)="setNew()" class="btn btn-dark">Nuevo modelo</button>
+  </div>
+</div>
+<div class="row me-0">
+  <div class="col-4"></div>
+  <div class="col-3">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      class="mat-elevation-z8 table table-striped table-hover"
+    >
+      <!-- Name Column -->
+      <ng-container matColumnDef="Anio">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
+          Año
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.anio }}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="Marca">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
+          Marca
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.marca.nombre }}</td>
+      </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="Modelo">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
+          Modelo
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.modelo }}</td>
+      </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="Capacidad">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
+          Capacidad
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.capacidad }}</td>
+      </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="Tipo">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
+          Tipo
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.tipoEquipo.nombre }}
+        </td>
+      </ng-container>
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="VerEquipos">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white"></th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            class="btn btn-dark"
+            (click)="setSelectedMarca(element)"
+            title="Modificar"
+          >
+            <i class="bi bi-pencil"></i>
+          </button>
+        </td>
+      </ng-container>
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="VerRepuestos">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white"></th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            class="btn btn-dark"
+            (click)="setSelectedMarca(element)"
+            title="Modificar"
+          >
+            <i class="bi bi-pencil"></i>
+          </button>
+        </td>
+      </ng-container>
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="Modificar">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white"></th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            class="btn btn-dark"
+            (click)="setSelectedMarca(element)"
+            title="Modificar"
+          >
+            <i class="bi bi-pencil"></i>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">
+          No existen datos para la consulta "{{ input.value }}"
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- @if(open){
+<div class="abrir-modal animacion fadeIn">
+  <marca-form
+    [marca]="marcaSelected"
+    (newTipoEventEmitter)="addMarca($event)"
+    (openEventEmitter)="setOpen()"
+  />
+</div>
+} -->

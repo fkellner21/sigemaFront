@@ -1,26 +1,26 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { TipoEquipo } from '../../../../models/tipoEquipo';
+import { Marca } from '../../../../../models/marca';
 
 @Component({
-  selector: 'tipo-form',
+  selector: 'marca-form',
   imports: [FormsModule],
-  templateUrl: './tipo-form.component.html',
-  styleUrl: './tipo-form.component.css'
+  templateUrl: './marca-form.component.html',
+  styleUrl: './marca-form.component.css'
 })
-export class TipoFormComponent {
-  @Input() tipoEquipo:TipoEquipo;
+export class MarcaFormComponent {
+  @Input() marca:Marca;
   @Output() openEventEmitter = new EventEmitter();  
-  @Output() newTipoEventEmitter: EventEmitter<TipoEquipo>=new EventEmitter();
+  @Output() newTipoEventEmitter: EventEmitter<Marca>=new EventEmitter();
 
   constructor(){
-    this.tipoEquipo=new TipoEquipo();
+    this.marca=new Marca();
   }
 
     onSubmit(tipoForm:NgForm):void{
     
     if(tipoForm.valid){
-      this.newTipoEventEmitter.emit(this.tipoEquipo);
+      this.newTipoEventEmitter.emit(this.marca);
     }
     tipoForm.reset();
     this.onOpen();

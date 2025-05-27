@@ -1,7 +1,14 @@
+import { EstadoEquipo } from "./enum/EstadoEquipo";
+import { UnidadMedida } from "./enum/unidadMedida";
+import { modeloEquipo } from "./modeloEquipo";
+
 export class Equipo{
     id!:number;
     matricula!:string;
-    marca!:string;
-    modelo!:string;
-    capacidad!:number;
+    observaciones!:string;
+    unidadMedida!:UnidadMedida;
+    cantidadUnidadMedida!:number;
+    idUltimaPosicion!:number;//todo cambiar por el objeto
+    modeloEquipo!:modeloEquipo;
+    estadoEquipo!:EstadoEquipo;
 }

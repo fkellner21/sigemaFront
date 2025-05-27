@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { MaquinaComponent } from './components/maquina/tab/listado/maquina.component';
-import { MaquinaFormComponent } from './components/maquina/maquina-form/maquina-form.component';
+//import { MaquinaComponent } from './components/maquina/tab/listado/maquina.component';
+//import { MaquinaFormComponent } from './components/maquina/tab/listado/maquina-form/maquina-form.component';
 import { HomeComponent } from './components/home/home.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { TipoEquipoComponent } from './components/maquina/tab/tipo/tipo-equipo.component';
@@ -12,10 +12,10 @@ export const routes: Routes = [
         pathMatch:'full',
         redirectTo:'/home',
     },
-    {
-        path: 'maquinas',
-        component: MaquinaComponent,
-    },
+    // {
+    //     path: 'maquinas',
+    //     component: MaquinaComponent,
+    // },
     {
         path: 'home',
         component: HomeComponent,
