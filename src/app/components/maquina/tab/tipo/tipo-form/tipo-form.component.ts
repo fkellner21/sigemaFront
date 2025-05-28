@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { TipoEquipo } from '../../../../models/tipoEquipo';
+import { TipoEquipo } from '../../../../../models/tipoEquipo';
+
 
 @Component({
   selector: 'tipo-form',

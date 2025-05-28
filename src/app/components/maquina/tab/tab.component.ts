@@ -1,15 +1,40 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatTabsModule} from '@angular/material/tabs';
 import { TipoEquipoComponent } from "./tipo/tipo-equipo.component";
-import { MaquinasAppComponent } from "../../maquinas-app.component";
-import { MaquinaComponent } from "./listado/maquina.component";
+import { MarcaComponent } from "./marca/marca.component";
+import { ModeloComponent } from './modelo/modelo.component';
+import { Marca } from '../../../models/marca';
+import { TipoEquipo } from '../../../models/tipoEquipo';
+import { marcaService } from '../../../services/marca.service';
+import { tipoEquipoService } from '../../../services/tipoEquipo.service';
+import { forkJoin } from 'rxjs';
 
-/**
- * @title Basic use of the tab group
- */
 @Component({
   selector: 'tabEquipos',
   templateUrl: 'tab.component.html',
-  imports: [MatTabsModule, TipoEquipoComponent, MaquinaComponent],
+  imports: [MatTabsModule, TipoEquipoComponent, MarcaComponent, ModeloComponent],
 })
-export class TabEquipos {}
+export class TabEquipos implements OnInit{
+
+  marcas: Marca[] = [];
+  tipos: TipoEquipo[] = [];
+  constructor(private marcaService: marcaService, private tipoService: tipoEquipoService) {}
+
+  ngOnInit(): void {
+  forkJoin({
+    marcas: this.marcaService.findAll(),
+    tipos: this.tipoService.findAll()
+  }).subscribe(({ marcas, tipos }) => {
+    this.marcas = marcas;
+    this.tipos = tipos;
+  });
+  }
+  loadTipos() {
+    this.marcaService.findAll().subscribe(data => {
+      this.marcas = data;
+    });
+  }
+  loadMarcas() {
+    this.tipoService.findAll().subscribe(data => this.tipos = data);
+  }
+}

@@ -1,36 +1,40 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { TipoEquipo } from '../../../../models/tipoEquipo';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { tipoEquipoService } from '../../../../services/tipoEquipo.service';
 import Swal from 'sweetalert2';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TipoFormComponent } from "./tipo-form/tipo-form.component";
+import { modeloEquipo } from '../../../../models/modeloEquipo';
+import { modeloService } from '../../../../services/modelo.service';
+import { ModeloFormComponent } from './modelo-form/modelo-form.component';
+import { Marca } from '../../../../models/marca';
+import { TipoEquipo } from '../../../../models/tipoEquipo';
 
 @Component({
-  selector: 'tipo-equipo',
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, TipoFormComponent],
-  templateUrl: './tipo-equipo.component.html',
-  styleUrl: './tipo-equipo.component.css'
+  selector: 'modelo',
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, ModeloFormComponent ],
+  templateUrl: './modelo.component.html',
+  styleUrl: './modelo.component.css'
 })
-export class TipoEquipoComponent implements OnInit {
-
-  @Output() tiposActualizados = new EventEmitter<void>();
-  tiposDeEquipo:TipoEquipo[]=[];
-  tipoEquipoSelected:TipoEquipo = new TipoEquipo();
+export class ModeloComponent {
+  @Input() tipos: TipoEquipo[] = [];
+  @Input() marcas: Marca[] = [];
+  //@Output() modelosActualizados = new EventEmitter<void>();
+  //@Input() tiposEquipo: TipoEquipo[] = [];
+  modelos:modeloEquipo[]=[];
+  modeloSelected:modeloEquipo = new modeloEquipo();
   open:boolean=false;
   dataSource!: MatTableDataSource<any>;
 
-  constructor(private service:tipoEquipoService){}
+  constructor(private service:modeloService){}
 
   ngOnInit(): void {
     this.refresh();
   }
 
   refresh():void{
-    this.service.findAll().subscribe(tipo => {
-    this.tiposDeEquipo = tipo;
-    this.dataSource = new MatTableDataSource(this.tiposDeEquipo);
+    this.service.findAll().subscribe(modelo => {
+    this.modelos = modelo;
+    this.dataSource = new MatTableDataSource(this.modelos);
     });
   }
 
@@ -56,78 +60,72 @@ export class TipoEquipoComponent implements OnInit {
   //   });
   // }
 
-  addTipoEquipo(tipo:TipoEquipo){
-    if(tipo.id>0){ //es una modificacion
-      tipo.codigo = tipo.codigo.toUpperCase();
-      this.service.edit(tipo.id, tipo).subscribe({
+  addModelo(modelo:modeloEquipo){
+    if(modelo.id>0){ //es una modificacion
+      this.service.edit(modelo.id, modelo).subscribe({
       next: (resp) => {
         Swal.fire({
         title: "Editado!",
-        text: "Tipo de equipo actualizado correctamente!",
+        text: "Modelo de equipo actualizado correctamente!",
         icon: "success"
       });
       //refresh de datos
       this.refresh();
-      this.tiposActualizados.emit();
     },
     error: (err) => {
       console.error("Error al editar:", err); //todo mostrarlo en algun lugar
       Swal.fire({
         title: "Error",
-        text: "No se pudo editar el tipo de equipo: \n"+ err.error,
+        text: "No se pudo editar este modelo de equipo.",
         icon: "error"
       });
+      //refresh de datos
       this.refresh();
     }
   });
     }else{
+      console.log(modelo);
       //peticion al back
-      tipo.codigo=tipo.codigo.toUpperCase();
-      this.service.addNew(tipo).subscribe({next:(resp)=>{
+      this.service.addNew(modelo).subscribe({next:(resp)=>{
         Swal.fire({
           title: "Guardado!",
-          text: "Tipo de equipo guardado con éxito!",
+          text: "Modelo de equipo agregado con éxito!",
           icon: "success"
         });
         //refresh de datos
         this.refresh();
-        this.tiposActualizados.emit();
       },
       error:(err)=>{
         console.log('error',err); //todo mostrar el error
         Swal.fire({
           title: "Error",
-          text: "No se pudo agregar el tipo de equipo: \n"+ err.error,
+          text: "No se pudo agregar el modelo de equipo. " + err.error,
           icon: "error"
         });
-        //refresh de datos
-        this.refresh();
       }
     });
     }
   }
 
    setNew(){
-     this.tipoEquipoSelected=new TipoEquipo();
+     this.modeloSelected=new modeloEquipo();
      this.open=true;
    }
 
   setOpen(){
     this.open=!this.open;
-    this.refresh();
   }
 
-  displayedColumns: string[] = [ 'Codigo', 'Descripcion', 'Modificar'];
+  displayedColumns: string[] = [ 'Anio', 'Marca', 'Modelo', 'Capacidad', 'Tipo', 'VerEquipos','VerRepuestos','Modificar'];
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+  } //todo, el filtro no agarra el tipo ni la marca
 
-  setSelectedTipo(tipoEquipo:TipoEquipo) {
-  this.tipoEquipoSelected=tipoEquipo;
+  setSelectedModelo(modelo:modeloEquipo) {
+  this.modeloSelected=modelo;
+  console.log(modelo)
   this.setOpen();
   }
-
 }
-
