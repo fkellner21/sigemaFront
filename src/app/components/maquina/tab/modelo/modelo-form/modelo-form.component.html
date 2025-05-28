@@ -43,26 +43,30 @@
           />
 
           <!-- Selección de Marca -->
+          <p>Marca</p>
           <select
             class="form-control my-2"
             name="marca"
             [(ngModel)]="modeloEquipo.marca"
             required
           >
+            <option [ngValue]="null" disabled>Seleccione una marca...</option>
             <option *ngFor="let m of marcas" [ngValue]="m">
               {{ m.nombre }}
             </option>
           </select>
 
           <!-- Selección de TipoEquipo -->
+          <p>Tipo</p>
           <select
             class="form-control my-2"
             name="tipoEquipo"
             [(ngModel)]="modeloEquipo.tipoEquipo"
             required
           >
+            <option [ngValue]="null" disabled>Seleccione un tipo...</option>
             <option *ngFor="let t of tiposEquipo" [ngValue]="t">
-              {{ t.nombre }}
+              {{ t.codigo }}
             </option>
           </select>
 

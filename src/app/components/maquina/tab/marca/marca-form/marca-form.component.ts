@@ -11,18 +11,18 @@ import { Marca } from '../../../../../models/marca';
 export class MarcaFormComponent {
   @Input() marca:Marca;
   @Output() openEventEmitter = new EventEmitter();  
-  @Output() newTipoEventEmitter: EventEmitter<Marca>=new EventEmitter();
+  @Output() newMarcaEventEmitter: EventEmitter<Marca>=new EventEmitter();
 
   constructor(){
     this.marca=new Marca();
   }
 
-    onSubmit(tipoForm:NgForm):void{
+    onSubmit(marcaForm:NgForm):void{
     
-    if(tipoForm.valid){
-      this.newTipoEventEmitter.emit(this.marca);
+    if(marcaForm.valid){
+      this.newMarcaEventEmitter.emit(this.marca);
     }
-    tipoForm.reset();
+    marcaForm.reset();
     this.onOpen();
   }
     onOpen(){

@@ -60,42 +60,48 @@
           Tipo
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.tipoEquipo.nombre }}
+          {{ element.tipoEquipo.codigo }}
         </td>
       </ng-container>
       <!-- Symbol Column -->
       <ng-container matColumnDef="VerEquipos">
-        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white"></th>
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
+          Equipos
+        </th>
         <td mat-cell *matCellDef="let element">
           <button
             class="btn btn-dark"
-            (click)="setSelectedMarca(element)"
-            title="Modificar"
+            (click)="setSelectedModelo(element)"
+            title="VerEquipos"
           >
-            <i class="bi bi-pencil"></i>
+            <i class="bi bi-bus-front-fill"></i>
           </button>
         </td>
       </ng-container>
       <!-- Symbol Column -->
       <ng-container matColumnDef="VerRepuestos">
-        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white"></th>
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
+          Repuestos
+        </th>
         <td mat-cell *matCellDef="let element">
           <button
             class="btn btn-dark"
-            (click)="setSelectedMarca(element)"
-            title="Modificar"
+            (click)="setSelectedModelo(element)"
+            title="VerRepuestos"
           >
-            <i class="bi bi-pencil"></i>
+            <i class="bi bi-gear-wide-connected"></i>
           </button>
         </td>
       </ng-container>
       <!-- Symbol Column -->
       <ng-container matColumnDef="Modificar">
-        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white"></th>
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
+          Modificar
+        </th>
         <td mat-cell *matCellDef="let element">
           <button
             class="btn btn-dark"
-            (click)="setSelectedMarca(element)"
+            (click)="setSelectedModelo(element)"
             title="Modificar"
           >
             <i class="bi bi-pencil"></i>
@@ -120,6 +126,8 @@
 <div class="abrir-modal animacion fadeIn">
   <modelo-form
     [modeloEquipo]="modeloSelected"
+    [marcas]="marcas"
+    [tiposEquipo]="tipos"
     (newModeloEventEmitter)="addModelo($event)"
     (openEventEmitter)="setOpen()"
   />

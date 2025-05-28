@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,6 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { modeloEquipo } from '../../../../models/modeloEquipo';
 import { modeloService } from '../../../../services/modelo.service';
 import { ModeloFormComponent } from './modelo-form/modelo-form.component';
+import { Marca } from '../../../../models/marca';
+import { TipoEquipo } from '../../../../models/tipoEquipo';
 
 @Component({
   selector: 'modelo',
@@ -14,7 +16,10 @@ import { ModeloFormComponent } from './modelo-form/modelo-form.component';
   styleUrl: './modelo.component.css'
 })
 export class ModeloComponent {
-
+  @Input() tipos: TipoEquipo[] = [];
+  @Input() marcas: Marca[] = [];
+  //@Output() modelosActualizados = new EventEmitter<void>();
+  //@Input() tiposEquipo: TipoEquipo[] = [];
   modelos:modeloEquipo[]=[];
   modeloSelected:modeloEquipo = new modeloEquipo();
   open:boolean=false;
@@ -79,6 +84,7 @@ export class ModeloComponent {
     }
   });
     }else{
+      console.log(modelo);
       //peticion al back
       this.service.addNew(modelo).subscribe({next:(resp)=>{
         Swal.fire({
@@ -93,7 +99,7 @@ export class ModeloComponent {
         console.log('error',err); //todo mostrar el error
         Swal.fire({
           title: "Error",
-          text: "No se pudo agregar el modelo de equipo.",
+          text: "No se pudo agregar el modelo de equipo. " + err.error,
           icon: "error"
         });
       }
@@ -115,10 +121,11 @@ export class ModeloComponent {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+  } //todo, el filtro no agarra el tipo ni la marca
 
-  setSelectedMarca(modelo:modeloEquipo) {
+  setSelectedModelo(modelo:modeloEquipo) {
   this.modeloSelected=modelo;
+  console.log(modelo)
   this.setOpen();
   }
 }

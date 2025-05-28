@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TipoEquipo } from '../../../../models/tipoEquipo';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { tipoEquipoService } from '../../../../services/tipoEquipo.service';
@@ -15,7 +15,7 @@ import { TipoFormComponent } from "./tipo-form/tipo-form.component";
 })
 export class TipoEquipoComponent implements OnInit {
 
-
+  @Output() tiposActualizados = new EventEmitter<void>();
   tiposDeEquipo:TipoEquipo[]=[];
   tipoEquipoSelected:TipoEquipo = new TipoEquipo();
   open:boolean=false;
@@ -68,6 +68,7 @@ export class TipoEquipoComponent implements OnInit {
       });
       //refresh de datos
       this.refresh();
+      this.tiposActualizados.emit();
     },
     error: (err) => {
       console.error("Error al editar:", err); //todo mostrarlo en algun lugar
@@ -90,6 +91,7 @@ export class TipoEquipoComponent implements OnInit {
         });
         //refresh de datos
         this.refresh();
+        this.tiposActualizados.emit();
       },
       error:(err)=>{
         console.log('error',err); //todo mostrar el error

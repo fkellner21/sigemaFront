@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Marca } from '../../../../models/marca';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { marcaService } from '../../../../services/marca.service';
@@ -14,6 +14,8 @@ import { MarcaFormComponent } from './marca-form/marca-form.component';
   styleUrl: './marca.component.css'
 })
 export class MarcaComponent {
+
+  @Output() marcasActualizadas = new EventEmitter<void>();
 
   marcas:Marca[]=[];
   marcaSelected:Marca = new Marca();
@@ -66,6 +68,7 @@ export class MarcaComponent {
       });
       //refresh de datos
       this.refresh();
+      this.marcasActualizadas.emit();
     },
     error: (err) => {
       console.error("Error al editar:", err); //todo mostrarlo en algun lugar
@@ -88,6 +91,7 @@ export class MarcaComponent {
         });
         //refresh de datos
         this.refresh();
+        this.marcasActualizadas.emit();
       },
       error:(err)=>{
         console.log('error',err); //todo mostrar el error

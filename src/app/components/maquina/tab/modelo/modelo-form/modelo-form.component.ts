@@ -3,20 +3,38 @@ import { modeloEquipo } from '../../../../../models/modeloEquipo';
 import { Marca } from '../../../../../models/marca';
 import { TipoEquipo } from '../../../../../models/tipoEquipo';
 import { FormsModule, NgForm } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'modelo-form',
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './modelo-form.component.html',
   styleUrl: './modelo-form.component.css'
 })
 export class ModeloFormComponent {
-@Input() modeloEquipo: modeloEquipo = new modeloEquipo();
+@Input() modeloEquipo: modeloEquipo;
 @Input() marcas: Marca[] = [];
 @Input() tiposEquipo: TipoEquipo[] = [];
 
 @Output() newModeloEventEmitter = new EventEmitter<modeloEquipo>();
 @Output() openEventEmitter = new EventEmitter();
+
+constructor(){
+  this.modeloEquipo=new modeloEquipo();
+}
+
+ngOnInit() {
+  // Cuando abras el formulario y ya tengas las listas cargadas:
+  if (this.modeloEquipo.marca) {
+    const match = this.marcas.find(m => m.id === this.modeloEquipo.marca.id);
+    if (match) this.modeloEquipo.marca = match;
+  }
+
+  if (this.modeloEquipo.tipoEquipo) {
+    const match = this.tiposEquipo.find(t => t.id === this.modeloEquipo.tipoEquipo.id);
+    if (match) this.modeloEquipo.tipoEquipo = match;
+  }
+}
 
 onSubmit(form: NgForm): void {
   if (form.valid) {
