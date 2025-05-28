@@ -5,10 +5,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { modeloEquipo } from '../../../../models/modeloEquipo';
 import { modeloService } from '../../../../services/modelo.service';
+import { ModeloFormComponent } from './modelo-form/modelo-form.component';
 
 @Component({
   selector: 'modelo',
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, ModeloFormComponent ],
   templateUrl: './modelo.component.html',
   styleUrl: './modelo.component.css'
 })
@@ -54,7 +55,7 @@ export class ModeloComponent {
   //   });
   // }
 
-  addMarca(modelo:modeloEquipo){
+  addModelo(modelo:modeloEquipo){
     if(modelo.id>0){ //es una modificacion
       this.service.edit(modelo.id, modelo).subscribe({
       next: (resp) => {

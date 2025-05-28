@@ -1,0 +1,91 @@
+<div class="modal" tabindex="-1" style="display: block">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ modeloEquipo.id ? "Editar" : "Agregar" }} modelo de equipo
+        </h5>
+        <button
+          (click)="onOpen()"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="onSubmit(modeloForm)" #modeloForm="ngForm">
+          <input
+            placeholder="Año"
+            name="anio"
+            [(ngModel)]="modeloEquipo.anio"
+            class="form-control my-2"
+            required
+            type="number"
+          />
+
+          <input
+            placeholder="Modelo"
+            name="modelo"
+            [(ngModel)]="modeloEquipo.modelo"
+            class="form-control my-2"
+            required
+          />
+
+          <input
+            placeholder="Capacidad"
+            name="capacidad"
+            [(ngModel)]="modeloEquipo.capacidad"
+            class="form-control my-2"
+            type="number"
+            required
+          />
+
+          <!-- Selección de Marca -->
+          <select
+            class="form-control my-2"
+            name="marca"
+            [(ngModel)]="modeloEquipo.marca"
+            required
+          >
+            <option *ngFor="let m of marcas" [ngValue]="m">
+              {{ m.nombre }}
+            </option>
+          </select>
+
+          <!-- Selección de TipoEquipo -->
+          <select
+            class="form-control my-2"
+            name="tipoEquipo"
+            [(ngModel)]="modeloEquipo.tipoEquipo"
+            required
+          >
+            <option *ngFor="let t of tiposEquipo" [ngValue]="t">
+              {{ t.nombre }}
+            </option>
+          </select>
+
+          <button
+            type="submit"
+            class="btn btn-primary my-2"
+            [disabled]="modeloForm.invalid"
+          >
+            {{ modeloEquipo.id ? "Modificar" : "Agregar" }}
+          </button>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="onOpen()"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

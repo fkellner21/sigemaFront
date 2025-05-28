@@ -73,9 +73,10 @@ export class TipoEquipoComponent implements OnInit {
       console.error("Error al editar:", err); //todo mostrarlo en algun lugar
       Swal.fire({
         title: "Error",
-        text: "No se pudo editar el tipo de equipo.",
+        text: "No se pudo editar el tipo de equipo: \n"+ err.error,
         icon: "error"
       });
+      this.refresh();
     }
   });
     }else{
@@ -94,7 +95,7 @@ export class TipoEquipoComponent implements OnInit {
         console.log('error',err); //todo mostrar el error
         Swal.fire({
           title: "Error",
-          text: "No se pudo agregar el tipo de equipo.",
+          text: "No se pudo agregar el tipo de equipo: \n"+ err.error,
           icon: "error"
         });
         //refresh de datos
@@ -111,6 +112,7 @@ export class TipoEquipoComponent implements OnInit {
 
   setOpen(){
     this.open=!this.open;
+    this.refresh();
   }
 
   displayedColumns: string[] = [ 'Codigo', 'Descripcion', 'Modificar'];

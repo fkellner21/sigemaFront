@@ -96,6 +96,7 @@ export class MarcaComponent {
           text: "No se pudo agregar la marca.",
           icon: "error"
         });
+        this.refresh();
       }
     });
     }
@@ -108,6 +109,7 @@ export class MarcaComponent {
 
   setOpen(){
     this.open=!this.open;
+    this.refresh();
   }
 
   displayedColumns: string[] = [ 'Codigo', 'Nombre', 'Modificar'];
