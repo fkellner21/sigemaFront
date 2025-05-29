@@ -71,7 +71,7 @@ export class MarcaComponent {
       this.marcasActualizadas.emit();
     },
     error: (err) => {
-      console.error("Error al editar:", err); //todo mostrarlo en algun lugar
+      console.error("Error al editar:", err); 
       Swal.fire({
         title: "Error",
         text: "No se pudo editar la marca.",
@@ -94,7 +94,7 @@ export class MarcaComponent {
         this.marcasActualizadas.emit();
       },
       error:(err)=>{
-        console.log('error',err); //todo mostrar el error
+        console.log('error',err); 
         Swal.fire({
           title: "Error",
           text: "No se pudo agregar la marca.",

@@ -71,7 +71,7 @@ export class TipoEquipoComponent implements OnInit {
       this.tiposActualizados.emit();
     },
     error: (err) => {
-      console.error("Error al editar:", err); //todo mostrarlo en algun lugar
+      console.error("Error al editar:", err);
       Swal.fire({
         title: "Error",
         text: "No se pudo editar el tipo de equipo: \n"+ err.error,
@@ -94,7 +94,7 @@ export class TipoEquipoComponent implements OnInit {
         this.tiposActualizados.emit();
       },
       error:(err)=>{
-        console.log('error',err); //todo mostrar el error
+        console.log('error',err); 
         Swal.fire({
           title: "Error",
           text: "No se pudo agregar el tipo de equipo: \n"+ err.error,

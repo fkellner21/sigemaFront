@@ -18,8 +18,7 @@ import { TipoEquipo } from '../../../../models/tipoEquipo';
 export class ModeloComponent {
   @Input() tipos: TipoEquipo[] = [];
   @Input() marcas: Marca[] = [];
-  //@Output() modelosActualizados = new EventEmitter<void>();
-  //@Input() tiposEquipo: TipoEquipo[] = [];
+
   modelos:modeloEquipo[]=[];
   modeloSelected:modeloEquipo = new modeloEquipo();
   open:boolean=false;
@@ -73,7 +72,7 @@ export class ModeloComponent {
       this.refresh();
     },
     error: (err) => {
-      console.error("Error al editar:", err); //todo mostrarlo en algun lugar
+      console.error("Error al editar:", err);
       Swal.fire({
         title: "Error",
         text: "No se pudo editar este modelo de equipo.",
@@ -96,7 +95,7 @@ export class ModeloComponent {
         this.refresh();
       },
       error:(err)=>{
-        console.log('error',err); //todo mostrar el error
+        console.log('error',err); 
         Swal.fire({
           title: "Error",
           text: "No se pudo agregar el modelo de equipo. " + err.error,
