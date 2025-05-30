@@ -31,7 +31,7 @@ export class TabEquipos implements OnInit{
   }
   loadTipos() {
     this.tipoService.findAll().subscribe(data => {
-    this.marcas = [...data];  //genera una copia de los datos para que note el cambio
+    this.tipos = [...data];  //genera una copia de los datos para que note el cambio
     });
   }
   loadMarcas() {

@@ -21,6 +21,7 @@ export class modeloService{
         return this.http.post<ModeloEquipoDTO>('http://localhost:8080/api/modelosEquipo', modeloDTO);
       }
       edit(id: number, modelo: modeloEquipo): Observable<modeloEquipo> {
-        return this.http.put<modeloEquipo>(`http://localhost:8080/api/modelosEquipo/${id}`, modelo);
+        let modeloDTO:ModeloEquipoDTO=ModeloEquipoDTO.toDTO(modelo);
+        return this.http.put<modeloEquipo>(`http://localhost:8080/api/modelosEquipo/${id}`, modeloDTO);
       }
     }

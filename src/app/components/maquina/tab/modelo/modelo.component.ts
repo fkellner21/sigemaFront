@@ -72,10 +72,9 @@ export class ModeloComponent {
       this.refresh();
     },
     error: (err) => {
-      console.error("Error al editar:", err);
       Swal.fire({
         title: "Error",
-        text: "No se pudo editar este modelo de equipo.",
+        text: "No se pudo editar este modelo de equipo. "+err.error,
         icon: "error"
       });
       //refresh de datos
@@ -83,7 +82,6 @@ export class ModeloComponent {
     }
   });
     }else{
-      console.log(modelo);
       //peticion al back
       this.service.addNew(modelo).subscribe({next:(resp)=>{
         Swal.fire({
@@ -95,7 +93,6 @@ export class ModeloComponent {
         this.refresh();
       },
       error:(err)=>{
-        console.log('error',err); 
         Swal.fire({
           title: "Error",
           text: "No se pudo agregar el modelo de equipo. " + err.error,
@@ -124,7 +121,6 @@ export class ModeloComponent {
 
   setSelectedModelo(modelo:modeloEquipo) {
   this.modeloSelected=modelo;
-  console.log(modelo)
   this.setOpen();
   }
 }
