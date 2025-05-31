@@ -16,32 +16,50 @@
 
       <div class="modal-body">
         <form (ngSubmit)="onSubmit(modeloForm)" #modeloForm="ngForm">
-          <input
-            placeholder="Año"
-            name="anio"
-            [(ngModel)]="modeloEquipo.anio"
-            class="form-control my-2"
-            required
-            type="number"
-          />
-
-          <input
-            placeholder="Modelo"
-            name="modelo"
-            [(ngModel)]="modeloEquipo.modelo"
-            class="form-control my-2"
-            required
-          />
-
-          <input
-            placeholder="Capacidad"
-            name="capacidad"
-            [(ngModel)]="modeloEquipo.capacidad"
-            class="form-control my-2"
-            type="number"
-            required
-          />
-
+          <div>
+            <input
+              placeholder="Año"
+              name="anio"
+              [(ngModel)]="modeloEquipo.anio"
+              class="form-control my-2"
+              required
+              type="number"
+              #anio="ngModel"
+            />
+            @if(anio.invalid && (anio.dirty || anio.touched)){
+            @if(anio.errors!['required']){
+            <div class="alert alert-danger">Año requerido</div>
+            } }
+          </div>
+          <div>
+            <input
+              placeholder="Modelo"
+              name="modelo"
+              [(ngModel)]="modeloEquipo.modelo"
+              class="form-control my-2"
+              required
+              #modelo="ngModel"
+            />
+            @if(modelo.invalid && (modelo.dirty || modelo.touched)){
+            @if(modelo.errors!['required']){
+            <div class="alert alert-danger">Modelo requerido</div>
+            } }
+          </div>
+          <div>
+            <input
+              placeholder="Capacidad"
+              name="capacidad"
+              [(ngModel)]="modeloEquipo.capacidad"
+              class="form-control my-2"
+              type="number"
+              required
+              #capacidad="ngModel"
+            />
+            @if(capacidad.invalid && (capacidad.dirty || capacidad.touched)){
+            @if(capacidad.errors!['required']){
+            <div class="alert alert-danger">Capacidad requerida</div>
+            } }
+          </div>
           <!-- Selección de Marca -->
           <p>Marca</p>
           <select
