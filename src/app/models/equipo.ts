@@ -1,5 +1,5 @@
 import { EstadoEquipo } from "./enum/EstadoEquipo";
-import { UnidadMedida } from "./enum/unidadMedida";
+import { UnidadMedida } from "./enum/UnidadMedida";
 import { modeloEquipo } from "./modeloEquipo";
 
 export class Equipo{
