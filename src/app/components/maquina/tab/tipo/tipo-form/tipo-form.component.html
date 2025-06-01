@@ -2,7 +2,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Agregar nuevo tipo de equipo</h5>
+        <h5 class="modal-title">
+          {{ tipoEquipo.id > 0 ? "Editar " : "Agregar " }} tipo de equipo
+        </h5>
         <button
           (click)="onOpen()"
           type="button"
@@ -15,7 +17,7 @@
         <form (ngSubmit)="onSubmit(tipoForm)" #tipoForm="ngForm">
           <div>
             <input
-              placeholder="Codigo"
+              placeholder="Código"
               name="codigo"
               [(ngModel)]="tipoEquipo.codigo"
               class="form-control my-2"
@@ -24,12 +26,12 @@
             />
             @if(codigo.invalid && (codigo.dirty || codigo.touched)){
             @if(codigo.errors!['required']){
-            <div class="alert alert-danger">Codigo requerido</div>
+            <div class="alert alert-danger">Código requerido</div>
             } }
           </div>
           <div>
             <input
-              placeholder="Descripcion"
+              placeholder="Descripción"
               name="nombre"
               [(ngModel)]="tipoEquipo.nombre"
               class="form-control my-2"
