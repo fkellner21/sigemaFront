@@ -88,6 +88,21 @@
             </option>
           </select>
 
+          <!-- Selección de UnidadMedida -->
+          <p>Unidad de medida de trabajo</p>
+          <select
+            class="form-control my-2"
+            name="unidadMedida"
+            [(ngModel)]="modeloEquipo.unidadMedida"
+            required
+          >
+            <option [ngValue]="null" disabled>
+              Seleccione una unidad de trabajo...
+            </option>
+            <option *ngFor="let u of unidadesDeMedida" [ngValue]="u.value">
+              {{ u.label }}
+            </option>
+          </select>
           <button
             type="submit"
             class="btn btn-primary my-2"

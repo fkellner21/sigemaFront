@@ -1,3 +1,5 @@
+import { model } from "@angular/core";
+import { UnidadMedida } from "../enum/UnidadMedida";
 import { Equipo } from "../equipo";
 import { Marca } from "../marca";
 import { modeloEquipo } from "../modeloEquipo";
@@ -13,6 +15,7 @@ export class ModeloEquipoDTO{
     idTipoEquipo!:number;
     equipos!:Array<Equipo>;
     repuestos!:Array<Repuesto>;
+    unidadMedida!:UnidadMedida;
 
     constructor(){}
 
@@ -27,6 +30,7 @@ export class ModeloEquipoDTO{
         salida.idTipoEquipo = modelo.tipoEquipo?.id ?? 0;
         salida.equipos = modelo.equipos ?? [];
         salida.repuestos = modelo.repuestos ?? [];
+        salida.unidadMedida=modelo.unidadMedida;
         return salida;
   }
 }

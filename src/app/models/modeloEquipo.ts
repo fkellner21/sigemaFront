@@ -1,3 +1,4 @@
+import { UnidadMedida } from "./enum/UnidadMedida";
 import { Equipo } from "./equipo";
 import { Marca } from "./marca";
 import { Repuesto } from "./Repuesto";
@@ -12,4 +13,5 @@ import { TipoEquipo } from "./tipoEquipo";
         tipoEquipo!:TipoEquipo;
         equipos!:Array<Equipo>;
         repuestos!:Array<Repuesto>;
+        unidadMedida!:UnidadMedida;
     }
