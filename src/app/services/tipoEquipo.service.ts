@@ -2,6 +2,7 @@ import { map, Observable, of } from "rxjs";
 import { TipoEquipo } from "../models/tipoEquipo";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +12,13 @@ export class tipoEquipoService{
     constructor(private http:HttpClient) { }
 
       findAll():Observable<TipoEquipo[]>{
-        return this.http.get<TipoEquipo[]>('http://localhost:8080/api/tiposEquipos/activos/true');
+        return this.http.get<TipoEquipo[]>(`${environment.apiUrl}/api/tiposEquipos/activos/true`);
       }
 
       addNew(tipoEquipo: TipoEquipo): Observable<TipoEquipo> {
-        return this.http.post<TipoEquipo>('http://localhost:8080/api/tiposEquipos/', tipoEquipo);
+        return this.http.post<TipoEquipo>(`${environment.apiUrl}/api/tiposEquipos/`, tipoEquipo);
       }
       edit(id: number, tipoEquipo: TipoEquipo): Observable<TipoEquipo> {
-        return this.http.put<TipoEquipo>(`http://localhost:8080/api/tiposEquipos/${id}`, tipoEquipo);
+        return this.http.put<TipoEquipo>(`${environment.apiUrl}/api/tiposEquipos/${id}`, tipoEquipo);
       }
     }
