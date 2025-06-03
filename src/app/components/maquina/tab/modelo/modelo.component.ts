@@ -8,10 +8,11 @@ import { modeloService } from '../../../../services/modelo.service';
 import { ModeloFormComponent } from './modelo-form/modelo-form.component';
 import { Marca } from '../../../../models/marca';
 import { TipoEquipo } from '../../../../models/tipoEquipo';
+import { DocumentoFormComponent } from "./documento-form/documento-form.component";
 
 @Component({
   selector: 'modelo',
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, ModeloFormComponent ],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, ModeloFormComponent, DocumentoFormComponent],
   templateUrl: './modelo.component.html',
   styleUrl: './modelo.component.css'
 })
@@ -123,4 +124,15 @@ export class ModeloComponent {
   this.modeloSelected=modelo;
   this.setOpen();
   }
+
+  modeloSeleccionadoId: number | null = null;
+
+  abrirModalDocumentos(id: number) {
+  this.modeloSeleccionadoId = id;
+  }
+
+  cerrarModal() {
+  this.modeloSeleccionadoId = null;
+  }
+
 }
