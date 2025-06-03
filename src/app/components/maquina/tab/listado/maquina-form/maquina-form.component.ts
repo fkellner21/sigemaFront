@@ -8,6 +8,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { modeloEquipo } from '/ProyectoFACULTADAngular/sigema_frontend/src/app/models/modeloEquipo';
 import { Equipo } from '/ProyectoFACULTADAngular/sigema_frontend/src/app/models/equipo';
+import { EstadoEquipo } from '/ProyectoFACULTADAngular/sigema_frontend/src/app/models/enum/EstadoEquipo'; // Ajustá la ruta según tu proyecto
+
 
 @Component({
   selector: 'app-maquina-form',
@@ -18,7 +20,7 @@ import { Equipo } from '/ProyectoFACULTADAngular/sigema_frontend/src/app/models/
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
   ],
   templateUrl: './maquina-form.component.html'
 })
@@ -30,6 +32,9 @@ export class MaquinaFormComponent implements OnChanges {
   @Output() cancelar = new EventEmitter<void>();
 
   equipoForm: Equipo = new Equipo();
+  estadoEquipoEnum = EstadoEquipo; // Para acceder en el template
+  estados = Object.keys(this.estadoEquipoEnum).filter(k => isNaN(Number(k))); // Solo las keys
+
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['equipo'] && this.equipo) {

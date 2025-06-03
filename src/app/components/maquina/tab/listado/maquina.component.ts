@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Equipo } from '../../../../models/equipo';
 import { MaquinaService } from '../../../../services/equipo.service';
+import { modeloService } from '../../../../services/modelo.service'; // ✅ NUEVO
+import { modeloEquipo } from '../../../../models/modeloEquipo'; // ✅ NUEVO
 import Swal from 'sweetalert2';
 
 import { MatTableDataSource } from '@angular/material/table';
@@ -16,31 +18,55 @@ import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
 @Component({
   selector: 'maquina',
   standalone: true,
-  imports: [CommonModule, FormsModule,MaquinaFormComponent, MatFormFieldModule, MatInputModule, MatTableModule, MatSelectModule,MatOptionModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MaquinaFormComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    MatSelectModule,
+    MatOptionModule
+  ],
   templateUrl: './maquina.component.html',
   styleUrls: ['./maquina.component.css']
 })
 export class MaquinaComponent implements OnInit {
 
-  @Input() maquinas: Equipo[] = [];  
+  @Input() maquinas: Equipo[] = [];
 
   maquinaSelected: Equipo = new Equipo();
   open: boolean = false;
   dataSource!: MatTableDataSource<Equipo>;
-
   displayedColumns: string[] = ['Codigo', 'Nombre', 'Modificar'];
+
+  modelos: modeloEquipo[] = []; // ✅ NUEVO
 
   @Output() maquinasActualizadas = new EventEmitter<void>();
 
-  constructor(private service: MaquinaService) {}
+  constructor(
+    private service: MaquinaService,
+    private modeloService: modeloService // ✅ NUEVO
+  ) {}
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource(this.maquinas);
+    this.cargarModelos(); // ✅ NUEVO
   }
 
   ngOnChanges() {
-    // Actualiza la tabla si cambian los datos de input
     this.dataSource = new MatTableDataSource(this.maquinas);
+  }
+
+  cargarModelos() {
+    this.modeloService.findAll().subscribe({
+      next: (modelos) => {
+        this.modelos = modelos;
+      },
+      error: (err) => {
+        console.error('Error al cargar modelos:', err);
+      }
+    });
   }
 
   applyFilter(event: Event) {

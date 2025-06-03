@@ -1,10 +1,10 @@
 <div class="card p-4">
   <h5 class="text-center mb-3">
-    {{ equipoForm?.id ? 'Editar Máquina' : 'Nueva Máquina' }}
-
+    {{ equipoForm.id ? 'Actualizar' : 'Guardar' }}
   </h5>
 
- <form #maquinaForm="ngForm" (ngSubmit)="onSubmit()">
+  <form #maquinaForm="ngForm" (ngSubmit)="onSubmit()">
+
     <!-- Matrícula -->
     <mat-form-field appearance="outline" class="w-100 mb-3">
       <mat-label>Matrícula</mat-label>
@@ -18,36 +18,34 @@
     </mat-form-field>
 
     <!-- Estado del Equipo -->
-    <mat-form-field appearance="outline" class="w-100 mb-3">
-      <mat-label>Estado</mat-label>
-      <mat-select name="estadoEquipo" [(ngModel)]="equipoForm.estadoEquipo" required>
-        <mat-option value="Operativo">Operativo</mat-option>
-        <mat-option value="En reparación">En reparación</mat-option>
-        <mat-option value="Fuera de servicio">Fuera de servicio</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Modelo de Equipo -->
 <mat-form-field appearance="outline" class="w-100 mb-3">
-  <mat-label>Modelo</mat-label>
-  <mat-select
-    [value]="equipoForm.modeloEquipo?.id"
-    (selectionChange)="onModeloChange($event.value)"
-    required
-  >
-    <mat-option *ngFor="let modelo of modelos" [value]="modelo.id">
-      {{ modelo.modelo }}
+  <mat-label>Estado</mat-label>
+  <mat-select name="estadoEquipo" [(ngModel)]="equipoForm.estadoEquipo" required>
+    <mat-option *ngFor="let estado of estados" [value]="estado">
+      {{ estado }}
     </mat-option>
   </mat-select>
 </mat-form-field>
 
 
+    <!-- Modelo de Equipo -->
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Modelo</mat-label>
+    <mat-select name="modeloEquipo" [(ngModel)]="equipoForm.modeloEquipo" required>
+      <mat-option *ngFor="let modelo of modelos" [value]="modelo.id">
+        {{ modelo.modelo }}
+      </mat-option>
+    </mat-select>
+
+    </mat-form-field>
+
+    <!-- Botones -->
     <div class="d-flex justify-content-end mt-4">
       <button type="submit" class="btn btn-success me-2" [disabled]="maquinaForm.invalid">
-        {{ equipoForm?.id ? 'Actualizar' : 'Guardar' }}
+        {{ equipoForm.id ? 'Actualizar' : 'Guardar' }}
       </button>
       <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
-
     </div>
+
   </form>
 </div>
