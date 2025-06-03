@@ -1,6 +1,6 @@
 //maquina-form.component.ts
 import { Component, EventEmitter, Input, Output, SimpleChanges, OnChanges } from '@angular/core';
-import { Equipo } from '/ProyectoFACULTADAngular/sigema_frontend/src/app/models/equipo'; // ← Ajusta el path correcto
+import { Equipo } from '../../../../../models/equipo'; 
 
 @Component({
   selector: 'app-maquina-form',
