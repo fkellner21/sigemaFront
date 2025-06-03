@@ -10,3 +10,8 @@
   font-size: x-large;
   padding: 10px;
 }
+
+td,
+th {
+  vertical-align: middle;
+}

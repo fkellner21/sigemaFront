@@ -1,35 +1,33 @@
-// import { Component, EventEmitter, Input, Output } from '@angular/core';
-// import { FormsModule, NgForm } from '@angular/forms';
-// import { Equipo } from '../../../../../models/equipo';
+//maquina-form.component.ts
+import { Component, EventEmitter, Input, Output, SimpleChanges, OnChanges } from '@angular/core';
+import { Equipo } from '/ProyectoFACULTADAngular/sigema_frontend/src/app/models/equipo'; // ← Ajusta el path correcto
 
+@Component({
+  selector: 'app-maquina-form',
+   standalone: true,
+  templateUrl: './maquina-form.component.html'
+})
+export class MaquinaFormComponent implements OnChanges {
+  @Input() equipo: Equipo = new Equipo();
+  @Input() editando: boolean = false;
+  @Output() guardar = new EventEmitter<Equipo>();
+  @Output() cancelar = new EventEmitter<void>();
 
+  equipoForm: Equipo = new Equipo();
 
-// @Component({
-//   selector: 'maquina-form',
-//   standalone: true,
-//   imports: [FormsModule],
-//   templateUrl: './maquina-form.component.html',
-// })
-// export class MaquinaFormComponent {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['equipo'] && this.equipo) {
+      this.equipoForm = Object.assign(new Equipo(), this.equipo);
+    }
+  }
 
-//   @Input() maquina:Equipo;
-//   @Output() openEventEmitter = new EventEmitter();  
-//   @Output() newMaquinaEventEmitter: EventEmitter<Equipo>=new EventEmitter();
+  onSubmit(): void {
+    this.guardar.emit(this.equipoForm);
+  }
+
+  onCancel(): void {
+    this.cancelar.emit();
+  }
+
   
-//   constructor(){
-//     this.maquina = new Equipo();
-//   }
-
-//   onSubmit(maquinaForm:NgForm):void{
-    
-//     if(maquinaForm.valid){
-//       this.newMaquinaEventEmitter.emit(this.maquina);
-//     }
-//     maquinaForm.reset();
-//     this.onOpen();
-//   }
-  
-//   onOpen(){
-//     this.openEventEmitter.emit();
-//   }
-// }
+}
