@@ -18,7 +18,7 @@ import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
 })
 export class MaquinaComponent implements OnInit {
 
-  @Input() maquinas: Equipo[] = [];  // <-- SOLO ESTA
+  @Input() maquinas: Equipo[] = [];  
 
   maquinaSelected: Equipo = new Equipo();
   open: boolean = false;

@@ -4,7 +4,7 @@ import { Equipo } from '/ProyectoFACULTADAngular/sigema_frontend/src/app/models/
 
 @Component({
   selector: 'app-maquina-form',
-   standalone: true,
+  standalone: true,
   templateUrl: './maquina-form.component.html'
 })
 export class MaquinaFormComponent implements OnChanges {
