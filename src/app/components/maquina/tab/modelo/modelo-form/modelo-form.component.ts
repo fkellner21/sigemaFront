@@ -4,6 +4,7 @@ import { Marca } from '../../../../../models/marca';
 import { TipoEquipo } from '../../../../../models/tipoEquipo';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { UnidadMedida } from '../../../../../models/enum/UnidadMedida';
 
 @Component({
   selector: 'modelo-form',
@@ -18,6 +19,11 @@ export class ModeloFormComponent {
 
 @Output() newModeloEventEmitter = new EventEmitter<modeloEquipo>();
 @Output() openEventEmitter = new EventEmitter();
+
+unidadesDeMedida=[
+  { label: 'Kilómetros', value: UnidadMedida.KMs },
+  { label: 'Horas de Trabajo', value: UnidadMedida.HT }
+];
 
 constructor(){
   this.modeloEquipo=new modeloEquipo();

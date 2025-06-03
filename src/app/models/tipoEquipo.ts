@@ -1,3 +1,5 @@
+import { UnidadMedida } from "./enum/UnidadMedida";
+
     export class TipoEquipo{
          id!:number;
          codigo!:string;

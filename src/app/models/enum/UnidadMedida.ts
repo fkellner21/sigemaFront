@@ -1,4 +1,4 @@
 export enum UnidadMedida{
-    KMs,
-    HT
+  KMs = 'KMs',
+  HT = 'HT'
 }
