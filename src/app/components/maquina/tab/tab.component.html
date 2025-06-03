@@ -1,5 +1,9 @@
 <mat-tab-group>
-  <mat-tab label="Listado de equipos">Under construction </mat-tab>
+
+  <mat-tab label="Listado de equipos">
+    <maquina [maquinas]="maquinas"></maquina>
+  </mat-tab>
+
   <mat-tab label="Modelos">
     <modelo [tipos]="tipos" [marcas]="marcas"></modelo>
   </mat-tab>
