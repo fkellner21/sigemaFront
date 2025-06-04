@@ -38,9 +38,9 @@ export class MaquinaComponent implements OnInit {
   maquinaSelected: Equipo = new Equipo();
   open: boolean = false;
   dataSource!: MatTableDataSource<Equipo>;
-  displayedColumns: string[] = ['Codigo', 'Nombre', 'Modificar'];
+  displayedColumns: string[] =  ['matricula', 'observaciones', 'estadoEquipo', 'modeloEquipo', 'editar', 'eliminar'];
 
-  modelos: modeloEquipo[] = []; // ✅ NUEVO
+  modelos: modeloEquipo[] = [];
 
   @Output() maquinasActualizadas = new EventEmitter<void>();
 
