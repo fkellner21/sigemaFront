@@ -32,6 +32,7 @@ export class MarcaComponent {
     this.service.findAll().subscribe(marca => {
     this.marcas = marca;
     this.dataSource = new MatTableDataSource(this.marcas);
+    console.log(this.dataSource)
     });
   }
 

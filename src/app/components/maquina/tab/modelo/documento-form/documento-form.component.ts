@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'documento-form',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './documento-form.component.html',
   styleUrl: './documento-form.component.css'
 })
