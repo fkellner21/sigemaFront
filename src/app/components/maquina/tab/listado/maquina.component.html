@@ -133,6 +133,7 @@
 <app-maquina-form
   *ngIf="open"
   [equipo]="maquinaSelected"
+  [modelos]="modelos"
   (guardar)="addMaquina($event)"
   (cancelar)="setOpen()"
 >
