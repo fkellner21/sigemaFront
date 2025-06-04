@@ -7,8 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { modeloEquipo } from '/ProyectoFACULTADAngular/sigema_frontend/src/app/models/modeloEquipo';
-import { Equipo } from '/ProyectoFACULTADAngular/sigema_frontend/src/app/models/equipo';
-import { EstadoEquipo } from '/ProyectoFACULTADAngular/sigema_frontend/src/app/models/enum/EstadoEquipo'; // Ajustá la ruta según tu proyecto
+import { Equipo } from '../../../../../models/equipo'; 
+import { EstadoEquipo } from '../../../../../models/enum/EstadoEquipo';
 
 
 @Component({
