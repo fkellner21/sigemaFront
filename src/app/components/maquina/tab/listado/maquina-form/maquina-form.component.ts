@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { modeloEquipo } from '/ProyectoFACULTADAngular/sigema_frontend/src/app/models/modeloEquipo';
+import { modeloEquipo } from '../../../../../models/modeloEquipo';
 import { Equipo } from '../../../../../models/equipo'; 
 import { EstadoEquipo } from '../../../../../models/enum/EstadoEquipo';
 
