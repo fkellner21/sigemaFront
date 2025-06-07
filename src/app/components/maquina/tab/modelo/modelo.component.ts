@@ -9,10 +9,11 @@ import { ModeloFormComponent } from './modelo-form/modelo-form.component';
 import { Marca } from '../../../../models/marca';
 import { TipoEquipo } from '../../../../models/tipoEquipo';
 import { DocumentoFormComponent } from "./documento-form/documento-form.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'modelo',
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, ModeloFormComponent, DocumentoFormComponent],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, ModeloFormComponent, DocumentoFormComponent, CommonModule],
   templateUrl: './modelo.component.html',
   styleUrl: './modelo.component.css'
 })
@@ -24,6 +25,8 @@ export class ModeloComponent {
   modeloSelected:modeloEquipo = new modeloEquipo();
   open:boolean=false;
   dataSource!: MatTableDataSource<any>;
+  isLoading: boolean = false;
+
 
   constructor(private service:modeloService){}
 
@@ -32,9 +35,11 @@ export class ModeloComponent {
   }
 
   refresh():void{
+    this.isLoading=true;
     this.service.findAll().subscribe(modelo => {
     this.modelos = modelo;
     this.dataSource = new MatTableDataSource(this.modelos);
+    this.isLoading=false;
     });
   }
 
@@ -113,7 +118,7 @@ export class ModeloComponent {
     this.open=!this.open;
   }
 
-  displayedColumns: string[] = [ 'Anio', 'Marca', 'Modelo', 'Capacidad', 'Tipo', 'VerEquipos','VerRepuestos','Modificar'];
+  displayedColumns: string[] = [ 'Anio', 'Marca', 'Modelo', 'Capacidad', 'Tipo', 'VerEquipos','VerRepuestos', 'VerDocumentos','Modificar'];
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -126,13 +131,18 @@ export class ModeloComponent {
   }
 
   modeloSeleccionadoId: number | null = null;
+  abrirDocs:boolean=false;
 
-  abrirModalDocumentos(id: number) {
-  this.modeloSeleccionadoId = id;
+  abrirModalDocumentos(modelo: modeloEquipo) {
+  this.modeloSelected=modelo
+  this.modeloSeleccionadoId = modelo.id;
+  this.abrirDocs=true;
   }
 
   cerrarModal() {
+  this.modeloSelected=new modeloEquipo();
   this.modeloSeleccionadoId = null;
+  this.abrirDocs=false;
   }
 
 }
