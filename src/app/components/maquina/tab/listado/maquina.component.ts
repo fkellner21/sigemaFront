@@ -34,6 +34,7 @@ import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
 export class MaquinaComponent implements OnInit {
 
   @Input() maquinas: Equipo[] = [];
+  @Input() unidades: Unidad[] = [];
 
   maquinaSelected: Equipo = new Equipo();
   open: boolean = false;
@@ -41,6 +42,7 @@ export class MaquinaComponent implements OnInit {
   displayedColumns: string[] =  ['matricula', 'observaciones', 'estadoEquipo', 'modeloEquipo', 'editar', 'eliminar'];
 
   modelos: modeloEquipo[] = [];
+  
 
   @Output() maquinasActualizadas = new EventEmitter<void>();
 
