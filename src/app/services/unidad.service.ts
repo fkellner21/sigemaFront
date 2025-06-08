@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Unidad } from '../models/Unidad';  // Ajusta la ruta según tu estructura
+import { Unidad } from '../models/Unidad';  
 
 @Injectable({
   providedIn: 'root'
