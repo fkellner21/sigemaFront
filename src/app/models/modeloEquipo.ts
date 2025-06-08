@@ -1,3 +1,4 @@
+import { DocumentoModeloEquipo } from "./DocumentoModeloEquipo";
 import { UnidadMedida } from "./enum/UnidadMedida";
 import { Equipo } from "./equipo";
 import { Marca } from "./marca";
@@ -14,4 +15,5 @@ import { TipoEquipo } from "./tipoEquipo";
         equipos!:Array<Equipo>;
         repuestos!:Array<Repuesto>;
         unidadMedida!:UnidadMedida;
+        documentos!:Array<DocumentoModeloEquipo>;
     }

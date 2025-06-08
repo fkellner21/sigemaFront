@@ -6,10 +6,11 @@ import Swal from 'sweetalert2';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MarcaFormComponent } from './marca-form/marca-form.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'marca',
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MarcaFormComponent],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MarcaFormComponent, CommonModule],
   templateUrl: './marca.component.html',
   styleUrl: './marca.component.css'
 })
@@ -21,6 +22,8 @@ export class MarcaComponent {
   marcaSelected:Marca = new Marca();
   open:boolean=false;
   dataSource!: MatTableDataSource<any>;
+  isLoading: boolean = false;
+
 
   constructor(private service:marcaService){}
 
@@ -29,10 +32,11 @@ export class MarcaComponent {
   }
 
   refresh():void{
+    this.isLoading=true;
     this.service.findAll().subscribe(marca => {
     this.marcas = marca;
     this.dataSource = new MatTableDataSource(this.marcas);
-    console.log(this.dataSource)
+    this.isLoading=false;
     });
   }
 

@@ -6,10 +6,11 @@ import Swal from 'sweetalert2';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TipoFormComponent } from "./tipo-form/tipo-form.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'tipo-equipo',
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, TipoFormComponent],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, TipoFormComponent, CommonModule],
   templateUrl: './tipo-equipo.component.html',
   styleUrl: './tipo-equipo.component.css'
 })
@@ -20,6 +21,8 @@ export class TipoEquipoComponent implements OnInit {
   tipoEquipoSelected:TipoEquipo = new TipoEquipo();
   open:boolean=false;
   dataSource!: MatTableDataSource<any>;
+  isLoading: boolean = false;
+
 
   constructor(private service:tipoEquipoService){}
 
@@ -28,9 +31,11 @@ export class TipoEquipoComponent implements OnInit {
   }
 
   refresh():void{
+    this.isLoading=true;
     this.service.findAll().subscribe(tipo => {
     this.tiposDeEquipo = tipo;
     this.dataSource = new MatTableDataSource(this.tiposDeEquipo);
+    this.isLoading=false;
     });
   }
 

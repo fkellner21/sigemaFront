@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { modeloEquipo } from "../models/modeloEquipo";
 import { ModeloEquipoDTO } from "../models/DTO/modeloEquipoDTO";
 import { environment } from "../../environments/environment";
+import { DocumentoModeloEquipo } from "../models/DocumentoModeloEquipo";
 
 @Injectable({
   providedIn: 'root'
@@ -25,4 +26,17 @@ export class modeloService{
         let modeloDTO:ModeloEquipoDTO=ModeloEquipoDTO.toDTO(modelo);
         return this.http.put<modeloEquipo>(`${environment.apiUrl}/api/modelosEquipo/${id}`, modeloDTO);
       }
+
+      cargarDocumentos(id:number):Observable<DocumentoModeloEquipo[]> {
+      return this.http.get<DocumentoModeloEquipo[]>(`${environment.apiUrl}/api/modelosEquipo/${id}/documentos`);
+      }
+
+      subirDocumento(id:number, archivo:FormData){
+        return this.http.post(`${environment.apiUrl}/api/modelosEquipo/${id}/documentos`, archivo)
+      }
+
+      eliminarDocumento(id: number) {
+        return this.http.delete(`${environment.apiUrl}/api/modelosEquipo/documentos/${id}`);
+      }
+
     }

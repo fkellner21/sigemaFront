@@ -1,20 +1,35 @@
 <div class="p-3">
-  <h5>Documentos del modelo</h5>
+  <h5>Documentos disponibles</h5>
 
+  @if(documentos.length>0){
   <ul class="list-group my-3">
     <li
       *ngFor="let doc of documentos"
       class="list-group-item d-flex justify-content-between align-items-center"
     >
-      {{ doc }}
+      {{ doc.nombreArchivo }}
       <a
-        [href]="getDocumentoUrl(doc)"
+        [href]="getDocumento(doc.id)"
         target="_blank"
         class="btn btn-sm btn-outline-primary"
         >Descargar</a
       >
+      <button
+        (click)="eliminarDocumento(doc.id)"
+        class="btn btn-sm btn-outline-danger"
+      >
+        Eliminar
+      </button>
     </li>
   </ul>
+  }@else {
+  <p>Aún no hay documentos para el modelo</p>
+  }
+  <div class="text-center my-3" *ngIf="isLoading">
+    <div class="spinner-border text-dark" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
 
   <div class="row justify-content-between mt-3">
     <div class="col-9">

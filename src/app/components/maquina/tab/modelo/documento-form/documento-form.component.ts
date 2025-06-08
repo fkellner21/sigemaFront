@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { CommonModule } from '@angular/common';
+import { modeloService } from '../../../../../services/modelo.service';
+import { DocumentoModeloEquipo } from '../../../../../models/DocumentoModeloEquipo';
+import { environment } from '../../../../../../environments/environment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'documento-form',
@@ -9,22 +13,28 @@ import { CommonModule } from '@angular/common';
   styleUrl: './documento-form.component.css'
 })
 export class DocumentoFormComponent implements OnInit {
-  @Input() modeloId: number | null=0;//todo el 0 puede dar problemas
-  documentos: string[] = [];
+  @Input() modeloId: number | null=null;
+  documentos: DocumentoModeloEquipo[] = [];
   selectedFile: File | null = null;
+  isLoading:boolean=false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private service:modeloService) {}
 
   ngOnInit(): void {
     this.cargarDocumentos();
   }
 
   cargarDocumentos() {
-    this.http.get<string[]>(`/api/modelos-equipos/${this.modeloId}/documentos`)
-      .subscribe({
+    this.isLoading=true;
+    if(this.modeloId!=null){
+      this.service.cargarDocumentos(this.modeloId).subscribe({
         next: data => this.documentos = data,
-        error: err => console.error('Error al cargar documentos', err)
-      });
+        error: err => console.error('Error al cargar documentos', err),
+        complete: () => {
+        this.isLoading = false;
+        }
+      })
+    }
   }
 
   onFileSelected(event: Event) {
@@ -38,19 +48,54 @@ export class DocumentoFormComponent implements OnInit {
     if (!this.selectedFile) return;
 
     const formData = new FormData();
-    formData.append('documento', this.selectedFile);
+    formData.append('archivo', this.selectedFile);
 
-    this.http.post(`/api/modelos-equipos/${this.modeloId}/documentos`, formData)
-      .subscribe({
+    if (this.modeloId!=null){    
+      this.service.subirDocumento(this.modeloId, formData).subscribe({
         next: () => {
+          Swal.fire({
+            title: "Agregado!",
+            text: "Documento ingresado correctamente!",
+            icon: "success"
+            });
           this.selectedFile = null;
           this.cargarDocumentos();
-        },
-        error: err => console.error('Error al subir documento', err)
+          },
+        error: (err) => {
+          Swal.fire({
+            title: "Error",
+            text: "No se pudo subir el documento. "+err.error,
+            icon: "error"
+          });}
       });
+    }
   }
 
-  getDocumentoUrl(nombre: string): string {
-    return `/uploads/documentos-modelo/${nombre}`;
+  getDocumento(id: number): string {
+    return `${environment.apiUrl}/api/modelosEquipo/documentos/${id}/descargar`;
   }
+
+  eliminarDocumento(id: number) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: "Esta acción eliminará el documento del sistema.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.service.eliminarDocumento(id).subscribe({
+        next: () => {
+          Swal.fire('Eliminado', 'Documento eliminado correctamente.', 'success');
+          this.cargarDocumentos();
+        },
+        error: (err) => {
+          Swal.fire('Error', 'No se pudo eliminar el documento. ' + err.error?.error, 'error');
+        }
+      });
+    }
+  });
+}
+
 }
