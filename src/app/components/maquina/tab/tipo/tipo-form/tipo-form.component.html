@@ -37,24 +37,28 @@
               class="form-control my-2"
             />
           </div>
-          <button
-            type="submit"
-            class="btn btn-primary my-2"
-            [disabled]="tipoForm.invalid"
-          >
-            {{ tipoEquipo.id > 0 ? "Modificar" : "Agregar" }}
-          </button>
+
+          <div class="row justify-content-between mt-3">
+            <div class="col-4">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="tipoForm.invalid"
+              >
+                {{ tipoEquipo.id > 0 ? "Modificar" : "Agregar" }}
+              </button>
+            </div>
+            <div class="col-4">
+              <button
+                type="button"
+                class="btn btn-secondary w-100"
+                data-bs-dismiss="modal"
+                (click)="onOpen()">
+                Cerrar
+              </button>
+            </div>
+          </div>  
         </form>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-          (click)="onOpen()"
-        >
-          Cerrar
-        </button>
       </div>
     </div>
   </div>

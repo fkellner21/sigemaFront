@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Equipo } from '../../../../models/equipo';
 import { MaquinaService } from '../../../../services/equipo.service';
-import { modeloService } from '../../../../services/modelo.service'; // ✅ NUEVO
-import { modeloEquipo } from '../../../../models/modeloEquipo'; // ✅ NUEVO
+import { modeloService } from '../../../../services/modelo.service';
+import { modeloEquipo } from '../../../../models/modeloEquipo';
 import Swal from 'sweetalert2';
 
 import { MatTableDataSource } from '@angular/material/table';
@@ -32,30 +32,36 @@ import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
   styleUrls: ['./maquina.component.css']
 })
 export class MaquinaComponent implements OnInit {
-
-  @Input() maquinas: Equipo[] = [];
-
+  maquinas: Equipo[] = [];
   maquinaSelected: Equipo = new Equipo();
   open: boolean = false;
   dataSource!: MatTableDataSource<Equipo>;
-  displayedColumns: string[] =  ['matricula', 'observaciones', 'estadoEquipo', 'modeloEquipo', 'editar', 'eliminar'];
+  displayedColumns: string[] =  ['matricula', 'observaciones', 'estadoEquipo', 'modeloEquipo', 'acciones'];
 
   modelos: modeloEquipo[] = [];
-
-  @Output() maquinasActualizadas = new EventEmitter<void>();
-
+  
   constructor(
     private service: MaquinaService,
-    private modeloService: modeloService // ✅ NUEVO
+    private modeloService: modeloService
   ) {}
 
   ngOnInit(): void {
+    this.cargarModelos();
+    this.refresh();
+  }
+
+  refresh():void{
+    this.service.findAll().subscribe(maquinas => {
+    this.maquinas = maquinas;
     this.dataSource = new MatTableDataSource(this.maquinas);
-    this.cargarModelos(); // ✅ NUEVO
+    console.log(this.dataSource)
+    });
   }
 
   ngOnChanges() {
-    this.dataSource = new MatTableDataSource(this.maquinas);
+    if (this.maquinas) {
+      this.dataSource = new MatTableDataSource(this.maquinas);
+    }
   }
 
   cargarModelos() {
@@ -93,7 +99,8 @@ export class MaquinaComponent implements OnInit {
       this.service.edit(maquina.id, maquina).subscribe({
         next: () => {
           Swal.fire('Editado', 'Máquina actualizada correctamente', 'success');
-          this.maquinasActualizadas.emit();
+              this.refresh();
+
         },
         error: err => {
           Swal.fire('Error', 'No se pudo editar la máquina. ' + err.error, 'error');
@@ -103,7 +110,7 @@ export class MaquinaComponent implements OnInit {
       this.service.addNew(maquina).subscribe({
         next: () => {
           Swal.fire('Guardado', 'Máquina agregada con éxito', 'success');
-          this.maquinasActualizadas.emit();
+              this.refresh();
         },
         error: err => {
           Swal.fire('Error', 'No se pudo agregar la máquina. ' + err.error, 'error');
@@ -127,7 +134,7 @@ export class MaquinaComponent implements OnInit {
         this.service.delete(id).subscribe({
           next: () => {
             Swal.fire('Eliminado', 'La máquina fue eliminada', 'success');
-            this.maquinasActualizadas.emit();
+            this.refresh();
           },
           error: err => {
             Swal.fire('Error', 'No se pudo eliminar la máquina. ' + err.error, 'error');
