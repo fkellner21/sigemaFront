@@ -1,10 +1,9 @@
-//equipo.service.ts
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Equipo } from '../models/equipo'; 
 import { environment } from '../../environments/environment';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,19 @@ export class MaquinaService {
 
   // Obtener todas las máquinas
   findAll(): Observable<Equipo[]> {
-    return this.http.get<Equipo[]>(this.baseUrl);
+    return this.http.get<Equipo[]>(this.baseUrl).pipe(
+      map((equipos) =>
+        equipos.map((equipo) => {
+          if (equipo.unidad) {
+            equipo.idUnidad = equipo.unidad.id;
+          }
+          if(equipo.modeloEquipo) {
+            equipo.idModeloEquipo = equipo.modeloEquipo.id;
+          }
+          return equipo;
+        })
+      )
+    );
   }
 
   // Crear una nueva máquina
@@ -27,7 +38,17 @@ export class MaquinaService {
 
   // Obtener máquina por ID
   findById(id: number): Observable<Equipo> {
-    return this.http.get<Equipo>(`${this.baseUrl}/${id}`);
+    return this.http.get<Equipo>(`${this.baseUrl}/${id}`).pipe(
+      map(equipo => {
+        if (equipo.unidad) {
+          equipo.idUnidad = equipo.unidad.id;
+        }
+        if(equipo.modeloEquipo) {
+          equipo.idModeloEquipo = equipo.modeloEquipo.id;
+        }
+        return equipo;
+      })
+    );
   }
 
   // Editar máquina
@@ -37,6 +58,6 @@ export class MaquinaService {
 
   // Eliminar máquina
   delete(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+    return this.http.delete(`${this.baseUrl}/${id}`, { responseType: 'text' });
   }
 }

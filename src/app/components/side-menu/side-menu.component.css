@@ -1,6 +1,51 @@
-.list-group-item-dark {
-  background-color: black;
-  font-family: Arial, Helvetica, sans-serif;
-  color: white;
-  font-weight: bold;
+:host {
+    display: block;
+}
+
+mat-nav-list {
+    background-color: #f7f7f7;
+    color: white;
+    border-radius: 4px;
+    padding: 0.5rem;
+    height: 100% !important;
+}
+
+.mat-list-item {
+    background-color: #f7f7f7;
+    border-radius: 4px;
+}
+
+.mat-list-item:hover {
+    background-color: #495057;
+}
+
+:host ::ng-deep .mdc-list-item__primary-text {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.notification-badge{
+    background-color: #ff4444db;
+    border-radius: 50%;
+    width: 25px;
+    text-align: center;
+}
+
+.sidebar-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.menu-items {
+    flex-grow: 1;
+    overflow-y: auto;
+}   
+
+.logout-wrapper {
+    border-top: 1px solid #ccc;
+}
+
+.sub-menu a {
+    padding-left: 2.5rem;
 }

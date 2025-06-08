@@ -25,7 +25,7 @@ export class TabEquipos implements OnInit{
   tipos: TipoEquipo[] = [];
   maquinas: Equipo[] = [];
 
- constructor(
+constructor(
   private marcaService: marcaService,
   private tipoService: tipoEquipoService,
   private maquinaService: MaquinaService
@@ -55,6 +55,10 @@ ngOnInit(): void {
 
   
   loadMaquinas() {
+    this.maquinaService.findAll().subscribe(data => this.maquinas = [...data]);
+  }
+
+  loadModelos() {
     this.maquinaService.findAll().subscribe(data => this.maquinas = [...data]);
   }
 }

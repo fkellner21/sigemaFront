@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-          {{ marca.id > 0 ? "Editar " : "Agregar " }} marca
+          {{ unidad.id > 0 ? "Editar " : "Agregar " }} unidad
         </h5>
         <button
           (click)="onOpen()"
@@ -14,12 +14,12 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="onSubmit(tipoForm)" #tipoForm="ngForm">
+        <form (ngSubmit)="onSubmit(unidadForm)" #unidadForm="ngForm">
           <div>
             <input
-              placeholder="Nombre de la marca"
+              placeholder="Nombre de la unidad"
               name="Nombre"
-              [(ngModel)]="marca.nombre"
+              [(ngModel)]="unidad.nombre"
               class="form-control my-2"
               required
               #codigo="ngModel"
@@ -34,9 +34,9 @@
               <button
                 type="submit"
                 class="btn btn-primary w-100"
-                [disabled]="tipoForm.invalid"
+                [disabled]="unidadForm.invalid"
               >
-                {{ marca.id > 0 ? "Modificar" : "Agregar" }}
+                {{ unidad.id > 0 ? "Modificar" : "Agregar" }}
               </button>
             </div>
             <div class="col-4">

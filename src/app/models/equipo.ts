@@ -1,5 +1,6 @@
 import { EstadoEquipo } from "./enum/EstadoEquipo";
 import { modeloEquipo } from "./modeloEquipo";
+import { Unidad } from "./Unidad";
 import { Posicion } from "./posicion";
 
 export class Equipo{
@@ -9,5 +10,8 @@ export class Equipo{
     cantidadUnidadMedida!:number;
     ultimaPosicion!:Posicion;//todo cambiar por el objeto
     modeloEquipo!:modeloEquipo;
-    estadoEquipo!:EstadoEquipo;
+    estado!:EstadoEquipo;
+    unidad!:Unidad;
+    idModeloEquipo!:number;
+    idUnidad!:number;
 }

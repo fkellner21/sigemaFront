@@ -5,6 +5,7 @@ import { HomeComponent } from './components/home/home.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { TipoEquipoComponent } from './components/maquina/tab/tipo/tipo-equipo.component';
 import { TabEquipos } from './components/maquina/tab/tab.component';
+import { UnidadComponent } from './components/configuracion/Unidades/unidad.component';
 
 export const routes: Routes = [
     {
@@ -32,4 +33,8 @@ export const routes: Routes = [
         path: 'tabEquipos',
         component: TabEquipos,
     },
+    {
+        path: 'unidades',
+        component: UnidadComponent
+    }
 ];

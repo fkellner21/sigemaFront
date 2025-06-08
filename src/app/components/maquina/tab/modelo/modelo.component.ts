@@ -38,28 +38,6 @@ export class ModeloComponent {
     });
   }
 
-  // onRemoveMaquina(id:number):void{
-  // Swal.fire({
-  // title: "Seguro de borrar?",
-  // text: "Cuidado!",
-  // icon: "warning",
-  // showCancelButton: true,
-  // confirmButtonColor: "#3085d6",
-  // cancelButtonColor: "#d33",
-  // confirmButtonText: "si!"
-  //   }).then((result) => {
-  //   if (result.isConfirmed) {
-  //     this.maquinas = this.maquinas.filter(maquina => maquina.id != id);
-  //     this.dataSource.data= this.maquinas;
-  //       Swal.fire({
-  //         title: "Eliminado!",
-  //         text: "Borrado.",
-  //         icon: "success"
-  //       });
-  //     }
-  //   });
-  // }
-
   addModelo(modelo:modeloEquipo){
     if(modelo.id>0){ //es una modificacion
       this.service.edit(modelo.id, modelo).subscribe({

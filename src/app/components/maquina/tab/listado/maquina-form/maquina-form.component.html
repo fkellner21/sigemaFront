@@ -1,62 +1,111 @@
-<div class="card p-4">
-  <h5 class="text-center mb-3">
-    {{ equipoForm.id ? 'Actualizar' : 'Guardar' }}
-  </h5>
+<div class="modal" tabindex="-1" style="display: block">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-  <form #maquinaForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ equipoForm.id ? 'Actualizar equipo' : 'Agregar equipo' }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="onCancel()"
+        ></button>
+      </div>
 
-    <!-- Matrícula -->
-    <mat-form-field appearance="outline" class="w-100 mb-3">
-      <mat-label>Matrícula</mat-label>
-      <input matInput name="matricula" [(ngModel)]="equipoForm.matricula" required />
-    </mat-form-field>
+      <div class="modal-body">
+        <form #maquinaForm="ngForm" (ngSubmit)="onSubmit()">
 
-    <!-- Observaciones -->
-    <mat-form-field appearance="outline" class="w-100 mb-3">
-      <mat-label>Observaciones</mat-label>
-      <textarea matInput name="observaciones" [(ngModel)]="equipoForm.observaciones"></textarea>
-    </mat-form-field>
+        <div class="mb-3">
+            <label for="unidad" class="form-label">Unidad</label>
+            <select
+              id="unidad"
+              name="unidad"
+              class="form-select"
+              [(ngModel)]="equipoForm.idUnidad"
+              required
+            >
+              <option *ngFor="let unidad of unidades" [value]="unidad.id">
+                {{ unidad.nombre }}
+              </option>
+            </select>
+          </div>
 
-    <!-- Estado del Equipo -->
-<mat-form-field appearance="outline" class="w-100 mb-3">
-  <mat-label>Estado</mat-label>
-  <mat-select name="estadoEquipo" [(ngModel)]="equipoForm.estadoEquipo" required>
-    <mat-option *ngFor="let estado of estados" [value]="estado">
-      {{ estado }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+          <div class="mb-3">
+            <label for="modeloEquipo" class="form-label">Modelo</label>
+            <select
+              id="modeloEquipo"
+              name="modeloEquipo"
+              class="form-select"
+              [(ngModel)]="equipoForm.idModeloEquipo"
+              required
+            >
+              <option *ngFor="let modelo of modelos" [value]="modelo.id">
+                {{ modelo.modelo }}
+              </option>
+            </select>
+          </div>
 
+          <div class="mb-3">
+            <label for="matricula" class="form-label">Matrícula</label>
+            <input
+              type="text"
+              id="matricula"
+              name="matricula"
+              class="form-control"
+              [(ngModel)]="equipoForm.matricula"
+              required
+            />
+          </div>
 
-    <!-- Modelo de Equipo -->
-    <mat-form-field appearance="outline" class="w-100 mb-3">
-      <mat-label>Modelo</mat-label>
-    <mat-select name="modeloEquipo" [(ngModel)]="equipoForm.modeloEquipo" required>
-      <mat-option *ngFor="let modelo of modelos" [value]="modelo.id">
-        {{ modelo.modelo }}
-      </mat-option>
-    </mat-select>
+          <div class="mb-3">
+            <label for="estadoEquipo" class="form-label">Estado</label>
+            <select
+              id="estadoEquipo"
+              name="estadoEquipo"
+              class="form-select"
+              [(ngModel)]="equipoForm.estado"
+              required
+            >
+              <option *ngFor="let estado of estados" [value]="estado">
+                {{ estado }}
+              </option>
+            </select>
+          </div>
 
-    </mat-form-field>
-
-    <!-- Unidad -->
-<mat-form-field appearance="outline" class="w-100 mb-3">
-  <mat-label>Unidad</mat-label>
-  <mat-select name="unidad" [(ngModel)]="equipoForm.unidad" required>
-    <mat-option *ngFor="let unidad of unidades" [value]="unidad">
-      {{ unidad.nombre }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-
-
-    <!-- Botones -->
-    <div class="d-flex justify-content-end mt-4">
-      <button type="submit" class="btn btn-success me-2" [disabled]="maquinaForm.invalid">
-        {{ equipoForm.id ? 'Actualizar' : 'Guardar' }}
-      </button>
-      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+          <div class="mb-3">
+            <label for="observaciones" class="form-label">Observaciones</label>
+            <textarea
+              id="observaciones"
+              name="observaciones"
+              class="form-control"
+              [(ngModel)]="equipoForm.observaciones"
+            ></textarea>
+          </div>
+          <div class="row justify-content-between mt-3">
+            <div class="col-4">
+              <button
+                  type="submit"
+                  class="btn btn-primary w-100"
+                  [disabled]="maquinaForm.invalid"
+                >
+                  {{ equipoForm.id ? 'Actualizar' : 'Guardar' }}
+                </button>
+            </div>
+            <div class="col-4">
+              <button
+                type="button"
+                class="btn btn-secondary w-100"
+                data-bs-dismiss="modal"
+                (click)="onCancel()">
+                Cerrar
+              </button>
+            </div>
+          </div>            
+        </form>
+      </div>
     </div>
-
-  </form>
+  </div>
 </div>

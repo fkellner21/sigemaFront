@@ -12,4 +12,3 @@ import { RouterOutlet } from '@angular/router';
 export class MaquinasAppComponent{
 
 }
-//todo prueba de git
