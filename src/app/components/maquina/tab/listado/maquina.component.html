@@ -1,4 +1,3 @@
-<!-- maquina.component.html -->
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
@@ -19,6 +18,7 @@
   </div>
 </div>
 
+
 <div class="row me-0">
   <div>
     <table
@@ -26,63 +26,52 @@
       [dataSource]="dataSource"
       class="mat-elevation-z8 table table-striped table-hover"
     >
-      <!-- Matricula Column -->
+      <!-- Unidad -->
+      <ng-container matColumnDef="unidad">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">Unidad</th>
+        <td mat-cell *matCellDef="let element">{{ element.unidad?.nombre || 'N/A' }}</td>
+      </ng-container>
+
+      <!-- Tipo Máquina -->
+      <ng-container matColumnDef="tipoMaquina">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">Tipo</th>
+        <td mat-cell *matCellDef="let element">{{ element.modeloEquipo?.tipoEquipo?.codigo || 'N/A' }}</td>
+      </ng-container>
+
+      <!-- Matrícula -->
       <ng-container matColumnDef="matricula">
-        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
-          Matrícula
-        </th>
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">Matrícula</th>
         <td mat-cell *matCellDef="let element">{{ element.matricula }}</td>
       </ng-container>
 
-      <!-- Observaciones Column -->
-      <ng-container matColumnDef="observaciones">
-        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
-          Observaciones
-        </th>
-        <td mat-cell *matCellDef="let element">{{ element.observaciones }}</td>
+      <!-- Marca -->
+      <ng-container matColumnDef="marca">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">Marca</th>
+        <td mat-cell *matCellDef="let element">{{ element.modeloEquipo?.marca?.nombre || 'N/A' }}</td>
       </ng-container>
 
-      <!-- Unidad Medida Column
-      <ng-container matColumnDef="unidadMedida">
-        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
-          Unidad Medida
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.unidadMedida }}
-        </td>
-      </ng-container> -->
-
-      <!-- Cantidad Unidad Medida Column
-      <ng-container matColumnDef="cantidadUnidadMedida">
-        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
-          Cantidad
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.cantidadUnidadMedida }}
-        </td>
-      </ng-container> -->
-
-      <!-- Estado Equipo Column -->
-      <ng-container matColumnDef="estadoEquipo">
-        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
-          Estado
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.estadoEquipo }}
-        </td>
+      <!-- Modelo -->
+      <ng-container matColumnDef="modelo">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">Modelo</th>
+        <td mat-cell *matCellDef="let element">{{ element.modeloEquipo?.modelo }}</td>
       </ng-container>
 
-      <!-- Modelo Equipo Column -->
-      <ng-container matColumnDef="modeloEquipo">
-        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
-          Modelo
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.modeloEquipo?.modelo }}
-        </td>
+      <!-- Capacidad -->
+      <ng-container matColumnDef="capacidad">
+        <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">M3</th>
+        <td mat-cell *matCellDef="let element">{{ element.modeloEquipo?.capacidad }}</td>
       </ng-container>
 
-      <!-- Editar -->
+<!-- Tiempo de trabajo -->
+<ng-container matColumnDef="tiempoDeTrabajo">
+  <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">KMs/HT</th>
+  <td mat-cell *matCellDef="let element">
+    {{ element.cantidadUnidadMedida }} {{ element.modeloEquipo?.unidadMedida }}
+  </td>
+</ng-container>
+
+
+      <!-- Acciones (Editar, Eliminar) -->
       <ng-container matColumnDef="acciones">
         <th mat-header-cell *matHeaderCellDef class="bg-dark text-white"></th>
         <td
@@ -117,8 +106,9 @@
   *ngIf="open"
   [equipo]="maquinaSelected"
   [modelos]="modelos"
+  [tiposEquipo]="tiposEquipo"
+  [marcas]="marcas"
   (guardar)="addMaquina($event)"
   (cancelar)="setOpen()"
 >
 </app-maquina-form>
-
