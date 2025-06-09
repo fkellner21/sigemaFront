@@ -2,7 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Equipo } from '../../../../models/equipo';
 import { MaquinaService } from '../../../../services/equipo.service';
 import { modeloService } from '../../../../services/modelo.service';
+import { tipoEquipoService } from '../../../../services/tipoEquipo.service';
+import { marcaService } from '../../../../services/marca.service';
 import { modeloEquipo } from '../../../../models/modeloEquipo';
+import { TipoEquipo } from '../../../../models/tipoEquipo';
+import { Marca } from '../../../../models/marca';
 import Swal from 'sweetalert2';
 
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { CommonModule } from '@angular/common'; // Necesario para *ngIf, *ngFor
+import { CommonModule } from '@angular/common';
 import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
 
 @Component({
@@ -36,25 +40,40 @@ export class MaquinaComponent implements OnInit {
   maquinaSelected: Equipo = new Equipo();
   open: boolean = false;
   dataSource!: MatTableDataSource<Equipo>;
-  displayedColumns: string[] =  ['matricula', 'observaciones', 'estadoEquipo', 'modeloEquipo', 'acciones'];
+displayedColumns: string[] = [
+  'unidad',
+  'tipoMaquina',
+  'matricula',
+  'marca',
+  'modelo',
+  'capacidad',
+  'tiempoDeTrabajo',
+  'acciones'
+];
+
+
 
   modelos: modeloEquipo[] = [];
+  tiposEquipo: TipoEquipo[] = [];
+  marcas: Marca[] = [];
   
   constructor(
     private service: MaquinaService,
-    private modeloService: modeloService
+    private modeloService: modeloService,
+    private tipoEquipoService: tipoEquipoService,
+    private marcaService: marcaService
   ) {}
 
   ngOnInit(): void {
-    this.cargarModelos();
+    this.cargarDatosIniciales();
     this.refresh();
   }
 
-  refresh():void{
+  refresh(): void {
     this.service.findAll().subscribe(maquinas => {
-    this.maquinas = maquinas;
-    this.dataSource = new MatTableDataSource(this.maquinas);
-    console.log(this.dataSource)
+      this.maquinas = maquinas;
+      this.dataSource = new MatTableDataSource(this.maquinas);
+      console.log(this.dataSource);
     });
   }
 
@@ -64,13 +83,34 @@ export class MaquinaComponent implements OnInit {
     }
   }
 
-  cargarModelos() {
+  cargarDatosIniciales() {
+    // Cargar modelos
     this.modeloService.findAll().subscribe({
       next: (modelos) => {
         this.modelos = modelos;
       },
       error: (err) => {
         console.error('Error al cargar modelos:', err);
+      }
+    });
+
+    // Cargar tipos de equipo
+    this.tipoEquipoService.findAll().subscribe({
+      next: (tipos) => {
+        this.tiposEquipo = tipos;
+      },
+      error: (err) => {
+        console.error('Error al cargar tipos de equipo:', err);
+      }
+    });
+
+    // Cargar marcas
+    this.marcaService.findAll().subscribe({
+      next: (marcas) => {
+        this.marcas = marcas;
+      },
+      error: (err) => {
+        console.error('Error al cargar marcas:', err);
       }
     });
   }
@@ -99,8 +139,7 @@ export class MaquinaComponent implements OnInit {
       this.service.edit(maquina.id, maquina).subscribe({
         next: () => {
           Swal.fire('Editado', 'Máquina actualizada correctamente', 'success');
-              this.refresh();
-
+          this.refresh();
         },
         error: err => {
           Swal.fire('Error', 'No se pudo editar la máquina. ' + err.error, 'error');
@@ -110,7 +149,7 @@ export class MaquinaComponent implements OnInit {
       this.service.addNew(maquina).subscribe({
         next: () => {
           Swal.fire('Guardado', 'Máquina agregada con éxito', 'success');
-              this.refresh();
+          this.refresh();
         },
         error: err => {
           Swal.fire('Error', 'No se pudo agregar la máquina. ' + err.error, 'error');

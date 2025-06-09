@@ -12,6 +12,6 @@ export class Equipo{
     modeloEquipo!:modeloEquipo;
     estado!:EstadoEquipo;
     unidad!:Unidad;
-    idModeloEquipo!:number;
+    idModeloEquipo?:number;
     idUnidad!:number;
 }
