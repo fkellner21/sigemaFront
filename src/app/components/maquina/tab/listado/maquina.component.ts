@@ -51,11 +51,10 @@ displayedColumns: string[] = [
   'acciones'
 ];
 
-
-
   modelos: modeloEquipo[] = [];
   tiposEquipo: TipoEquipo[] = [];
   marcas: Marca[] = [];
+  isLoading:boolean=false;
   
   constructor(
     private service: MaquinaService,
@@ -70,10 +69,11 @@ displayedColumns: string[] = [
   }
 
   refresh(): void {
+    this.isLoading=true;
     this.service.findAll().subscribe(maquinas => {
       this.maquinas = maquinas;
       this.dataSource = new MatTableDataSource(this.maquinas);
-      console.log(this.dataSource);
+      this.isLoading=false;
     });
   }
 

@@ -10,10 +10,13 @@ import { Marca } from '../../../../models/marca';
 import { TipoEquipo } from '../../../../models/tipoEquipo';
 import { DocumentoFormComponent } from "./documento-form/documento-form.component";
 import { CommonModule } from '@angular/common';
+import { ListaRepuestosDeModeloComponent } from './lista-repuestos-de-modelo/lista-repuestos-de-modelo.component';
+import { ListaEquiposDeModeloComponent } from './lista-equipos-de-modelo/lista-equipos-de-modelo.component';
+import { ListaLubricantesDeModeloComponent } from './lista-lubricantes-de-modelo/lista-lubricantes-de-modelo.component';
 
 @Component({
   selector: 'modelo',
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, ModeloFormComponent, DocumentoFormComponent, CommonModule],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, ModeloFormComponent, DocumentoFormComponent, CommonModule, ListaRepuestosDeModeloComponent, ListaEquiposDeModeloComponent, ListaLubricantesDeModeloComponent],
   templateUrl: './modelo.component.html',
   styleUrl: './modelo.component.css'
 })
@@ -96,7 +99,7 @@ export class ModeloComponent {
     this.open=!this.open;
   }
 
-  displayedColumns: string[] = [ 'Anio', 'Marca', 'Modelo', 'Capacidad', 'Tipo', 'VerEquipos','VerRepuestos', 'VerDocumentos','Modificar'];
+  displayedColumns: string[] = [ 'Anio', 'Marca', 'Modelo', 'Capacidad', 'Tipo', 'VerEquipos','VerRepuestos', 'VerLubricantes', 'VerDocumentos','Modificar'];
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -110,6 +113,8 @@ export class ModeloComponent {
 
   modeloSeleccionadoId: number | null = null;
   abrirDocs:boolean=false;
+  abrirRepuestos:boolean=false;
+  abrirLubricantes:boolean=false;
 
   abrirModalDocumentos(modelo: modeloEquipo) {
   this.modeloSelected=modelo
@@ -121,6 +126,30 @@ export class ModeloComponent {
   this.modeloSelected=new modeloEquipo();
   this.modeloSeleccionadoId = null;
   this.abrirDocs=false;
+  }
+
+  abrirModalRepuestos(modelo: modeloEquipo) {
+  this.modeloSelected=modelo
+  this.modeloSeleccionadoId = modelo.id;
+  this.abrirRepuestos=true;
+  }
+
+  cerrarModalRepuestos() {
+  this.modeloSelected=new modeloEquipo();
+  this.modeloSeleccionadoId = null;
+  this.abrirRepuestos=false;
+  }
+
+  abrirModalLubricantes(modelo: modeloEquipo) {
+  this.modeloSelected=modelo
+  this.modeloSeleccionadoId = modelo.id;
+  this.abrirLubricantes=true;
+  }
+
+  cerrarModalLubricantes() {
+  this.modeloSelected=new modeloEquipo();
+  this.modeloSeleccionadoId = null;
+  this.abrirLubricantes=false;
   }
 
 }

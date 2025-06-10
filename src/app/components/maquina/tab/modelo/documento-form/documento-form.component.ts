@@ -14,9 +14,9 @@ import Swal from 'sweetalert2';
 })
 export class DocumentoFormComponent implements OnInit {
   @Input() modeloId: number | null=null;
-  documentos: DocumentoModeloEquipo[] = [];
   selectedFile: File | null = null;
   isLoading:boolean=false;
+  documentos: DocumentoModeloEquipo[] = [];
 
   constructor(private http: HttpClient, private service:modeloService) {}
 

@@ -5,6 +5,8 @@ import { modeloEquipo } from "../models/modeloEquipo";
 import { ModeloEquipoDTO } from "../models/DTO/modeloEquipoDTO";
 import { environment } from "../../environments/environment";
 import { DocumentoModeloEquipo } from "../models/DocumentoModeloEquipo";
+import { TipoRepuesto } from "../models/enum/TipoRepuesto";
+import { Repuesto } from "../models/Repuesto";
 
 @Injectable({
   providedIn: 'root'
@@ -39,4 +41,7 @@ export class modeloService{
         return this.http.delete(`${environment.apiUrl}/api/modelosEquipo/documentos/${id}`);
       }
 
+      cargarRepuestos(id:number, tipo:TipoRepuesto):Observable<Repuesto[]>{
+        return this.http.get<Repuesto[]>(`${environment.apiUrl}/api/modelosEquipo/${id}/repuestos/tipoRepuesto/${tipo}`)
+      }
     }

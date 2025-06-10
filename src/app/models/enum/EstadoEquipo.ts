@@ -1,6 +1,6 @@
 export enum EstadoEquipo {
-    Verde,
-    Amarillo,
-    Rojo,
-    Negro
+    Verde = 'Verde',
+    Amarillo='Amarillo',
+    Rojo='Rojo',
+    Negro='Negro'
 }
