@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Equipo } from '../../../../models/equipo';
 import { MaquinaService } from '../../../../services/equipo.service';
 import { modeloService } from '../../../../services/modelo.service';
@@ -35,84 +35,53 @@ import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
   templateUrl: './maquina.component.html',
   styleUrls: ['./maquina.component.css']
 })
-export class MaquinaComponent implements OnInit {
-  maquinas: Equipo[] = [];
+export class MaquinaComponent{
+  
   maquinaSelected: Equipo = new Equipo();
   open: boolean = false;
   dataSource!: MatTableDataSource<Equipo>;
-displayedColumns: string[] = [
+
+  @Input() maquinas: Equipo[] = [];
+  @Input() isLoadingMaquinas = false; 
+  @Input() modelos: modeloEquipo[] = [];
+  @Input() tiposEquipo: TipoEquipo[] = [];
+  @Input() marcas: Marca[] = [];
+
+  @Output() actualizarMaquinasEventEmmiter: EventEmitter<void> =new EventEmitter()
+  
+  displayedColumns: string[] = [
   'unidad',
   'tipoMaquina',
   'matricula',
   'marca',
   'modelo',
+  'estado',
   'capacidad',
   'tiempoDeTrabajo',
   'acciones'
-];
-
-  modelos: modeloEquipo[] = [];
-  tiposEquipo: TipoEquipo[] = [];
-  marcas: Marca[] = [];
-  isLoading:boolean=false;
-  
-  constructor(
-    private service: MaquinaService,
-    private modeloService: modeloService,
-    private tipoEquipoService: tipoEquipoService,
-    private marcaService: marcaService
-  ) {}
-
-  ngOnInit(): void {
-    this.cargarDatosIniciales();
-    this.refresh();
-  }
+  ];
+ 
+  constructor(private service: MaquinaService) {}
 
   refresh(): void {
-    this.isLoading=true;
-    this.service.findAll().subscribe(maquinas => {
-      this.maquinas = maquinas;
-      this.dataSource = new MatTableDataSource(this.maquinas);
-      this.isLoading=false;
-    });
+    this.actualizarMaquinasEventEmmiter.emit();
   }
 
-  ngOnChanges() {
-    if (this.maquinas) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['maquinas'] && this.maquinas) {
       this.dataSource = new MatTableDataSource(this.maquinas);
     }
-  }
+    if (changes['modelos'] && this.modelos) {
+      this.modelos = [...this.modelos];
+    }
 
-  cargarDatosIniciales() {
-    // Cargar modelos
-    this.modeloService.findAll().subscribe({
-      next: (modelos) => {
-        this.modelos = modelos;
-      },
-      error: (err) => {
-        console.error('Error al cargar modelos:', err);
-      }
-    });
+    if (changes['tiposEquipo'] && this.tiposEquipo) {
+      this.tiposEquipo = [...this.tiposEquipo];
+    }
 
-    // Cargar tipos de equipo
-    this.tipoEquipoService.findAll().subscribe({
-      next: (tipos) => {
-        this.tiposEquipo = tipos;
-      },
-      error: (err) => {
-        console.error('Error al cargar tipos de equipo:', err);
-      }
-    });
-
-    // Cargar marcas
-    this.marcaService.findAll().subscribe({
-      next: (marcas) => {
-        this.marcas = marcas;
-      },
-      error: (err) => {
-        console.error('Error al cargar marcas:', err);
-      }
-    });
+    if (changes['marcas'] && this.marcas) {
+      this.marcas = [...this.marcas];
+    }
   }
 
   applyFilter(event: Event) {

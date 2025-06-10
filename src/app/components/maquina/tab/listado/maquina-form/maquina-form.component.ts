@@ -30,21 +30,16 @@ import { marcaService } from '../../../../../services/marca.service';
   templateUrl: './maquina-form.component.html'
 })
 export class MaquinaFormComponent implements OnChanges, OnInit {
+  editando: boolean = false;
+  unidades: Unidad[] = [];
   @Input() equipo: Equipo = new Equipo();
-  @Input() editando: boolean = false;
   @Input() modelos: modeloEquipo[] = [];
-  @Input() unidades: Unidad[] = [];
   @Input() tiposEquipo: TipoEquipo[] = [];
   @Input() marcas: Marca[] = [];
   @Output() guardar = new EventEmitter<Equipo>();
   @Output() cancelar = new EventEmitter<void>();
 
-  constructor(
-    private unidadService: UnidadService, 
-    private modeloService: modeloService,
-    private tipoEquipoService: tipoEquipoService,
-    private marcaService: marcaService
-  ) {}
+  constructor(private unidadService: UnidadService) {}
 
   equipoForm: Equipo = new Equipo();
   estadoEquipoEnum = EstadoEquipo;
@@ -57,8 +52,6 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
   anioModelo: number | null = null;
 
   ngOnInit(): void {
-    console.log('Equipo recibido:', this.equipo);
-    console.log('Modelos disponibles:', this.modelos);
     this.refresh();
   }
 
@@ -66,7 +59,6 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
     this.unidadService.findAll().subscribe((unidad: Unidad[]) => {
       this.unidades = unidad;
     });
-
     this.modelosFiltrados = [...this.modelos];
     this.marcasFiltradas = [...this.marcas];
   }
@@ -85,8 +77,13 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
       } else {
         this.resetearTodosLosCampos();
       }
+
     }
     
+    if (changes['tiposEquipo'] && this.tiposEquipo) {
+      this.tiposEquipo = [...this.tiposEquipo];
+    }    
+
     if (changes['modelos'] && this.modelos) {
       this.modelosFiltrados = [...this.modelos];
     }
@@ -94,6 +91,9 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
     if (changes['marcas'] && this.marcas) {
       this.marcasFiltradas = [...this.marcas];
     }
+    console.log(this.tiposEquipo)
+    console.log(this.modelos)
+    console.log(this.marcas)
   }
 
   onTipoEquipoChange(event: Event): void {

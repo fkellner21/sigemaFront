@@ -12,6 +12,8 @@ import { MaquinaComponent } from './listado/maquina.component';
 
 import { forkJoin } from 'rxjs';
 import { Equipo } from '../../../models/equipo';
+import { modeloService } from '../../../services/modelo.service';
+import { modeloEquipo } from '../../../models/modeloEquipo';
 
 @Component({
   selector: 'tabEquipos',
@@ -24,41 +26,47 @@ export class TabEquipos implements OnInit{
   marcas: Marca[] = [];
   tipos: TipoEquipo[] = [];
   maquinas: Equipo[] = [];
+  modelos: modeloEquipo[] = [];
+  isLoadingMaquinas:boolean = false;
+  isLoadingModelos:boolean = false;
+  isLoadingMarcas:boolean = false;
+  isLoadingTipos:boolean = false;
 
 constructor(
   private marcaService: marcaService,
   private tipoService: tipoEquipoService,
-  private maquinaService: MaquinaService
+  private maquinaService: MaquinaService,
+  private modeloService: modeloService
 ) {}
 
 
-ngOnInit(): void {
-  forkJoin({
-    marcas: this.marcaService.findAll(),
-    tipos: this.tipoService.findAll(),
-    maquinas: this.maquinaService.findAll()
-  }).subscribe(({ marcas, tipos, maquinas }) => {
-    this.marcas = marcas;
-    this.tipos = tipos;
-    this.maquinas = maquinas;
-  });
-}
+  ngOnInit(): void {
+  this.loadMaquinas();
+  this.loadMarcas();
+  this.loadModelos();
+  this.loadTipos();
+  }
 
   loadTipos() {
+    this.isLoadingTipos=true;
     this.tipoService.findAll().subscribe(data => {
     this.tipos = [...data];  //genera una copia de los datos para que note el cambio
+    this.isLoadingTipos=false;
     });
   }
+
   loadMarcas() {
-    this.marcaService.findAll().subscribe(data => {this.marcas = [...data]});
+    this.isLoadingMarcas=true;
+    this.marcaService.findAll().subscribe(data => {this.marcas = [...data]; this.isLoadingMarcas=false;});
   }
 
-  
   loadMaquinas() {
-    this.maquinaService.findAll().subscribe(data => this.maquinas = [...data]);
+    this.isLoadingMaquinas=true;
+    this.maquinaService.findAll().subscribe(data => {this.maquinas = [...data]; this.isLoadingMaquinas=false;});
   }
 
   loadModelos() {
-    this.maquinaService.findAll().subscribe(data => this.maquinas = [...data]);
+    this.isLoadingModelos=true;
+    this.modeloService.findAll().subscribe(data => {this.modelos = [...data]; this.isLoadingModelos=false;});
   }
 }

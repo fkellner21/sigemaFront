@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,27 +23,25 @@ import { ListaLubricantesDeModeloComponent } from './lista-lubricantes-de-modelo
 export class ModeloComponent {
   @Input() tipos: TipoEquipo[] = [];
   @Input() marcas: Marca[] = [];
+  @Input() isLoadingModelos = false;
+  @Output() actualizarModelosEventEmmiter = new EventEmitter();
 
-  modelos:modeloEquipo[]=[];
+  @Input() modelos:modeloEquipo[]=[];
   modeloSelected:modeloEquipo = new modeloEquipo();
   open:boolean=false;
   dataSource!: MatTableDataSource<any>;
-  isLoading: boolean = false;
+
 
 
   constructor(private service:modeloService){}
 
-  ngOnInit(): void {
-    this.refresh();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['modelos'] && this.modelos) {
+      this.dataSource = new MatTableDataSource(this.modelos);
+    }
   }
-
   refresh():void{
-    this.isLoading=true;
-    this.service.findAll().subscribe(modelo => {
-    this.modelos = modelo;
-    this.dataSource = new MatTableDataSource(this.modelos);
-    this.isLoading=false;
-    });
+    this.actualizarModelosEventEmmiter.emit();
   }
 
   addModelo(modelo:modeloEquipo){
