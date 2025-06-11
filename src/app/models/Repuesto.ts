@@ -10,4 +10,5 @@ export class Repuesto{
     cantidad!:number;
     observaciones!:string;
     codigoSICE!:string;
+    idModelo!: number;
 }

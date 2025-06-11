@@ -7,6 +7,7 @@ import { environment } from "../../environments/environment";
 import { DocumentoModeloEquipo } from "../models/DocumentoModeloEquipo";
 import { TipoRepuesto } from "../models/enum/TipoRepuesto";
 import { Repuesto } from "../models/Repuesto";
+import { Equipo } from "../models/equipo";
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,9 @@ export class modeloService{
         return this.http.put(`${environment.apiUrl}/api/repuestos/${repuesto.id}`,repuesto, { responseType: 'text' })
       }
       crearRepuesto(repuesto:Repuesto){
-        return this.http.post(`${environment.apiUrl}/api/repuestos/`,repuesto, { responseType: 'text' })
+        return this.http.post(`${environment.apiUrl}/api/repuestos`,repuesto, { responseType: 'text' })
+      }
+      cargarEquipos(id:number):Observable<Equipo[]>{
+        return this.http.get<Equipo[]>(`${environment.apiUrl}/api/modelosEquipo/${id}/equipos`)
       }
     }
