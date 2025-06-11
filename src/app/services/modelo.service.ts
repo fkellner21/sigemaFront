@@ -44,4 +44,10 @@ export class modeloService{
       cargarRepuestos(id:number, tipo:TipoRepuesto):Observable<Repuesto[]>{
         return this.http.get<Repuesto[]>(`${environment.apiUrl}/api/modelosEquipo/${id}/repuestos/tipoRepuesto/${tipo}`)
       }
+      editarRepuesto(repuesto:Repuesto):Observable<any>{
+        return this.http.put(`${environment.apiUrl}/api/repuestos/${repuesto.id}`,repuesto, { responseType: 'text' })
+      }
+      crearRepuesto(repuesto:Repuesto){
+        return this.http.post(`${environment.apiUrl}/api/repuestos/`,repuesto, { responseType: 'text' })
+      }
     }

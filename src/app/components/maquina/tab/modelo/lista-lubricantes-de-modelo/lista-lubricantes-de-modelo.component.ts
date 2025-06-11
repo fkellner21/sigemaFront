@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Repuesto } from '../../../../../models/Repuesto';
 import { modeloService } from '../../../../../services/modelo.service';
 import { TipoRepuesto } from '../../../../../models/enum/TipoRepuesto';
@@ -6,16 +6,19 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { RepuestoFormComponent } from '../repuesto-form/repuesto-form.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'lista-lubricantes-de-modelo',
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, CommonModule],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, CommonModule, RepuestoFormComponent],
   templateUrl: './lista-lubricantes-de-modelo.component.html',
   styleUrl: './lista-lubricantes-de-modelo.component.css'
 })
 
 export class ListaLubricantesDeModeloComponent implements OnInit{
   @Input() modeloId: number | null=null;
+  @Output() newRepuestoEventEmitter:EventEmitter<Repuesto>=new EventEmitter()
   lubricantes!:Array<Repuesto>;
   isLoading:boolean=false;
   dataSource = new MatTableDataSource<Repuesto>([]);
@@ -57,7 +60,56 @@ export class ListaLubricantesDeModeloComponent implements OnInit{
 
   setNew(){
     this.repuestoSelected=new Repuesto();
-    this.open=false;
+    this.repuestoSelected.tipo=TipoRepuesto.Lubricante
+    this.open=true;
     //abre el modal
+  }
+  addRepuesto(repuesto:Repuesto){
+   if(repuesto.id>0){ //es una modificacion
+      this.service.editarRepuesto(repuesto).subscribe({
+          
+      next: (resp) => {
+        Swal.fire({
+        title: "Editado!",
+        text: "Lubricante actualizado correctamente!",
+        icon: "success"
+      });
+      //refresh de datos
+      this.refresh();
+    },
+    error: (err) => {
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo editar el lubricante. "+err.error,
+        icon: "error"
+      });
+      //refresh de datos
+      this.refresh();
+    }
+  });
+    }else{
+      //peticion al back
+      this.service.crearRepuesto(repuesto).subscribe({next:(resp)=>{
+        Swal.fire({
+          title: "Guardado!",
+          text: "Lubricante agregado con éxito!",
+          icon: "success"
+        });
+        //refresh de datos
+        this.refresh();
+      },
+      error:(err)=>{
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo agregar el lubricante. "+ err.error,
+          icon: "error"
+        });
+        this.refresh();
+      }
+    });
+    }
+  }
+  setOpen(){
+    this.open=false;
   }
 }
