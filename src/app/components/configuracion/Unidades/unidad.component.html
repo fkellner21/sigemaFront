@@ -25,7 +25,6 @@
       [dataSource]="dataSource"
       class="mat-elevation-z8 table table-striped table-hover"
     >
-
       <!-- Name Column -->
       <ng-container matColumnDef="Nombre">
         <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
@@ -57,6 +56,11 @@
         </td>
       </tr>
     </table>
+  </div>
+</div>
+<div class="text-center my-3" *ngIf="isLoading">
+  <div class="spinner-border text-dark" role="status">
+    <span class="visually-hidden">Cargando...</span>
   </div>
 </div>
 

@@ -30,21 +30,16 @@ import { marcaService } from '../../../../../services/marca.service';
   templateUrl: './maquina-form.component.html'
 })
 export class MaquinaFormComponent implements OnChanges, OnInit {
+  editando: boolean = false;
+  unidades: Unidad[] = [];
   @Input() equipo: Equipo = new Equipo();
-  @Input() editando: boolean = false;
   @Input() modelos: modeloEquipo[] = [];
-  @Input() unidades: Unidad[] = [];
   @Input() tiposEquipo: TipoEquipo[] = [];
   @Input() marcas: Marca[] = [];
   @Output() guardar = new EventEmitter<Equipo>();
   @Output() cancelar = new EventEmitter<void>();
 
-  constructor(
-    private unidadService: UnidadService, 
-    private modeloService: modeloService,
-    private tipoEquipoService: tipoEquipoService,
-    private marcaService: marcaService
-  ) {}
+  constructor(private unidadService: UnidadService) {}
 
   equipoForm: Equipo = new Equipo();
   estadoEquipoEnum = EstadoEquipo;
@@ -57,8 +52,6 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
   anioModelo: number | null = null;
 
   ngOnInit(): void {
-    console.log('Equipo recibido:', this.equipo);
-    console.log('Modelos disponibles:', this.modelos);
     this.refresh();
   }
 
@@ -66,7 +59,6 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
     this.unidadService.findAll().subscribe((unidad: Unidad[]) => {
       this.unidades = unidad;
     });
-
     this.modelosFiltrados = [...this.modelos];
     this.marcasFiltradas = [...this.marcas];
   }
@@ -85,22 +77,28 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
       } else {
         this.resetearTodosLosCampos();
       }
+
     }
     
+    if (changes['tiposEquipo'] && this.tiposEquipo) {
+      this.tiposEquipo = [...this.tiposEquipo];
+    }    
+
     if (changes['modelos'] && this.modelos) {
       this.modelosFiltrados = [...this.modelos];
-      console.log('Modelos actualizados:', this.modelos);
     }
     
     if (changes['marcas'] && this.marcas) {
       this.marcasFiltradas = [...this.marcas];
     }
+    console.log(this.tiposEquipo)
+    console.log(this.modelos)
+    console.log(this.marcas)
   }
 
   onTipoEquipoChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     const tipoId = input.value ? Number(input.value) : null;
-    console.log('Tipo seleccionado:', tipoId);
     this.tipoSeleccionado = tipoId;
     
     this.marcaSeleccionada = null;
@@ -113,7 +111,6 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
   onMarcaChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     const marcaId = input.value ? Number(input.value) : null;
-    console.log('Marca seleccionada:', marcaId);
     this.marcaSeleccionada = marcaId;
     
     this.resetearModeloYAnio();
@@ -124,7 +121,6 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
   onModeloChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     const modeloId = input.value ? Number(input.value) : null;
-    console.log('Modelo seleccionado:', modeloId);
 
     if (modeloId !== null) {
       const modeloSeleccionado = this.modelosFiltrados.find(m => m.id === modeloId);
@@ -132,7 +128,6 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
         this.equipoForm.modeloEquipo = modeloSeleccionado;
         this.equipoForm.idModeloEquipo = modeloSeleccionado.id;
         this.anioModelo = modeloSeleccionado.anio;
-        console.log('Modelo asignado:', modeloSeleccionado);
         return;
       }
     }
@@ -155,8 +150,6 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
       });
 
     this.marcasFiltradas = this.marcas.filter(marca => marcasDelTipo.has(marca.id));
-    
-    console.log('Marcas filtradas para tipo', this.tipoSeleccionado, ':', this.marcasFiltradas);
   }
 
   private filtrarModelos(): void {
@@ -166,18 +159,15 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
       modelosFiltrados = modelosFiltrados.filter(m => 
         m.tipoEquipo && m.tipoEquipo.id === this.tipoSeleccionado
       );
-      console.log('Modelos después de filtrar por tipo:', modelosFiltrados);
     }
 
     if (this.marcaSeleccionada) {
       modelosFiltrados = modelosFiltrados.filter(m => 
         m.marca && m.marca.id === this.marcaSeleccionada
       );
-      console.log('Modelos después de filtrar por marca:', modelosFiltrados);
     }
 
     this.modelosFiltrados = modelosFiltrados;
-    console.log('Modelos finales filtrados:', this.modelosFiltrados);
 
     if (this.equipoForm.idModeloEquipo) {
       const modeloActualEnLista = this.modelosFiltrados.find(m => m.id === this.equipoForm.idModeloEquipo);

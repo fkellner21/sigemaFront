@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { TipoEquipo } from '../../../../models/tipoEquipo';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { tipoEquipoService } from '../../../../services/tipoEquipo.service';
@@ -14,52 +14,25 @@ import { CommonModule } from '@angular/common';
   templateUrl: './tipo-equipo.component.html',
   styleUrl: './tipo-equipo.component.css'
 })
-export class TipoEquipoComponent implements OnInit {
+export class TipoEquipoComponent  {
 
-  @Output() tiposActualizados = new EventEmitter<void>();
-  tiposDeEquipo:TipoEquipo[]=[];
+  @Input() tiposDeEquipo:TipoEquipo[]=[];
   tipoEquipoSelected:TipoEquipo = new TipoEquipo();
   open:boolean=false;
   dataSource!: MatTableDataSource<any>;
-  isLoading: boolean = false;
-
+  @Input() isLoadingTipos = false
+  @Output() actualizarTiposEventEmmiter = new EventEmitter();
 
   constructor(private service:tipoEquipoService){}
 
-  ngOnInit(): void {
-    this.refresh();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['tiposDeEquipo'] && this.tiposDeEquipo) {
+      this.dataSource = new MatTableDataSource(this.tiposDeEquipo);
+    }
   }
-
   refresh():void{
-    this.isLoading=true;
-    this.service.findAll().subscribe(tipo => {
-    this.tiposDeEquipo = tipo;
-    this.dataSource = new MatTableDataSource(this.tiposDeEquipo);
-    this.isLoading=false;
-    });
+    this.actualizarTiposEventEmmiter.emit();
   }
-
-  // onRemoveMaquina(id:number):void{
-  // Swal.fire({
-  // title: "Seguro de borrar?",
-  // text: "Cuidado!",
-  // icon: "warning",
-  // showCancelButton: true,
-  // confirmButtonColor: "#3085d6",
-  // cancelButtonColor: "#d33",
-  // confirmButtonText: "si!"
-  //   }).then((result) => {
-  //   if (result.isConfirmed) {
-  //     this.maquinas = this.maquinas.filter(maquina => maquina.id != id);
-  //     this.dataSource.data= this.maquinas;
-  //       Swal.fire({
-  //         title: "Eliminado!",
-  //         text: "Borrado.",
-  //         icon: "success"
-  //       });
-  //     }
-  //   });
-  // }
 
   addTipoEquipo(tipo:TipoEquipo){
     if(tipo.id>0){ //es una modificacion
@@ -73,10 +46,8 @@ export class TipoEquipoComponent implements OnInit {
       });
       //refresh de datos
       this.refresh();
-      this.tiposActualizados.emit();
     },
     error: (err) => {
-      console.error("Error al editar:", err);
       Swal.fire({
         title: "Error",
         text: "No se pudo editar el tipo de equipo: \n"+ err.error,
@@ -96,10 +67,8 @@ export class TipoEquipoComponent implements OnInit {
         });
         //refresh de datos
         this.refresh();
-        this.tiposActualizados.emit();
       },
       error:(err)=>{
-        console.log('error',err); 
         Swal.fire({
           title: "Error",
           text: "No se pudo agregar el tipo de equipo: \n"+ err.error,

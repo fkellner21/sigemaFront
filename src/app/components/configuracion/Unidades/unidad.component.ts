@@ -6,10 +6,11 @@ import Swal from 'sweetalert2';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UnidadFormComponent } from './unidad-form/unidad-form.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'unidad',
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, UnidadFormComponent],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, UnidadFormComponent, CommonModule],
   templateUrl: './unidad.component.html',
   styleUrl: './unidad.component.css'
 })
@@ -21,6 +22,7 @@ export class UnidadComponent {
   unidadSelected:Unidad = new Unidad();
   open:boolean=false;
   dataSource!: MatTableDataSource<any>;
+  isLoading:boolean=false;
 
   constructor(private service:UnidadService){}
 
@@ -29,10 +31,11 @@ export class UnidadComponent {
   }
 
   refresh():void{
+    this.isLoading=true;
     this.service.findAll().subscribe((unidad: Unidad[]) => {
     this.unidades = unidad;
     this.dataSource = new MatTableDataSource(this.unidades);
-    console.log(this.dataSource)
+    this.isLoading=false;
     });
   }
 

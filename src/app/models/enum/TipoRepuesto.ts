@@ -1,4 +1,4 @@
 export enum TipoRepuesto {
-    Pieza,
-    Lubricante
+    Pieza = 'Pieza',
+    Lubricante = 'Lubricante'
 }

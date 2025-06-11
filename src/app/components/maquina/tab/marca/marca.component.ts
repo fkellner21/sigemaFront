@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { Marca } from '../../../../models/marca';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { marcaService } from '../../../../services/marca.service';
@@ -17,50 +17,23 @@ import { CommonModule } from '@angular/common';
 export class MarcaComponent {
 
   @Output() marcasActualizadas = new EventEmitter<void>();
-
-  marcas:Marca[]=[];
+  @Input() isLoadingMarcas=false
+  @Input() marcas:Marca[]=[];
   marcaSelected:Marca = new Marca();
   open:boolean=false;
   dataSource!: MatTableDataSource<any>;
-  isLoading: boolean = false;
-
 
   constructor(private service:marcaService){}
 
-  ngOnInit(): void {
-    this.refresh();
-  }
-
   refresh():void{
-    this.isLoading=true;
-    this.service.findAll().subscribe(marca => {
-    this.marcas = marca;
-    this.dataSource = new MatTableDataSource(this.marcas);
-    this.isLoading=false;
-    });
+    this.marcasActualizadas.emit();
   }
-
-  // onRemoveMaquina(id:number):void{
-  // Swal.fire({
-  // title: "Seguro de borrar?",
-  // text: "Cuidado!",
-  // icon: "warning",
-  // showCancelButton: true,
-  // confirmButtonColor: "#3085d6",
-  // cancelButtonColor: "#d33",
-  // confirmButtonText: "si!"
-  //   }).then((result) => {
-  //   if (result.isConfirmed) {
-  //     this.maquinas = this.maquinas.filter(maquina => maquina.id != id);
-  //     this.dataSource.data= this.maquinas;
-  //       Swal.fire({
-  //         title: "Eliminado!",
-  //         text: "Borrado.",
-  //         icon: "success"
-  //       });
-  //     }
-  //   });
-  // }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['marcas'] && this.marcas) {
+      this.dataSource = new MatTableDataSource(this.marcas);
+    }
+  }
 
   addMarca(marca:Marca){
     if(marca.id>0){ //es una modificacion
@@ -73,7 +46,6 @@ export class MarcaComponent {
       });
       //refresh de datos
       this.refresh();
-      this.marcasActualizadas.emit();
     },
     error: (err) => {
       Swal.fire({
@@ -95,7 +67,6 @@ export class MarcaComponent {
         });
         //refresh de datos
         this.refresh();
-        this.marcasActualizadas.emit();
       },
       error:(err)=>{
         Swal.fire({
