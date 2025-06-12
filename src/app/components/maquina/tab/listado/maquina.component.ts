@@ -71,6 +71,26 @@ export class MaquinaComponent{
     if (changes['maquinas'] && this.maquinas) {
       this.dataSource = new MatTableDataSource(this.maquinas);
     }
+
+    this.dataSource.filterPredicate = (data: Equipo, filter: string): boolean => {
+    const filterValue = filter.trim().toLowerCase();
+
+    // Crear un string con todos los campos relevantes para la búsqueda
+    const dataStr = `
+      ${data.unidad?.nombre || ''}
+      ${data.modeloEquipo?.tipoEquipo?.codigo || ''}
+      ${data.matricula || ''}
+      ${data.modeloEquipo?.marca?.nombre || ''}
+      ${data.modeloEquipo?.modelo || ''}
+      ${data.estado || ''}
+      ${data.modeloEquipo?.capacidad?.toString() || ''}
+      ${data.cantidadUnidadMedida?.toString() || ''}
+      ${data.modeloEquipo?.unidadMedida || ''}
+    `.toLowerCase();
+
+    return dataStr.includes(filterValue);
+    };
+
     if (changes['modelos'] && this.modelos) {
       this.modelos = [...this.modelos];
     }

@@ -52,6 +52,17 @@ export class ModeloComponent {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['modelos'] && this.modelos) {
       this.dataSource = new MatTableDataSource(this.modelos);
+      this.dataSource.filterPredicate = (data: modeloEquipo, filter: string) => {
+      const dataStr = `
+        ${data.anio}
+        ${data.modelo}
+        ${data.capacidad}
+        ${data.marca?.nombre}
+        ${data.tipoEquipo?.codigo}
+      `.toLowerCase();
+
+      return dataStr.includes(filter.trim().toLowerCase());
+      };
     }
   }
   refresh(): void {
@@ -129,7 +140,7 @@ export class ModeloComponent {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  } //todo, el filtro no agarra el tipo ni la marca
+  } 
 
   setSelectedModelo(modelo: modeloEquipo) {
     this.modeloSelected = modelo;

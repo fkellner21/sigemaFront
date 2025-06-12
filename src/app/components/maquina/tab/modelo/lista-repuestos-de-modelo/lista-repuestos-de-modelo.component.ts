@@ -25,7 +25,7 @@ export class ListaRepuestosDeModeloComponent implements OnInit{
   dataSource = new MatTableDataSource<Repuesto>([]);
   open:boolean=false;
   repuestoSelected:Repuesto=new Repuesto();
-  tituloTipoRepuesto:string="Repuestos";
+  tituloTipoRepuesto:string="Repuesto";
 
   constructor(private service:modeloService){}
   
@@ -36,13 +36,12 @@ export class ListaRepuestosDeModeloComponent implements OnInit{
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['tipoRepuesto']) {
       if (this.tipoRepuesto === TipoRepuesto.Lubricante) {
-        this.tituloTipoRepuesto = 'Lubricantes';
+        this.tituloTipoRepuesto = 'Lubricante';
         this.repuestoSelected.tipo = TipoRepuesto.Lubricante;
       } else {
-        this.tituloTipoRepuesto = 'Repuestos';
+        this.tituloTipoRepuesto = 'Repuesto';
         this.repuestoSelected.tipo = TipoRepuesto.Pieza;
       }
-
       this.refresh();
     }
   }
@@ -60,6 +59,7 @@ export class ListaRepuestosDeModeloComponent implements OnInit{
   'codigo',
   'nombre',
   'cantidad',
+  'observaciones',
   'acciones'
   ];
   

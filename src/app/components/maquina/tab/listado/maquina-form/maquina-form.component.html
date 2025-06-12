@@ -95,6 +95,16 @@
             required
           />
 
+          <!-- USO -->
+          <p>
+            {{ equipoForm.modeloEquipo.unidadMedida || "Unidad de medida" }}
+          </p>
+          <input
+            class="form-control my-2"
+            [(ngModel)]="equipoForm.cantidadUnidadMedida"
+            name="cantidadUnidadMedida"
+          />
+
           <!-- ESTADO -->
           <p>Estado</p>
           <select

@@ -21,7 +21,6 @@ export class RepuestoFormComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['repuesto'] && changes['repuesto'].currentValue) {
-      console.log('repuesto recibido en modal:', this.repuesto);
       if (this.repuesto.tipo === TipoRepuesto.Pieza) {
         this.titulo = "repuesto";
       } else if (this.repuesto.tipo === TipoRepuesto.Lubricante) {

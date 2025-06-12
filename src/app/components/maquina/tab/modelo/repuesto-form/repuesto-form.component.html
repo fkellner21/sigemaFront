@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-          {{ repuesto.id > 0 ? "Editar " : "Agregar " }} {{titulo}}
+          {{ repuesto.id > 0 ? "Editar " : "Agregar " }} {{ titulo }}
         </h5>
         <button
           (click)="onOpen()"
@@ -29,19 +29,14 @@
             <div class="alert alert-danger">Nombre requerido</div>
             } }
           </div>
-                    <div>
+          <div>
             <input
               placeholder="Código SICE"
               name="codigoSICE"
               [(ngModel)]="repuesto.codigoSICE"
               class="form-control my-2"
-              required
               #codigoSICE="ngModel"
             />
-            @if(codigoSICE.invalid && (codigoSICE.dirty || codigoSICE.touched)){
-            @if(codigoSICE.errors!['required']){
-            <div class="alert alert-danger">Código SICE requerido</div>
-            } }
           </div>
           <div>
             <input

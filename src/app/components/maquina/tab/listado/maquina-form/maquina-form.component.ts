@@ -12,9 +12,6 @@ import { EstadoEquipo } from '../../../../../models/enum/EstadoEquipo';
 import { TipoEquipo } from '../../../../../models/tipoEquipo';
 import { Marca } from '../../../../../models/marca';
 import { UnidadService } from '../../../../../services/unidad.service';
-import { modeloService } from '../../../../../services/modelo.service';
-import { tipoEquipoService } from '../../../../../services/tipoEquipo.service';
-import { marcaService } from '../../../../../services/marca.service';
 
 @Component({
   selector: 'app-maquina-form',

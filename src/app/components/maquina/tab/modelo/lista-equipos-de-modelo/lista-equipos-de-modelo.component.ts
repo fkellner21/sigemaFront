@@ -51,6 +51,21 @@ export class ListaEquiposDeModeloComponent implements OnInit {
     this.service.cargarEquipos(this.idModelo ?? 0).subscribe((data) => {
       this.maquinas = [...data];
       this.dataSource = new MatTableDataSource(this.maquinas);
+
+        this.dataSource.filterPredicate = (data: Equipo, filter: string) => {
+        const dataStr = `
+        ${data.unidad?.nombre || ''}
+        ${data.modeloEquipo?.tipoEquipo?.codigo || ''}
+        ${data.matricula || ''}
+        ${data.modeloEquipo?.marca?.nombre || ''}
+        ${data.modeloEquipo?.modelo || ''}
+        ${data.estado || ''}
+        ${data.modeloEquipo?.capacidad || ''}
+        ${data.cantidadUnidadMedida || ''}
+        ${data.modeloEquipo?.unidadMedida || ''}
+        `.toLowerCase();
+        return dataStr.includes(filter.trim().toLowerCase());
+      };
       this.isLoadingMaquinas = false;
     });
   }
