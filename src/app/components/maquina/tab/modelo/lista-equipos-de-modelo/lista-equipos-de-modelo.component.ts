@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Equipo } from '../../../../../models/equipo';
-import Swal from 'sweetalert2';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
