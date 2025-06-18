@@ -38,6 +38,18 @@
             />
           </div>
 
+          <p>Tarea principal</p>
+          <select
+            class="form-control my-2"
+            [(ngModel)]="tipoEquipo.tarea"
+            name="tareaEquipo"
+            required
+          >
+            <option value="">Seleccione una tarea</option>
+            <option *ngFor="let tarea of tareas" [value]="tarea">
+              {{ tarea }}
+            </option>
+          </select>
           <div class="row justify-content-between mt-3">
             <div class="col-4">
               <button
@@ -53,11 +65,12 @@
                 type="button"
                 class="btn btn-secondary w-100"
                 data-bs-dismiss="modal"
-                (click)="onOpen()">
+                (click)="onOpen()"
+              >
                 Cerrar
               </button>
             </div>
-          </div>  
+          </div>
         </form>
       </div>
     </div>

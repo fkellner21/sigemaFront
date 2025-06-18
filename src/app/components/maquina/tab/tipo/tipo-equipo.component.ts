@@ -91,7 +91,7 @@ export class TipoEquipoComponent  {
     this.refresh();
   }
 
-  displayedColumns: string[] = [ 'Codigo', 'Descripcion', 'Modificar'];
+  displayedColumns: string[] = [ 'Codigo', 'Descripcion','Tarea', 'Modificar'];
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

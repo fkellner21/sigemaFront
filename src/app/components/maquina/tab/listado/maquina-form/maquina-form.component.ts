@@ -88,9 +88,6 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
     if (changes['marcas'] && this.marcas) {
       this.marcasFiltradas = [...this.marcas];
     }
-    console.log(this.tiposEquipo)
-    console.log(this.modelos)
-    console.log(this.marcas)
   }
 
   onTipoEquipoChange(event: Event): void {
@@ -189,7 +186,6 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
   }
 
   onSubmit(): void {
-    console.log('Enviando equipo:', this.equipoForm);
     this.guardar.emit(this.equipoForm);
     this.cancelar.emit();
   }

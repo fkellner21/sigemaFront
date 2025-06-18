@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { TipoEquipo } from '../../../../../models/tipoEquipo';
+import { TareaEquipo } from '../../../../../models/enum/TareaEquipo';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'tipo-form',
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './tipo-form.component.html',
   styleUrl: './tipo-form.component.css'
 })
@@ -13,9 +15,14 @@ export class TipoFormComponent {
   @Input() tipoEquipo:TipoEquipo;
   @Output() openEventEmitter = new EventEmitter();  
   @Output() newTipoEventEmitter: EventEmitter<TipoEquipo>=new EventEmitter();
+  tareasEnum=TareaEquipo;
+  tareas = Object.keys(this.tareasEnum);
+  
 
   constructor(){
     this.tipoEquipo=new TipoEquipo();
+      console.log("Enum:", this.tareasEnum);
+  console.log("Tareas:", this.tareas);
   }
 
     onSubmit(tipoForm:NgForm):void{
