@@ -1,39 +1,66 @@
 // unidad.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Unidad } from '../models/Unidad';
-import { environment } from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class UnidadService {
+    token: string | null = null;
+    headers: HttpHeaders = new HttpHeaders();
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+        this.token = localStorage.getItem('token');
+        this.headers = new HttpHeaders().set(
+            'Authorization',
+            `Bearer ${this.token}`
+        );
+    }
 
-  // Obtener todas las unidades
-  findAll(): Observable<Unidad[]> {
-    return this.http.get<Unidad[]>(`${environment.apiUrl}/api/unidades`);
-  }
+    findAll(): Observable<Unidad[]> {
+        return this.http.get<Unidad[]>(`${environment.apiUrl}/api/unidades`, {
+            headers: this.headers,
+        });
+    }
 
-  // Obtener unidad por id
-  findById(id: number): Observable<Unidad> {
-    return this.http.get<Unidad>(`${environment.apiUrl}/api/unidades/${id}`);
-  }
+    findById(id: number): Observable<Unidad> {
+        return this.http.get<Unidad>(
+            `${environment.apiUrl}/api/unidades/${id}`,
+            {
+                headers: this.headers,
+            }
+        );
+    }
 
-  // Crear nueva unidad
-  addNew(unidad: Unidad): Observable<Unidad> {
-    return this.http.post<Unidad>(`${environment.apiUrl}/api/unidades`, unidad);
-  }
+    addNew(unidad: Unidad): Observable<Unidad> {
+        return this.http.post<Unidad>(
+            `${environment.apiUrl}/api/unidades`,
+            unidad,
+            {
+                headers: this.headers,
+            }
+        );
+    }
 
-  // Actualizar unidad existente
-  edit(id: number, unidad: Unidad): Observable<Unidad> {
-    return this.http.put<Unidad>(`${environment.apiUrl}/api/unidades/${id}`, unidad);
-  }
+    edit(id: number, unidad: Unidad): Observable<Unidad> {
+        return this.http.put<Unidad>(
+            `${environment.apiUrl}/api/unidades/${id}`,
+            unidad,
+            {
+                headers: this.headers,
+            }
+        );
+    }
 
-  // Eliminar unidad
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${environment.apiUrl}/api/unidades/${id}`);
-  }
+    delete(id: number): Observable<void> {
+        return this.http.delete<void>(
+            `${environment.apiUrl}/api/unidades/${id}`,
+            {
+                headers: this.headers,
+            }
+        );
+    }
 }

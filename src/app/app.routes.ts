@@ -1,40 +1,45 @@
 import { Routes } from '@angular/router';
-//import { MaquinaComponent } from './components/maquina/tab/listado/maquina.component';
-//import { MaquinaFormComponent } from './components/maquina/tab/listado/maquina-form/maquina-form.component';
 import { HomeComponent } from './components/home/home.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { TipoEquipoComponent } from './components/maquina/tab/tipo/tipo-equipo.component';
 import { TabEquipos } from './components/maquina/tab/tab.component';
 import { UnidadComponent } from './components/configuracion/Unidades/unidad.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './services/auth.guard';
 
 export const routes: Routes = [
     {
-        path:'',
-        pathMatch:'full',
-        redirectTo:'/home',
+        path: '',
+        pathMatch: 'full',
+        redirectTo: '/home',
     },
-    // {
-    //     path: 'maquinas',
-    //     component: MaquinaComponent,
-    // },
+    {
+        path: 'login',
+        component: LoginComponent,
+    },
     {
         path: 'home',
         component: HomeComponent,
+        canActivate: [AuthGuard],
     },
     {
         path: 'usuarios',
         component: UsuariosComponent,
+        canActivate: [AuthGuard],
     },
     {
         path: 'tipos',
         component: TipoEquipoComponent,
+        canActivate: [AuthGuard],
     },
-            {
+    {
         path: 'tabEquipos',
         component: TabEquipos,
+        canActivate: [AuthGuard],
     },
     {
         path: 'unidades',
-        component: UnidadComponent
-    }
+        component: UnidadComponent,
+        canActivate: [AuthGuard],
+    },
 ];
