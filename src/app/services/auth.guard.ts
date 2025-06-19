@@ -15,7 +15,6 @@ export class AuthGuard implements CanActivate {
         | boolean
         | UrlTree {
         return this.authService.isTokenValid().then((isValid) => {
-            console.log('Token valid:', isValid);
             if (isValid) {
                 return true;
             } else {
