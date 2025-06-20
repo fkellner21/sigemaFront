@@ -11,39 +11,24 @@ export class tipoEquipoService {
     token: string | null = null;
     headers: HttpHeaders = new HttpHeaders();
 
-    constructor(private http: HttpClient) {
-        this.token = localStorage.getItem('token');
-        this.headers = new HttpHeaders().set(
-            'Authorization',
-            `Bearer ${this.token}`
-        );
-    }
+    constructor(private http: HttpClient) {}
 
     findAll(): Observable<TipoEquipo[]> {
         return this.http.get<TipoEquipo[]>(
             `${environment.apiUrl}/api/tiposEquipos/activos/true`,
-            {
-                headers: this.headers,
-            }
         );
     }
 
     addNew(tipoEquipo: TipoEquipo): Observable<TipoEquipo> {
         return this.http.post<TipoEquipo>(
             `${environment.apiUrl}/api/tiposEquipos/`,
-            tipoEquipo,
-            {
-                headers: this.headers,
-            }
+            tipoEquipo
         );
     }
     edit(id: number, tipoEquipo: TipoEquipo): Observable<TipoEquipo> {
         return this.http.put<TipoEquipo>(
             `${environment.apiUrl}/api/tiposEquipos/${id}`,
-            tipoEquipo,
-            {
-                headers: this.headers,
-            }
+            tipoEquipo
         );
     }
 }

@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class UsuarioFormComponent {
   @Input() usuario: any = {};
-  @Input() roles: string[] = [];
+  @Input() roles!: { key: string; label: string }[];
 
   @Output() cerrar = new EventEmitter<void>();
   @Output() guardarUsuario = new EventEmitter<any>();

@@ -1,5 +1,6 @@
 export enum Rol {
-    Administrador = 'Administrador',
-    Brigada = 'Brigada',
-    Unidad = 'Unidad'
+    ADMINISTRADOR = 'Administrador',
+    BRIGADA = 'Brigada',
+    UNIDAD = 'Unidad',
+    ADMINISTRADOR_UNIDAD='Administrador de Unidad'
 }

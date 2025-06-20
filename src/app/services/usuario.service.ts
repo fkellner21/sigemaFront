@@ -10,54 +10,32 @@ export class UsuarioService {
     headers: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
-        this.token = localStorage.getItem('token');
-        this.headers = new HttpHeaders().set(
-            'Authorization',
-            `Bearer ${this.token}`
-        );
+
     }
 
     findAll(): Observable<Usuario[]> {
-        return this.http.get<Usuario[]>(`${environment.apiUrl}/api/usuarios`, {
-            headers: this.headers,
-        });
+        return this.http.get<Usuario[]>(`${environment.apiUrl}/api/usuarios`);
     }
 
     findById(id: number): Observable<Usuario> {
         return this.http.get<Usuario>(
-            `${environment.apiUrl}/api/usuarios/${id}`,
-            {
-                headers: this.headers,
-            }
-        );
+            `${environment.apiUrl}/api/usuarios/${id}` );
     }
 
     addNew(unidad: Usuario): Observable<Usuario> {
         return this.http.post<Usuario>(
             `${environment.apiUrl}/api/usuarios`,
-            unidad,
-            {
-                headers: this.headers,
-            }
-        );
+            unidad);
     }
 
     edit(id: number, usuario: Usuario): Observable<Usuario> {
         return this.http.put<Usuario>(
             `${environment.apiUrl}/api/usuarios/${id}`,
-            usuario,
-            {
-                headers: this.headers,
-            }
-        );
+            usuario);
     }
 
     delete(id: number): Observable<void> {
         return this.http.delete<void>(
-            `${environment.apiUrl}/api/usuarios/${id}`,
-            {
-                headers: this.headers,
-            }
-        );
+            `${environment.apiUrl}/api/usuarios/${id}`);
     }
 }

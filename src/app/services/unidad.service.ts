@@ -13,54 +13,31 @@ export class UnidadService {
     headers: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
-        this.token = localStorage.getItem('token');
-        this.headers = new HttpHeaders().set(
-            'Authorization',
-            `Bearer ${this.token}`
-        );
     }
 
     findAll(): Observable<Unidad[]> {
-        return this.http.get<Unidad[]>(`${environment.apiUrl}/api/unidades`, {
-            headers: this.headers,
-        });
+        return this.http.get<Unidad[]>(`${environment.apiUrl}/api/unidades`);
     }
 
     findById(id: number): Observable<Unidad> {
         return this.http.get<Unidad>(
-            `${environment.apiUrl}/api/unidades/${id}`,
-            {
-                headers: this.headers,
-            }
-        );
+            `${environment.apiUrl}/api/unidades/${id}`);
     }
 
     addNew(unidad: Unidad): Observable<Unidad> {
         return this.http.post<Unidad>(
             `${environment.apiUrl}/api/unidades`,
-            unidad,
-            {
-                headers: this.headers,
-            }
-        );
+            unidad);
     }
 
     edit(id: number, unidad: Unidad): Observable<Unidad> {
         return this.http.put<Unidad>(
             `${environment.apiUrl}/api/unidades/${id}`,
-            unidad,
-            {
-                headers: this.headers,
-            }
-        );
+            unidad);
     }
 
     delete(id: number): Observable<void> {
         return this.http.delete<void>(
-            `${environment.apiUrl}/api/unidades/${id}`,
-            {
-                headers: this.headers,
-            }
-        );
+            `${environment.apiUrl}/api/unidades/${id}`);
     }
 }

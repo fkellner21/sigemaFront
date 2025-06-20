@@ -17,98 +17,58 @@ export class modeloService {
     headers: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
-        this.token = localStorage.getItem('token');
-        this.headers = new HttpHeaders().set(
-            'Authorization',
-            `Bearer ${this.token}`
-        );
     }
 
     findAll(): Observable<modeloEquipo[]> {
         return this.http.get<modeloEquipo[]>(
-            `${environment.apiUrl}/api/modelosEquipo`,
-            {
-                headers: this.headers,
-            }
-        );
+            `${environment.apiUrl}/api/modelosEquipo`);
     }
 
     addNew(modelo: modeloEquipo): Observable<ModeloEquipoDTO> {
         let modeloDTO: ModeloEquipoDTO = ModeloEquipoDTO.toDTO(modelo);
         return this.http.post<ModeloEquipoDTO>(
             `${environment.apiUrl}/api/modelosEquipo`,
-            modeloDTO,
-            {
-                headers: this.headers,
-            }
-        );
+            modeloDTO);
     }
     edit(id: number, modelo: modeloEquipo): Observable<modeloEquipo> {
         let modeloDTO: ModeloEquipoDTO = ModeloEquipoDTO.toDTO(modelo);
         return this.http.put<modeloEquipo>(
             `${environment.apiUrl}/api/modelosEquipo/${id}`,
-            modeloDTO,
-            {
-                headers: this.headers,
-            }
-        );
+            modeloDTO);
     }
 
     cargarDocumentos(id: number): Observable<DocumentoModeloEquipo[]> {
         return this.http.get<DocumentoModeloEquipo[]>(
-            `${environment.apiUrl}/api/modelosEquipo/${id}/documentos`,
-            {
-                headers: this.headers,
-            }
-        );
+            `${environment.apiUrl}/api/modelosEquipo/${id}/documentos`);
     }
 
     subirDocumento(id: number, archivo: FormData) {
         return this.http.post(
             `${environment.apiUrl}/api/modelosEquipo/${id}/documentos`,
-            archivo,
-            {
-                headers: this.headers,
-            }
-        );
+            archivo);
     }
 
     eliminarDocumento(id: number) {
         return this.http.delete(
-            `${environment.apiUrl}/api/modelosEquipo/documentos/${id}`,
-            {
-                headers: this.headers,
-            }
-        );
+            `${environment.apiUrl}/api/modelosEquipo/documentos/${id}`);
     }
 
     cargarRepuestos(id: number, tipo: TipoRepuesto): Observable<Repuesto[]> {
         return this.http.get<Repuesto[]>(
-            `${environment.apiUrl}/api/modelosEquipo/${id}/repuestos/tipoRepuesto/${tipo}`,
-            {
-                headers: this.headers,
-            }
-        );
+            `${environment.apiUrl}/api/modelosEquipo/${id}/repuestos/tipoRepuesto/${tipo}`);
     }
     editarRepuesto(repuesto: Repuesto): Observable<any> {
         return this.http.put(
             `${environment.apiUrl}/api/repuestos/${repuesto.id}`,
-            repuesto,
-            { responseType: 'text', headers: this.headers }
-        );
+            repuesto);
     }
     crearRepuesto(repuesto: Repuesto) {
         return this.http.post(`${environment.apiUrl}/api/repuestos`, repuesto, {
             responseType: 'text',
-            headers: this.headers,
         });
     }
     cargarEquipos(id: number): Observable<Equipo[]> {
         return this.http.get<Equipo[]>(
-            `${environment.apiUrl}/api/modelosEquipo/${id}/equipos`,
-            {
-                headers: this.headers,
-            }
-        );
+            `${environment.apiUrl}/api/modelosEquipo/${id}/equipos`);
     }
 }

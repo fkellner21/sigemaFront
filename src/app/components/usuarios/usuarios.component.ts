@@ -38,12 +38,15 @@ export class UsuariosComponent implements OnInit {
 
   mostrarFormulario: boolean = false;
   usuarioSeleccionado: any = {};
-  roles: string[] = [];
+  roles!: { key: string; label: string }[];
 
   constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit() {
-    this.roles = Object.values(Rol);
+    this.roles = Object.keys(Rol).map(key => ({
+    key: key,             
+    label: Rol[key as keyof typeof Rol] 
+  }));
     this.cargarUsuarios();
   }
 

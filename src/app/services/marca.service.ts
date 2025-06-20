@@ -12,35 +12,20 @@ export class marcaService {
     headers: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
-        this.token = localStorage.getItem('token');
-        this.headers = new HttpHeaders().set(
-            'Authorization',
-            `Bearer ${this.token}`
-        );
     }
 
     findAll(): Observable<Marca[]> {
-        return this.http.get<Marca[]>(`${environment.apiUrl}/api/marcas`, {
-            headers: this.headers,
-        });
+        return this.http.get<Marca[]>(`${environment.apiUrl}/api/marcas`);
     }
 
     addNew(marca: Marca): Observable<Marca> {
         return this.http.post<Marca>(
             `${environment.apiUrl}/api/marcas`,
-            marca,
-            {
-                headers: this.headers,
-            }
-        );
+            marca);
     }
     edit(id: number, marca: Marca): Observable<Marca> {
         return this.http.put<Marca>(
             `${environment.apiUrl}/api/marcas/${id}`,
-            marca,
-            {
-                headers: this.headers,
-            }
-        );
+            marca);
     }
 }

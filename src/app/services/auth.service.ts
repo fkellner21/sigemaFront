@@ -40,16 +40,29 @@ export class AuthService {
     }
 
     login(loginDTO: LoginDTO): Observable<LoginRespuestaDTO> {
-        return this.http.post<LoginRespuestaDTO>(this.baseUrl, loginDTO);
+    return this.http.post<LoginRespuestaDTO>(this.baseUrl, loginDTO).pipe(
+        map(res => {
+            if (res && res.token) {
+                localStorage.setItem('token', res.token);
+                this.setRol(res.rol);
+            }
+            return res;
+        })
+    );
     }
 
     isTokenValid(): Promise<boolean> {
+        const token = localStorage.getItem('token');
+        
+        // Validación del formato JWT
+        if (!token || token.split('.').length !== 3) {
+            return Promise.resolve(false); // ni intenta la llamada si no hay token válido
+        }
+
         return firstValueFrom(
             this.tipoEquipoService.findAll().pipe(
-                map(() => true),
-                catchError((error) => {
-                    return of(false);
-                })
+            map(() => true),
+            catchError(() => of(false))
             )
         );
     }
