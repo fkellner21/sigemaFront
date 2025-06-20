@@ -10,6 +10,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Rol } from '../../models/enum/Rol';
 import Swal from 'sweetalert2';
+import { UnidadService } from '../../services/unidad.service';
+import { gradoService } from '../../services/grado.service';
+import { Grado } from '../../models/grado';
+import { Unidad } from '../../models/Unidad';
 
 @Component({
     selector: 'usuarios',
@@ -43,14 +47,52 @@ export class UsuariosComponent implements OnInit {
     mostrarFormulario: boolean = false;
     usuarioSeleccionado: any = {};
     roles!: { key: string; label: string }[];
+    grados!: Grado[];
+    unidades!: Unidad[];
+    Rol = Rol;
 
-    constructor(private usuarioService: UsuarioService) {}
+    constructor(
+        private usuarioService: UsuarioService,
+        private unidadService: UnidadService,
+        private gradoService: gradoService
+    ) {}
+
+    getRolLabel(key: any): string {
+        return this.Rol[key as keyof typeof Rol] ?? key;
+    }
 
     ngOnInit() {
         this.roles = Object.keys(Rol).map((key) => ({
             key: key,
             label: Rol[key as keyof typeof Rol],
         }));
+
+        this.gradoService.findAll().subscribe({
+            next: (resp) => {
+                this.grados = resp;
+            },
+            error: (err) => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudieron cargar los grados. ' + err.error,
+                    icon: 'error',
+                });
+            },
+        });
+
+        this.unidadService.findAll().subscribe({
+            next: (resp) => {
+                this.unidades = resp;
+            },
+            error: (err) => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudieron cargar las unidades. ' + err.error,
+                    icon: 'error',
+                });
+            },
+        });
+
         this.cargarUsuarios();
     }
 

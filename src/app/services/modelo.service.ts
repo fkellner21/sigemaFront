@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { modeloEquipo } from '../models/modeloEquipo';
 import { ModeloEquipoDTO } from '../models/DTO/modeloEquipoDTO';
 import { environment } from '../../environments/environment';
@@ -13,8 +13,6 @@ import { Equipo } from '../models/equipo';
     providedIn: 'root',
 })
 export class modeloService {
-    token: string | null = null;
-    headers: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
     }

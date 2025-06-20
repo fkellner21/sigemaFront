@@ -53,23 +53,38 @@
 
                     <!-- Grado -->
                     <p>Grado</p>
-                    <input
-                        type="number"
+                    <select
                         class="form-control my-2"
                         name="idGrado"
                         [(ngModel)]="usuario.idGrado"
                         required
-                    />
+                    >
+                        <option [ngValue]="null" disabled>
+                            Seleccione un grado...
+                        </option>
+                        <option *ngFor="let grado of grados" [value]="grado.id">
+                            {{ grado.nombre }}
+                        </option>
+                    </select>
 
                     <!-- Unidad -->
                     <p>Unidad</p>
-                    <input
-                        type="number"
+                    <select
                         class="form-control my-2"
                         name="idUnidad"
                         [(ngModel)]="usuario.idUnidad"
                         required
-                    />
+                    >
+                        <option [ngValue]="null" disabled>
+                            Seleccione una unidad...
+                        </option>
+                        <option
+                            *ngFor="let unidad of unidades"
+                            [value]="unidad.id"
+                        >
+                            {{ unidad.nombre }}
+                        </option>
+                    </select>
 
                     <!-- Teléfono -->
                     <p>Teléfono</p>

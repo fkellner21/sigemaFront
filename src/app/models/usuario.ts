@@ -1,4 +1,6 @@
 import { Rol } from "./enum/Rol";
+import { Grado } from "./grado";
+import { Unidad } from "./Unidad";
 
     export class Usuario{
         id!:number;
@@ -9,4 +11,6 @@ import { Rol } from "./enum/Rol";
         telefono!:number;
         rol!:Rol;
         cedula!:string;
+        grado:Grado = new Grado();
+        unidad:Unidad = new Unidad();
     }
