@@ -8,5 +8,5 @@ import { Rol } from "./enum/Rol";
         idUnidad!:number;
         telefono!:number;
         rol!:Rol;
-
+        cedula!:string;
     }

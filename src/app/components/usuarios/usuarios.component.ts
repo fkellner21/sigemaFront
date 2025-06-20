@@ -11,123 +11,130 @@ import { MatButtonModule } from '@angular/material/button';
 import { Rol } from '../../models/enum/Rol';
 import Swal from 'sweetalert2';
 
-
-
 @Component({
-  selector: 'usuarios',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatTableModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    UsuarioFormComponent,
-  ],
-  templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.css'],
+    selector: 'usuarios',
+    standalone: true,
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatTableModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        UsuarioFormComponent,
+    ],
+    templateUrl: './usuarios.component.html',
+    styleUrls: ['./usuarios.component.css'],
 })
-
 export class UsuariosComponent implements OnInit {
-  displayedColumns: string[] = ['Grado', 'Nombre', 'Unidad', 'Rol', 'acciones'];
-  dataSource: any[] = [];
-  dataSourceOriginal: any[] = []; // para guardar la lista original y poder filtrar
-  isLoading: boolean = false;
+    displayedColumns: string[] = [
+        'Grado',
+        'Nombre',
+        'Cedula',
+        'Unidad',
+        'Rol',
+        'acciones',
+    ];
+    dataSource: any[] = [];
+    dataSourceOriginal: any[] = [];
+    isLoading: boolean = false;
 
-  mostrarFormulario: boolean = false;
-  usuarioSeleccionado: any = {};
-  roles!: { key: string; label: string }[];
+    mostrarFormulario: boolean = false;
+    usuarioSeleccionado: any = {};
+    roles!: { key: string; label: string }[];
 
-  constructor(private usuarioService: UsuarioService) {}
+    constructor(private usuarioService: UsuarioService) {}
 
-  ngOnInit() {
-    this.roles = Object.keys(Rol).map(key => ({
-    key: key,             
-    label: Rol[key as keyof typeof Rol] 
-  }));
-    this.cargarUsuarios();
-  }
-
-  cargarUsuarios() {
-    this.isLoading = true;
-    this.usuarioService.findAll().subscribe({
-      next: (usuarios) => {
-        this.dataSourceOriginal = usuarios; // guardo copia original
-        this.dataSource = usuarios;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error cargando usuarios', err);
-        this.isLoading = false;
-      },
-    });
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-
-    if (!filterValue) {
-      this.dataSource = this.dataSourceOriginal;
-      return;
-    }
-
-    this.dataSource = this.dataSourceOriginal.filter(usuario =>
-      usuario.nombreCompleto.toLowerCase().includes(filterValue)
-    );
-  }
-
-  abrirFormularioUsuario(usuario?: any) {
-    this.usuarioSeleccionado = usuario ? { ...usuario } : {};
-    this.mostrarFormulario = true;
-  }
-
-  cerrarFormulario() {
-    this.mostrarFormulario = false;
-  }
-
-guardarUsuario(usuario: any) {
-  this.isLoading = true;
-
-  const request$ = usuario.id
-    ? this.usuarioService.edit(usuario.id, usuario)
-    : this.usuarioService.addNew(usuario);
-
-  request$.subscribe({
-    next: () => {
-      this.cargarUsuarios();
-      this.cerrarFormulario();
-
-      Swal.fire({
-        icon: 'success',
-        title: usuario.id ? 'Usuario actualizado' : 'Usuario creado',
-        text: usuario.id
-          ? 'El usuario ha sido actualizado correctamente.'
-          : 'El usuario ha sido creado correctamente.',
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    },
-    error: (err) => {
-      console.error('Error guardando usuario', err);
-      this.isLoading = false;
-
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Ocurrió un error al guardar el usuario.',
-      });
-    },
-  });
-}
-
-
-  eliminarUsuario(id: number) {
-    if (confirm('¿Está seguro de eliminar este usuario?')) {
-      this.usuarioService.delete(id).subscribe(() => {
+    ngOnInit() {
+        this.roles = Object.keys(Rol).map((key) => ({
+            key: key,
+            label: Rol[key as keyof typeof Rol],
+        }));
         this.cargarUsuarios();
-      });
     }
-  }
+
+    cargarUsuarios() {
+        this.isLoading = true;
+        this.usuarioService.findAll().subscribe({
+            next: (usuarios) => {
+                this.dataSourceOriginal = usuarios; // guardo copia original
+                this.dataSource = usuarios;
+                this.isLoading = false;
+            },
+            error: (err) => {
+                console.error('Error cargando usuarios', err);
+                this.isLoading = false;
+            },
+        });
+    }
+
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value
+            .trim()
+            .toLowerCase();
+
+        if (!filterValue) {
+            this.dataSource = this.dataSourceOriginal;
+            return;
+        }
+
+        this.dataSource = this.dataSourceOriginal.filter((usuario) =>
+            usuario.nombreCompleto.toLowerCase().includes(filterValue)
+        );
+    }
+
+    abrirFormularioUsuario(usuario?: any) {
+        this.usuarioSeleccionado = usuario ? { ...usuario } : {};
+        this.mostrarFormulario = true;
+    }
+
+    cerrarFormulario() {
+        this.mostrarFormulario = false;
+    }
+
+    guardarUsuario(usuario: any) {
+        this.isLoading = true;
+
+        const request$ = usuario.id
+            ? this.usuarioService.edit(usuario.id, usuario)
+            : this.usuarioService.addNew(usuario);
+
+        request$.subscribe({
+            next: () => {
+                this.cargarUsuarios();
+                this.cerrarFormulario();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: usuario.id
+                        ? 'Usuario actualizado'
+                        : 'Usuario creado',
+                    text: usuario.id
+                        ? 'El usuario ha sido actualizado correctamente.'
+                        : 'El usuario ha sido creado correctamente.',
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+            },
+            error: (err) => {
+                console.error('Error guardando usuario', err);
+                this.isLoading = false;
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ocurrió un error al guardar el usuario.',
+                });
+            },
+        });
+    }
+
+    eliminarUsuario(id: number) {
+        if (confirm('¿Está seguro de eliminar este usuario?')) {
+            this.usuarioService.delete(id).subscribe(() => {
+                this.cargarUsuarios();
+            });
+        }
+    }
 }
