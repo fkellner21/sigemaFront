@@ -10,7 +10,6 @@ import { tipoEquipoService } from '../../../services/tipoEquipo.service';
 import { MaquinaService } from '../../../services/equipo.service';
 import { MaquinaComponent } from './listado/maquina.component';
 
-import { forkJoin } from 'rxjs';
 import { Equipo } from '../../../models/equipo';
 import { modeloService } from '../../../services/modelo.service';
 import { modeloEquipo } from '../../../models/modeloEquipo';

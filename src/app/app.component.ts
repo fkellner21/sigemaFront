@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { MaquinasAppComponent } from './components/maquinas-app.component';
-
 
 @Component({
   selector: 'app-root',

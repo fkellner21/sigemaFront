@@ -1,0 +1,122 @@
+<div
+    class="modal"
+    tabindex="-1"
+    style="display: block; background: rgba(0, 0, 0, 0.4)"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {{ usuario.id ? "Actualizar usuario" : "Agregar usuario" }}
+                </h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    aria-label="Close"
+                    (click)="onCancel()"
+                ></button>
+            </div>
+
+            <div class="modal-body">
+                <form #usuarioForm="ngForm" (ngSubmit)="onSubmit()">
+                    <!-- Nombre Completo -->
+                    <p>Nombre completo</p>
+                    <input
+                        type="text"
+                        class="form-control my-2"
+                        name="nombreCompleto"
+                        [(ngModel)]="usuario.nombreCompleto"
+                        required
+                    />
+
+                    <p>Cédula</p>
+                    <input
+                        type="text"
+                        class="form-control my-2"
+                        name="cedula"
+                        [(ngModel)]="usuario.cedula"
+                        required
+                    />
+
+                    <!-- Contraseña -->
+                    <p>Contraseña</p>
+                    <input
+                        type="password"
+                        class="form-control my-2"
+                        name="password"
+                        [(ngModel)]="usuario.password"
+                        [required]="!usuario.id"
+                        placeholder="{{
+                            usuario.id ? 'Dejar vacío para no cambiar' : ''
+                        }}"
+                    />
+
+                    <!-- Grado -->
+                    <p>Grado</p>
+                    <input
+                        type="number"
+                        class="form-control my-2"
+                        name="idGrado"
+                        [(ngModel)]="usuario.idGrado"
+                        required
+                    />
+
+                    <!-- Unidad -->
+                    <p>Unidad</p>
+                    <input
+                        type="number"
+                        class="form-control my-2"
+                        name="idUnidad"
+                        [(ngModel)]="usuario.idUnidad"
+                        required
+                    />
+
+                    <!-- Teléfono -->
+                    <p>Teléfono</p>
+                    <input
+                        type="text"
+                        class="form-control my-2"
+                        name="telefono"
+                        [(ngModel)]="usuario.telefono"
+                    />
+
+                    <!-- Rol -->
+                    <p>Rol</p>
+                    <select
+                        class="form-control my-2"
+                        name="rol"
+                        [(ngModel)]="usuario.rol"
+                        required
+                    >
+                        <option value="">Seleccione un rol</option>
+                        <option *ngFor="let rol of roles" [value]="rol.key">
+                            {{ rol.label }}
+                        </option>
+                    </select>
+
+                    <!-- Botones -->
+                    <div class="row justify-content-between mt-3">
+                        <div class="col-5">
+                            <button
+                                type="submit"
+                                class="btn btn-primary w-100"
+                                [disabled]="usuarioForm.invalid"
+                            >
+                                {{ usuario.id ? "Actualizar" : "Guardar" }}
+                            </button>
+                        </div>
+                        <div class="col-5">
+                            <button
+                                type="button"
+                                class="btn btn-secondary w-100"
+                                (click)="onCancel()"
+                            >
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

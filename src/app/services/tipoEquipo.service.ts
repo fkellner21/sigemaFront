@@ -1,24 +1,34 @@
-import { map, Observable, of } from "rxjs";
-import { TipoEquipo } from "../models/tipoEquipo";
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "../../environments/environment";
+import { Observable } from 'rxjs';
+import { TipoEquipo } from '../models/tipoEquipo';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
-export class tipoEquipoService{
-  
-    constructor(private http:HttpClient) { }
+export class tipoEquipoService {
+    token: string | null = null;
+    headers: HttpHeaders = new HttpHeaders();
 
-      findAll():Observable<TipoEquipo[]>{
-        return this.http.get<TipoEquipo[]>(`${environment.apiUrl}/api/tiposEquipos/activos/true`);
-      }
+    constructor(private http: HttpClient) {}
 
-      addNew(tipoEquipo: TipoEquipo): Observable<TipoEquipo> {
-        return this.http.post<TipoEquipo>(`${environment.apiUrl}/api/tiposEquipos/`, tipoEquipo);
-      }
-      edit(id: number, tipoEquipo: TipoEquipo): Observable<TipoEquipo> {
-        return this.http.put<TipoEquipo>(`${environment.apiUrl}/api/tiposEquipos/${id}`, tipoEquipo);
-      }
+    findAll(): Observable<TipoEquipo[]> {
+        return this.http.get<TipoEquipo[]>(
+            `${environment.apiUrl}/api/tiposEquipos/activos/true`,
+        );
     }
+
+    addNew(tipoEquipo: TipoEquipo): Observable<TipoEquipo> {
+        return this.http.post<TipoEquipo>(
+            `${environment.apiUrl}/api/tiposEquipos/`,
+            tipoEquipo
+        );
+    }
+    edit(id: number, tipoEquipo: TipoEquipo): Observable<TipoEquipo> {
+        return this.http.put<TipoEquipo>(
+            `${environment.apiUrl}/api/tiposEquipos/${id}`,
+            tipoEquipo
+        );
+    }
+}
