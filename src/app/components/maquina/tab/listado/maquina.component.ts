@@ -1,9 +1,6 @@
 import { Component, EventEmitter, input, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Equipo } from '../../../../models/equipo';
 import { MaquinaService } from '../../../../services/equipo.service';
-import { modeloService } from '../../../../services/modelo.service';
-import { tipoEquipoService } from '../../../../services/tipoEquipo.service';
-import { marcaService } from '../../../../services/marca.service';
 import { modeloEquipo } from '../../../../models/modeloEquipo';
 import { TipoEquipo } from '../../../../models/tipoEquipo';
 import { Marca } from '../../../../models/marca';

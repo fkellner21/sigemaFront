@@ -111,20 +111,32 @@ export class UsuariosComponent implements OnInit {
         });
     }
 
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value
-            .trim()
-            .toLowerCase();
+applyFilter(event: Event) {
+  const filterValue = (event.target as HTMLInputElement).value
+    .trim()
+    .toLowerCase();
 
-        if (!filterValue) {
-            this.dataSource = this.dataSourceOriginal;
-            return;
-        }
+  if (!filterValue) {
+    this.dataSource = this.dataSourceOriginal;
+    return;
+  }
 
-        this.dataSource = this.dataSourceOriginal.filter((usuario) =>
-            usuario.nombreCompleto.toLowerCase().includes(filterValue)
-        );
-    }
+  this.dataSource = this.dataSourceOriginal.filter((usuario) => {
+    const nombre = usuario.nombreCompleto?.toLowerCase() ?? '';
+    const cedula = usuario.cedula?.toLowerCase() ?? '';
+    const unidad = usuario.unidad?.nombre?.toLowerCase() ?? '';
+    const grado = usuario.grado?.nombre?.toLowerCase() ?? '';
+    const rol = this.getRolLabel(usuario.rol)?.toLowerCase() ?? '';
+
+    return (
+      nombre.includes(filterValue) ||
+      cedula.includes(filterValue) ||
+      unidad.includes(filterValue) ||
+      grado.includes(filterValue) ||
+      rol.includes(filterValue)
+    );
+  });
+}
 
     abrirFormularioUsuario(usuario?: any) {
         this.usuarioSeleccionado = usuario ? { ...usuario } : {};

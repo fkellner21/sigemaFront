@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit{
       this.service.login(this.loginDTO).subscribe({
         next: () => {
           // intentá validar hasta 3 veces con delay
-          this.retryTokenValidation(3, 10000).then((isValid) => {
+          this.retryTokenValidation(3, 2000).then((isValid) => {
             if (isValid) {
               this.router.navigate(['/home']);
             } else {
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit{
             }
           });
         },
-        error: () => {
+        error: (err) => {
           this.isLoading = false;
           Swal.fire({
             title: 'Error',
