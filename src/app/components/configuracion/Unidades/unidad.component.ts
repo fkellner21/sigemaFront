@@ -43,8 +43,8 @@ export class UnidadComponent {
   addUnidad(unidad:Unidad){
     if(unidad.id>0){ //es una modificacion
       this.service.edit(unidad.id, unidad).subscribe({
-      next: (resp:Unidad) => {
-        Swal.fire({
+        next: (resp:Unidad) => {
+          Swal.fire({
         title: "Editado!",
         text: "Unidad actualizada correctamente!",
         icon: "success"
