@@ -6,6 +6,7 @@ import { TabEquipos } from './components/maquina/tab/tab.component';
 import { UnidadComponent } from './components/configuracion/Unidades/unidad.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './services/auth.guard';
+import { GradoComponent } from './components/configuracion/grados/grado.component';
 
 export const routes: Routes = [
     {
@@ -16,7 +17,6 @@ export const routes: Routes = [
     {
         path: 'login',
         component: LoginComponent,
-
     },
     {
         path: 'home',
@@ -43,4 +43,9 @@ export const routes: Routes = [
         component: UnidadComponent,
         canActivate: [AuthGuard],
     },
+    {
+        path: 'grados',
+        component: GradoComponent,
+        canActivate: [AuthGuard],
+    }
 ];

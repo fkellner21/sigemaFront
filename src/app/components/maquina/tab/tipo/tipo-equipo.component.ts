@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TipoFormComponent } from "./tipo-form/tipo-form.component";
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'tipo-equipo',
@@ -23,7 +24,7 @@ export class TipoEquipoComponent  {
   @Input() isLoadingTipos = false
   @Output() actualizarTiposEventEmmiter = new EventEmitter();
 
-  constructor(private service:tipoEquipoService){}
+  constructor(private service:tipoEquipoService, public authservice:AuthService){}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['tiposDeEquipo'] && this.tiposDeEquipo) {

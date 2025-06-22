@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { CommonModule } from '@angular/common';
 import { modeloService } from '../../../../../services/modelo.service';
 import { DocumentoModeloEquipo } from '../../../../../models/DocumentoModeloEquipo';
 import { environment } from '../../../../../../environments/environment';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../../../services/auth.service';
 
 @Component({
   selector: 'documento-form',
@@ -15,10 +16,11 @@ import Swal from 'sweetalert2';
 export class DocumentoFormComponent implements OnInit {
   @Input() modeloId: number | null=null;
   selectedFile: File | null = null;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   isLoading:boolean=false;
   documentos: DocumentoModeloEquipo[] = [];
 
-  constructor(private http: HttpClient, private service:modeloService) {}
+  constructor(private http: HttpClient, private service:modeloService, public authservice:AuthService) {}
 
   ngOnInit(): void {
     this.cargarDocumentos();
@@ -59,9 +61,11 @@ export class DocumentoFormComponent implements OnInit {
             icon: "success"
             });
           this.selectedFile = null;
+          this.fileInput.nativeElement.value = '';
           this.cargarDocumentos();
           },
         error: (err) => {
+          console.log(err);
           Swal.fire({
             title: "Error",
             text: "No se pudo subir el documento. "+err.error,

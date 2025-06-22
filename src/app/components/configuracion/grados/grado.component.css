@@ -1,5 +1,5 @@
 .titulo {
-  background-image: url("../../../../../assets/img/pixelado.jpg");
+  background-image: url("../../../../assets/img/pixelado.jpg");
   background-repeat: repeat;
   background-size: 30%;
   background-blend-mode: darken;
@@ -15,14 +15,10 @@ th {
   vertical-align: middle;
 }
 
-.colCodigo{
-  width: 20%;
-}
-
 .colNombre{
-  width: 68%;
+  width: 85%;
 }
 
 .colBtn{
-  width: 12%;
+  width: 15%;
 }

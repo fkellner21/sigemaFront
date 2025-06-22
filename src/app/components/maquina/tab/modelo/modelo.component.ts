@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 import { ListaRepuestosDeModeloComponent } from './lista-repuestos-de-modelo/lista-repuestos-de-modelo.component';
 import { ListaEquiposDeModeloComponent } from './lista-equipos-de-modelo/lista-equipos-de-modelo.component';
 import { TipoRepuesto } from '../../../../models/enum/TipoRepuesto';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'modelo',
@@ -47,7 +48,7 @@ export class ModeloComponent {
   open: boolean = false;
   dataSource!: MatTableDataSource<any>;
 
-  constructor(private service: modeloService) {}
+  constructor(private service: modeloService, public authservice:AuthService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['modelos'] && this.modelos) {

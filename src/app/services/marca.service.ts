@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Marca } from '../models/marca';
 import { environment } from '../../environments/environment';
 
@@ -8,8 +8,6 @@ import { environment } from '../../environments/environment';
     providedIn: 'root',
 })
 export class marcaService {
-    token: string | null = null;
-    headers: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
     }

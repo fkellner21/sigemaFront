@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UnidadFormComponent } from './unidad-form/unidad-form.component';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'unidad',
@@ -24,7 +25,7 @@ export class UnidadComponent {
   dataSource!: MatTableDataSource<any>;
   isLoading:boolean=false;
 
-  constructor(private service:UnidadService){}
+  constructor(private service:UnidadService, public authservice:AuthService){}
 
   ngOnInit(): void {
     this.refresh();

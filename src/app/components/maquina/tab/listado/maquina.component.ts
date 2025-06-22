@@ -1,9 +1,6 @@
 import { Component, EventEmitter, input, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Equipo } from '../../../../models/equipo';
 import { MaquinaService } from '../../../../services/equipo.service';
-import { modeloService } from '../../../../services/modelo.service';
-import { tipoEquipoService } from '../../../../services/tipoEquipo.service';
-import { marcaService } from '../../../../services/marca.service';
 import { modeloEquipo } from '../../../../models/modeloEquipo';
 import { TipoEquipo } from '../../../../models/tipoEquipo';
 import { Marca } from '../../../../models/marca';
@@ -18,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'maquina',
@@ -61,7 +59,7 @@ export class MaquinaComponent{
   'acciones'
   ];
  
-  constructor(private service: MaquinaService) {}
+  constructor(private service: MaquinaService, public authservice:AuthService) {}
 
   refresh(): void {
     this.actualizarMaquinasEventEmmiter.emit();

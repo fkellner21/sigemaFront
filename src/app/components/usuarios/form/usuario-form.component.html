@@ -18,7 +18,17 @@
             </div>
 
             <div class="modal-body">
-                <form #usuarioForm="ngForm" (ngSubmit)="onSubmit()">
+                <div *ngIf="isLoadingg" class="form text-center">
+                    <p><strong> Cargando... </strong></p>
+                    <div class="spinner-border text-dark" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+                <form
+                    #usuarioForm="ngForm"
+                    (ngSubmit)="onSubmit()"
+                    *ngIf="!isLoadingg"
+                >
                     <!-- Nombre Completo -->
                     <p>Nombre completo</p>
                     <input
@@ -53,23 +63,38 @@
 
                     <!-- Grado -->
                     <p>Grado</p>
-                    <input
-                        type="number"
+                    <select
                         class="form-control my-2"
                         name="idGrado"
                         [(ngModel)]="usuario.idGrado"
                         required
-                    />
+                    >
+                        <option [ngValue]="null" disabled>
+                            Seleccione un grado...
+                        </option>
+                        <option *ngFor="let grado of grados" [value]="grado.id">
+                            {{ grado.nombre }}
+                        </option>
+                    </select>
 
                     <!-- Unidad -->
                     <p>Unidad</p>
-                    <input
-                        type="number"
+                    <select
+                        disabled="{{ noPermitirEditarUnidad }}"
                         class="form-control my-2"
                         name="idUnidad"
                         [(ngModel)]="usuario.idUnidad"
-                        required
-                    />
+                    >
+                        <option [ngValue]="null">
+                            Seleccione una unidad...
+                        </option>
+                        <option
+                            *ngFor="let unidad of unidades"
+                            [value]="unidad.id"
+                        >
+                            {{ unidad.nombre }}
+                        </option>
+                    </select>
 
                     <!-- Teléfono -->
                     <p>Teléfono</p>
@@ -83,6 +108,7 @@
                     <!-- Rol -->
                     <p>Rol</p>
                     <select
+                        disabled="{{ noPermitirEditarRol }}"
                         class="form-control my-2"
                         name="rol"
                         [(ngModel)]="usuario.rol"

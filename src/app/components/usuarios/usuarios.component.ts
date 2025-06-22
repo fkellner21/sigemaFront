@@ -10,6 +10,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Rol } from '../../models/enum/Rol';
 import Swal from 'sweetalert2';
+import { UnidadService } from '../../services/unidad.service';
+import { gradoService } from '../../services/grado.service';
+import { Grado } from '../../models/grado';
+import { Unidad } from '../../models/Unidad';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'usuarios',
@@ -43,14 +48,53 @@ export class UsuariosComponent implements OnInit {
     mostrarFormulario: boolean = false;
     usuarioSeleccionado: any = {};
     roles!: { key: string; label: string }[];
+    grados!: Grado[];
+    unidades!: Unidad[];
+    Rol = Rol;
 
-    constructor(private usuarioService: UsuarioService) {}
+    constructor(
+        private usuarioService: UsuarioService,
+        private unidadService: UnidadService,
+        private gradoService: gradoService,
+        public authservice: AuthService
+    ) {}
+
+    getRolLabel(key: any): string {
+        return this.Rol[key as keyof typeof Rol] ?? key;
+    }
 
     ngOnInit() {
         this.roles = Object.keys(Rol).map((key) => ({
             key: key,
             label: Rol[key as keyof typeof Rol],
         }));
+
+        this.gradoService.findAll().subscribe({
+            next: (resp) => {
+                this.grados = resp;
+            },
+            error: (err) => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudieron cargar los grados. ' + err.error,
+                    icon: 'error',
+                });
+            },
+        });
+
+        this.unidadService.findAll().subscribe({
+            next: (resp) => {
+                this.unidades = resp;
+            },
+            error: (err) => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudieron cargar las unidades. ' + err.error,
+                    icon: 'error',
+                });
+            },
+        });
+
         this.cargarUsuarios();
     }
 
@@ -69,20 +113,32 @@ export class UsuariosComponent implements OnInit {
         });
     }
 
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value
-            .trim()
-            .toLowerCase();
+applyFilter(event: Event) {
+  const filterValue = (event.target as HTMLInputElement).value
+    .trim()
+    .toLowerCase();
 
-        if (!filterValue) {
-            this.dataSource = this.dataSourceOriginal;
-            return;
-        }
+  if (!filterValue) {
+    this.dataSource = this.dataSourceOriginal;
+    return;
+  }
 
-        this.dataSource = this.dataSourceOriginal.filter((usuario) =>
-            usuario.nombreCompleto.toLowerCase().includes(filterValue)
-        );
-    }
+  this.dataSource = this.dataSourceOriginal.filter((usuario) => {
+    const nombre = usuario.nombreCompleto?.toLowerCase() ?? '';
+    const cedula = usuario.cedula?.toLowerCase() ?? '';
+    const unidad = usuario.unidad?.nombre?.toLowerCase() ?? '';
+    const grado = usuario.grado?.nombre?.toLowerCase() ?? '';
+    const rol = this.getRolLabel(usuario.rol)?.toLowerCase() ?? '';
+
+    return (
+      nombre.includes(filterValue) ||
+      cedula.includes(filterValue) ||
+      unidad.includes(filterValue) ||
+      grado.includes(filterValue) ||
+      rol.includes(filterValue)
+    );
+  });
+}
 
     abrirFormularioUsuario(usuario?: any) {
         this.usuarioSeleccionado = usuario ? { ...usuario } : {};
