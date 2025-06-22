@@ -29,7 +29,7 @@
         </mat-list-item>
 
         <div *ngIf="isConfigOpen" class="sub-menu">
-            <a mat-list-item
+            <a mat-list-item (click)="abrirModalPerfil()"
                 ><mat-icon>person</mat-icon><span class="ms-2">Perfil</span></a
             >
             <a mat-list-item routerLink="/usuarios"
@@ -56,3 +56,14 @@
         </mat-nav-list>
     </div>
 </div>
+
+
+<app-usuario-form
+    *ngIf="mostrarFormularioPerfil"
+    [usuario]="usuario"
+    [roles]="roles"
+    [grados]="grados"
+    [unidades]="unidades"
+    (cerrar)="cerrarModalPerfil()"
+    (guardarUsuario)="guardarUsuario($event)"
+></app-usuario-form>

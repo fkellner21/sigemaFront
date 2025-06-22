@@ -11,6 +11,8 @@ import { tipoEquipoService } from './tipoEquipo.service';
 })
 export class AuthService {
     private rolUsuario: string | null = null;
+    private idUnidad: number | null = null;
+    private idUsuario: number | null = null;
     private baseUrl = `${environment.apiUrl}/api/login`;
 
     constructor(
@@ -26,6 +28,22 @@ export class AuthService {
         return this.rolUsuario;
     }
 
+    setIdUnidad(idUnidad: number): void {
+        this.idUnidad = idUnidad;
+    }
+
+    getIdUnidad(): number | null {
+        return this.idUnidad;
+    }
+
+    setIdUsuario(idUsuario: number): void {
+        this.idUsuario = idUsuario;
+    }
+
+    getIdUsuario(): number | null {
+        return this.idUsuario;
+    }
+
     getToken(): string | null {
         return localStorage.getItem('token');
     }
@@ -33,6 +51,8 @@ export class AuthService {
     logout(): void {
         localStorage.removeItem('token');
         this.rolUsuario = null;
+        this.idUnidad = null;
+        this.idUsuario = null;
     }
 
     isAuthenticated(): boolean {
@@ -45,6 +65,9 @@ export class AuthService {
             if (res && res.token) {
                 localStorage.setItem('token', res.token);
                 this.setRol(res.rol);
+                this.setIdUnidad(res.idUnidad);
+                this.setIdUsuario(res.idUsuario);
+                console.log(res);
             }
             return res;
         })
@@ -54,9 +77,8 @@ export class AuthService {
     isTokenValid(): Promise<boolean> {
         const token = localStorage.getItem('token');
         
-        // Validación del formato JWT
         if (!token || token.split('.').length !== 3) {
-            return Promise.resolve(false); // ni intenta la llamada si no hay token válido
+            return Promise.resolve(false);
         }
 
         return firstValueFrom(

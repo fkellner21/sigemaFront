@@ -69,13 +69,12 @@
 
                     <!-- Unidad -->
                     <p>Unidad</p>
-                    <select
+                    <select disabled={{noPermitirEditarUnidad}}
                         class="form-control my-2"
                         name="idUnidad"
                         [(ngModel)]="usuario.idUnidad"
-                        required
                     >
-                        <option [ngValue]="null" disabled>
+                        <option [ngValue]="null">
                             Seleccione una unidad...
                         </option>
                         <option
@@ -97,7 +96,7 @@
 
                     <!-- Rol -->
                     <p>Rol</p>
-                    <select
+                    <select disabled={{noPermitirEditarRol}}
                         class="form-control my-2"
                         name="rol"
                         [(ngModel)]="usuario.rol"

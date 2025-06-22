@@ -14,3 +14,19 @@ td,
 th {
   vertical-align: middle;
 }
+
+.colCodigo{
+  width: 15%;
+}
+
+.colDesc{
+  width: 60%;
+}
+
+.colTarea{
+  width: 18%;
+}
+
+.colBtn{
+  width: 10%;
+}

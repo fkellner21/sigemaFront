@@ -14,3 +14,15 @@ td,
 th {
   vertical-align: middle;
 }
+
+.colCodigo{
+  width: 20%;
+}
+
+.colNombre{
+  width: 68%;
+}
+
+.colBtn{
+  width: 12%;
+}

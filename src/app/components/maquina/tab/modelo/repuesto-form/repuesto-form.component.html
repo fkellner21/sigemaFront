@@ -16,6 +16,7 @@
       <div class="modal-body">
         <form (ngSubmit)="onSubmit(repuestoForm)" #repuestoForm="ngForm">
           <div>
+            <p>Nombre</p>
             <input
               placeholder="Nombre"
               name="nombre"
@@ -30,6 +31,7 @@
             } }
           </div>
           <div>
+            <p>Código SICE</p>
             <input
               placeholder="Código SICE"
               name="codigoSICE"
@@ -39,8 +41,9 @@
             />
           </div>
           <div>
+            <p>Características</p>
             <input
-              placeholder="Característica"
+              placeholder="Características"
               name="caracteristica"
               [(ngModel)]="repuesto.caracteristicas"
               class="form-control my-2"
@@ -53,6 +56,7 @@
             } }
           </div>
           <div>
+            <p>Cantidad</p>
             <input
               type="number"
               placeholder="Cantidad"
@@ -68,6 +72,7 @@
             } }
           </div>
           <div>
+            <p>Observaciones</p>
             <input
               placeholder="Observaciones"
               name="observaciones"

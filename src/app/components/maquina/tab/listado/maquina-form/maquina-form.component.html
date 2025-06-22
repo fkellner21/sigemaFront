@@ -15,8 +15,9 @@
       </div>
 
       <div class="modal-body">
-        <form #maquinaForm="ngForm" (ngSubmit)="onSubmit()">
+        <form #maquinaForm="ngForm" (ngSubmit)="onSubmit()" class="row">
           <!-- UNIDAD -->
+           <div class="col-12">
           <p>Unidad</p>
           <select
             class="form-control my-2"
@@ -29,7 +30,8 @@
               {{ unidad.nombre }}
             </option>
           </select>
-
+</div>
+<div class="col-6">
           <!-- TIPO -->
           <p>Tipo de equipo</p>
           <select
@@ -44,7 +46,8 @@
               {{ tipo.codigo }}
             </option>
           </select>
-
+</div>
+<div class="col-6">
           <!-- MARCA -->
           <p>Marca</p>
           <select
@@ -60,7 +63,8 @@
               {{ marca.nombre }}
             </option>
           </select>
-
+</div>
+<div class="col-12">
           <!-- MODELO -->
           <p>Modelo</p>
           <select
@@ -76,7 +80,8 @@
               {{ modelo.modelo }}
             </option>
           </select>
-
+</div>
+<div class="col-6">
           <!-- AÑO -->
           <p>Año</p>
           <input
@@ -85,7 +90,8 @@
             readonly
             type="number"
           />
-
+</div>
+<div class="col-6">
           <!-- MATRÍCULA -->
           <p>Matrícula</p>
           <input
@@ -93,7 +99,9 @@
             [(ngModel)]="equipoForm.matricula"
             name="matricula"
           />
+        </div>
 
+        <div class="col-6">
           <!-- USO -->
           <p>
             {{ equipoForm.modeloEquipo.unidadMedida || "Unidad de medida" }}
@@ -103,7 +111,8 @@
             [(ngModel)]="equipoForm.cantidadUnidadMedida"
             name="cantidadUnidadMedida"
           />
-
+        </div>
+        <div class="col-6">
           <!-- ESTADO -->
           <p>Estado</p>
           <select
@@ -117,7 +126,8 @@
               {{ estado }}
             </option>
           </select>
-
+        </div>
+        <div class="col-12">
           <!-- OBSERVACIONES -->
           <p>Observaciones</p>
           <textarea
@@ -125,7 +135,8 @@
             [(ngModel)]="equipoForm.observaciones"
             name="observaciones"
           ></textarea>
-
+        </div>
+        <div class="col-12">
           <!-- BOTONES -->
           <div class="row justify-content-between mt-3">
             <div class="col-4">
@@ -147,6 +158,7 @@
               </button>
             </div>
           </div>
+        </div>
         </form>
       </div>
     </div>

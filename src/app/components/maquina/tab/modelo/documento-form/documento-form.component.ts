@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { CommonModule } from '@angular/common';
 import { modeloService } from '../../../../../services/modelo.service';
@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 export class DocumentoFormComponent implements OnInit {
   @Input() modeloId: number | null=null;
   selectedFile: File | null = null;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   isLoading:boolean=false;
   documentos: DocumentoModeloEquipo[] = [];
 
@@ -59,9 +60,11 @@ export class DocumentoFormComponent implements OnInit {
             icon: "success"
             });
           this.selectedFile = null;
+          this.fileInput.nativeElement.value = '';
           this.cargarDocumentos();
           },
         error: (err) => {
+          console.log(err);
           Swal.fire({
             title: "Error",
             text: "No se pudo subir el documento. "+err.error,
