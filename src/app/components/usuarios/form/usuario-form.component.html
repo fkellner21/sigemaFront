@@ -18,7 +18,17 @@
             </div>
 
             <div class="modal-body">
-                <form #usuarioForm="ngForm" (ngSubmit)="onSubmit()">
+                <div *ngIf="isLoadingg" class="form text-center">
+                    <p><strong> Cargando... </strong></p>
+                    <div class="spinner-border text-dark" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+                <form
+                    #usuarioForm="ngForm"
+                    (ngSubmit)="onSubmit()"
+                    *ngIf="!isLoadingg"
+                >
                     <!-- Nombre Completo -->
                     <p>Nombre completo</p>
                     <input
@@ -69,7 +79,8 @@
 
                     <!-- Unidad -->
                     <p>Unidad</p>
-                    <select disabled={{noPermitirEditarUnidad}}
+                    <select
+                        disabled="{{ noPermitirEditarUnidad }}"
                         class="form-control my-2"
                         name="idUnidad"
                         [(ngModel)]="usuario.idUnidad"
@@ -96,7 +107,8 @@
 
                     <!-- Rol -->
                     <p>Rol</p>
-                    <select disabled={{noPermitirEditarRol}}
+                    <select
+                        disabled="{{ noPermitirEditarRol }}"
                         class="form-control my-2"
                         name="rol"
                         [(ngModel)]="usuario.rol"

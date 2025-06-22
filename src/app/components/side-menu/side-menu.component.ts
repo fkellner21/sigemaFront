@@ -48,36 +48,39 @@ export class SideMenuComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.roles = Object.keys(Rol).map((key) => ({
-            key: key,
-            label: Rol[key as keyof typeof Rol],
-        }));
+        if(this.authService.isAuthenticated()){
 
-        this.gradosService.findAll().subscribe({
-            next: (resp) => {
-                this.grados = resp;
-            },
-            error: (err) => {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'No se pudieron cargar los grados. ' + err.error,
-                    icon: 'error',
-                });
-            },
-        });
-
-        this.unidadService.findAll().subscribe({
-            next: (resp) => {
-                this.unidades = resp;
-            },
-            error: (err) => {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'No se pudieron cargar las unidades. ' + err.error,
-                    icon: 'error',
-                });
-            },
-        });
+            this.roles = Object.keys(Rol).map((key) => ({
+                key: key,
+                label: Rol[key as keyof typeof Rol],
+            }));
+            
+            this.gradosService.findAll().subscribe({
+                next: (resp) => {
+                    this.grados = resp;
+                },
+                error: (err) => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudieron cargar los grados. ' + err.error,
+                        icon: 'error',
+                    });
+                },
+            });
+            
+            this.unidadService.findAll().subscribe({
+                next: (resp) => {
+                    this.unidades = resp;
+                },
+                error: (err) => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudieron cargar las unidades. ' + err.error,
+                        icon: 'error',
+                    });
+                },
+            });
+        }
     }
 
     toggleConfig() {
@@ -93,7 +96,6 @@ export class SideMenuComponent implements OnInit {
 
     abrirModalPerfil() {
         let idUsuario = this.authService.getIdUsuario();
-
         this.usuarioService.findById(idUsuario ?? 0).subscribe({
             next: (resp) => {
                 this.usuario = resp;

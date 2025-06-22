@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'maquina',
@@ -58,7 +59,7 @@ export class MaquinaComponent{
   'acciones'
   ];
  
-  constructor(private service: MaquinaService) {}
+  constructor(private service: MaquinaService, public authservice:AuthService) {}
 
   refresh(): void {
     this.actualizarMaquinasEventEmmiter.emit();

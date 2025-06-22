@@ -14,6 +14,7 @@ import { UnidadService } from '../../services/unidad.service';
 import { gradoService } from '../../services/grado.service';
 import { Grado } from '../../models/grado';
 import { Unidad } from '../../models/Unidad';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'usuarios',
@@ -54,7 +55,8 @@ export class UsuariosComponent implements OnInit {
     constructor(
         private usuarioService: UsuarioService,
         private unidadService: UnidadService,
-        private gradoService: gradoService
+        private gradoService: gradoService,
+        public authservice: AuthService
     ) {}
 
     getRolLabel(key: any): string {

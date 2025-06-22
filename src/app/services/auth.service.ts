@@ -67,7 +67,6 @@ export class AuthService {
                 this.setRol(res.rol);
                 this.setIdUnidad(res.idUnidad);
                 this.setIdUsuario(res.idUsuario);
-                console.log(res);
             }
             return res;
         })

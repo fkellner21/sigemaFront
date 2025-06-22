@@ -4,6 +4,7 @@ import {
     Output,
     Input,
     SimpleChanges,
+    OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,15 +14,16 @@ import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-usuario-form',
-    standalone: true,
     imports: [CommonModule, FormsModule],
     templateUrl: './usuario-form.component.html',
 })
-export class UsuarioFormComponent {
+export class UsuarioFormComponent implements OnInit {
     @Input() usuario: any = {};
-    @Input() roles!: { key: string; label: string }[];
+    @Input() rolesOriginal!: { key: string; label: string }[];
     @Input() unidades!: Unidad[];
     @Input() grados!: Grado[];
+    roles!: { key: string; label: string }[];
+    isLoadingg!:boolean;
 
     @Output() cerrar = new EventEmitter<void>();
     @Output() guardarUsuario = new EventEmitter<any>();
@@ -29,16 +31,27 @@ export class UsuarioFormComponent {
     noPermitirEditarUnidad = false;
 
     constructor(private authService: AuthService) {}
+    ngOnInit(): void {
+        this.isLoadingg=true;
+        setTimeout(() => {
+  this.isLoadingg = false;
+}, 1500);
+    }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['usuario'] && this.usuario) {
+ngOnChanges(changes: SimpleChanges): void {
+    if (changes['usuario'] && this.usuario) {
+
             let idUsuario = this.authService.getIdUsuario();
-            console.log(idUsuario);
-            console.log(this.usuario);
 
             this.usuario.idUnidad ??= null;
             this.usuario.idGrado ??= null;
             this.usuario.rol ??= '';
+
+            if (this.authService.getRol() == 'ROLE_BRIGADA' && idUsuario != this.usuario.id) {
+                this.roles = [...this.rolesOriginal.filter(x => x.key != 'ADMINISTRADOR' && x.key != 'BRIGADA')];
+            } else {
+                this.roles = [...this.rolesOriginal];
+            }
 
             if (this.usuario.grado != null) {
                 this.usuario.idGrado = this.usuario.grado.id;
@@ -50,13 +63,15 @@ export class UsuarioFormComponent {
 
             if (idUsuario == this.usuario.id) {
                 this.noPermitirEditarRol = true;
-                this.noPermitirEditarUnidad = true;
+                if (this.authService.getRol() != 'ROLE_ADMINISTRADOR') {
+                    this.noPermitirEditarUnidad = true;
+                }
             } else {
                 this.noPermitirEditarRol = false;
                 this.noPermitirEditarUnidad = false;
             }
-        }
     }
+}
 
     onSubmit() {
         this.guardarUsuario.emit(this.usuario);

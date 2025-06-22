@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { GradoFormComponent } from './grado-form/grado-form.component';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'grado',
@@ -27,7 +28,7 @@ export class GradoComponent implements OnInit {
     open: boolean = false;
     dataSource!: MatTableDataSource<any>;
 
-    constructor(private service: gradoService) {}
+    constructor(private service: gradoService, public authservice:AuthService) {}
     ngOnInit(): void {
         this.refresh();
     }

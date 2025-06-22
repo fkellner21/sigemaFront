@@ -41,7 +41,8 @@
                 ><span class="ms-2">Unidades</span></a
             >
             <a mat-list-item routerLink="/grados"
-                ><mat-icon>admin_panel_settings</mat-icon><span class="ms-2">Grados</span></a
+                ><mat-icon>admin_panel_settings</mat-icon
+                ><span class="ms-2">Grados</span></a
             >
         </div>
     </mat-nav-list>
@@ -57,11 +58,10 @@
     </div>
 </div>
 
-
 <app-usuario-form
     *ngIf="mostrarFormularioPerfil"
     [usuario]="usuario"
-    [roles]="roles"
+    [rolesOriginal]="roles"
     [grados]="grados"
     [unidades]="unidades"
     (cerrar)="cerrarModalPerfil()"

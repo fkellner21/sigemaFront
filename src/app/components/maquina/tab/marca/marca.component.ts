@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MarcaFormComponent } from './marca-form/marca-form.component';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'marca',
@@ -23,7 +24,7 @@ export class MarcaComponent {
   open:boolean=false;
   dataSource!: MatTableDataSource<any>;
 
-  constructor(private service:marcaService){}
+  constructor(private service:marcaService, public authservice:AuthService){}
 
   refresh():void{
     this.marcasActualizadas.emit();

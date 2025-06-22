@@ -5,6 +5,7 @@ import { modeloService } from '../../../../../services/modelo.service';
 import { DocumentoModeloEquipo } from '../../../../../models/DocumentoModeloEquipo';
 import { environment } from '../../../../../../environments/environment';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../../../services/auth.service';
 
 @Component({
   selector: 'documento-form',
@@ -19,7 +20,7 @@ export class DocumentoFormComponent implements OnInit {
   isLoading:boolean=false;
   documentos: DocumentoModeloEquipo[] = [];
 
-  constructor(private http: HttpClient, private service:modeloService) {}
+  constructor(private http: HttpClient, private service:modeloService, public authservice:AuthService) {}
 
   ngOnInit(): void {
     this.cargarDocumentos();

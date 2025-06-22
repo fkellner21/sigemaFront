@@ -12,6 +12,7 @@ import { EstadoEquipo } from '../../../../../models/enum/EstadoEquipo';
 import { TipoEquipo } from '../../../../../models/tipoEquipo';
 import { Marca } from '../../../../../models/marca';
 import { UnidadService } from '../../../../../services/unidad.service';
+import { AuthService } from '../../../../../services/auth.service';
 
 @Component({
   selector: 'app-maquina-form',
@@ -29,6 +30,7 @@ import { UnidadService } from '../../../../../services/unidad.service';
 export class MaquinaFormComponent implements OnChanges, OnInit {
   editando: boolean = false;
   unidades: Unidad[] = [];
+  isLoading:boolean = false;
   @Input() equipo: Equipo = new Equipo();
   @Input() modelos: modeloEquipo[] = [];
   @Input() tiposEquipo: TipoEquipo[] = [];
@@ -36,7 +38,7 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
   @Output() guardar = new EventEmitter<Equipo>();
   @Output() cancelar = new EventEmitter<void>();
 
-  constructor(private unidadService: UnidadService) {}
+  constructor(private unidadService: UnidadService, public authservice:AuthService) {}
 
   equipoForm: Equipo = new Equipo();
   estadoEquipoEnum = EstadoEquipo;
@@ -53,11 +55,13 @@ export class MaquinaFormComponent implements OnChanges, OnInit {
   }
 
   refresh(): void {
+    this.isLoading=true;
     this.unidadService.findAll().subscribe((unidad: Unidad[]) => {
       this.unidades = unidad;
+      this.modelosFiltrados = [...this.modelos];
+      this.marcasFiltradas = [...this.marcas];
+      this.isLoading=false;
     });
-    this.modelosFiltrados = [...this.modelos];
-    this.marcasFiltradas = [...this.marcas];
   }
 
   ngOnChanges(changes: SimpleChanges): void {

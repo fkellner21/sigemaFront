@@ -3,12 +3,9 @@
 
     @if(documentos.length>0){
     <ul class="list-group my-3">
-        <li
-            *ngFor="let doc of documentos"
-            class="list-group-item"
-        >
+        <li *ngFor="let doc of documentos" class="list-group-item">
             <div class="row">
-                <div class="col-8" style="overflow-wrap: anywhere;">
+                <div class="col-8" style="overflow-wrap: anywhere">
                     {{ doc.nombreArchivo }}
                 </div>
                 <div class="col-2">
@@ -21,6 +18,11 @@
                 </div>
                 <div class="col-2">
                     <button
+                        *ngIf="
+                            authservice.getRol() == 'ROLE_ADMINISTRADOR' ||
+                            authservice.getRol() == 'ROLE_BRIGADA' ||
+                            authservice.getRol() == 'ROLE_ADMINISTRADOR_UNIDAD'
+                        "
                         (click)="eliminarDocumento(doc.id)"
                         class="btn btn-sm btn-outline-danger"
                     >
@@ -39,7 +41,14 @@
         </div>
     </div>
 
-    <div class="row justify-content-between mt-3">
+    <div
+        class="row justify-content-between mt-3"
+        *ngIf="
+            authservice.getRol() == 'ROLE_ADMINISTRADOR' ||
+            authservice.getRol() == 'ROLE_BRIGADA' ||
+            authservice.getRol() == 'ROLE_ADMINISTRADOR_UNIDAD'
+        "
+    >
         <div class="col-9">
             <input
                 type="file"
