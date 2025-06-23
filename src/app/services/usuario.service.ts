@@ -20,10 +20,10 @@ export class UsuarioService {
             `${environment.apiUrl}/api/usuarios/${id}` );
     }
 
-    addNew(unidad: Usuario): Observable<Usuario> {
+    addNew(usuario: Usuario): Observable<Usuario> {
         return this.http.post<Usuario>(
             `${environment.apiUrl}/api/usuarios`,
-            unidad);
+            usuario);
     }
 
     edit(id: number, usuario: Usuario): Observable<Usuario> {
