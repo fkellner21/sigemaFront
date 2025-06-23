@@ -19,9 +19,10 @@ export class LoginComponent implements OnInit{
     constructor(private service: AuthService, private router: Router) {}
     ngOnInit(): void {
       this.isLoading=true;
-  this.service.isTokenValid().then((isValid) => {
+      this.service.isTokenValid().then((isValid) => {
     if (isValid) {
-      this.router.navigate(['/home']);
+      if(this.service.getIdUnidad()) this.router.navigate(['/home']);
+      this.isLoading=false;
     } else {
       this.isLoading = false;
     }

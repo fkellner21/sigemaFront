@@ -34,8 +34,8 @@ export class UsuarioFormComponent implements OnInit {
     ngOnInit(): void {
         this.isLoadingg=true;
         setTimeout(() => {
-  this.isLoadingg = false;
-}, 1500);
+            this.isLoadingg = false;
+            }, 1500);
     }
 
 ngOnChanges(changes: SimpleChanges): void {

@@ -8,5 +8,5 @@ import { MaquinasAppComponent } from './components/maquinas-app.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'maquinas';
+  title = 'sigema';
 }

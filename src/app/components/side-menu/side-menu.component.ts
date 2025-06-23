@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { RedirectCommand, Router, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -36,6 +36,7 @@ export class SideMenuComponent implements OnInit {
     roles!: { key: string; label: string }[];
     grados: Grado[] = [];
     unidades: Unidad[] = [];
+    usuarioOriginal!: Usuario;
     usuario!: Usuario;
     mostrarFormularioPerfil = false;
 
@@ -80,6 +81,26 @@ export class SideMenuComponent implements OnInit {
                     });
                 },
             });
+
+            
+            let idUsuario = this.authService.getIdUsuario();
+            if(idUsuario!=null){
+                this.usuarioService.findById(idUsuario ?? 0).subscribe({
+                    next: (resp) => {
+                        this.usuarioOriginal = resp;
+                    },
+                    error: (err) => {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'No se pudo cargar el usuario. ' + err.error,
+                            icon: 'error',
+                        });
+                    },
+                });
+            }else{
+                this.router.navigate(['/login'])
+            }
+                
         }
     }
 
@@ -95,20 +116,7 @@ export class SideMenuComponent implements OnInit {
     }
 
     abrirModalPerfil() {
-        let idUsuario = this.authService.getIdUsuario();
-        this.usuarioService.findById(idUsuario ?? 0).subscribe({
-            next: (resp) => {
-                this.usuario = resp;
-            },
-            error: (err) => {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'No se pudo cargar el usuario. ' + err.error,
-                    icon: 'error',
-                });
-            },
-        });
-
+        this.usuario= { ...this.usuarioOriginal }
         this.mostrarFormularioPerfil = true;
     }
 
