@@ -7,6 +7,7 @@ import { UnidadComponent } from './components/configuracion/Unidades/unidad.comp
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './services/auth.guard';
 import { GradoComponent } from './components/configuracion/grados/grado.component';
+import { TramitesComponent } from './components/tramites/tramite.component';
 
 export const routes: Routes = [
     {
@@ -21,6 +22,11 @@ export const routes: Routes = [
     {
         path: 'home',
         component: HomeComponent,
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'tramites',
+        component: TramitesComponent,
         canActivate: [AuthGuard],
     },
     {
