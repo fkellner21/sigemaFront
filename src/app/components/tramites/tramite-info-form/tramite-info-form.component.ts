@@ -15,7 +15,8 @@ import { FormsModule } from '@angular/forms';
 export class TramiteInfoFormComponent {
   @Input() tramite:Tramite;
   @Input() unidades!:Unidad[];
-  @Output() cancelEventEmiter = new EventEmitter()
+  @Output() cancelEventEmiter = new EventEmitter();
+  nuevaActuacion:string='';
 
   constructor(){
     this.tramite=new Tramite;
@@ -43,5 +44,13 @@ export class TramiteInfoFormComponent {
   }
   onCancel(){
     this.cancelEventEmiter.emit();
+  }
+
+  guardarActuacion(){
+    if (!this.nuevaActuacion.trim()) {
+        return;
+    }
+
+    const textoActuacion = this.nuevaActuacion.trim();
   }
 }

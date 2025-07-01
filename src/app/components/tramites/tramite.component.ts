@@ -61,7 +61,6 @@ export class TramitesComponent implements OnInit {
     mostrarFormularioUsuario: boolean = false;
     mostrarFormularioInfo: boolean = false;
     
- //   roles!: { key: string; label: string }[];
     estados!: { key: string; label: string }[];
     tipos!: { key: string; label: string }[];
     unidades!: any;
@@ -71,8 +70,7 @@ export class TramitesComponent implements OnInit {
     tramiteSeleccionado: Tramite = new Tramite;
     unidadOrigen!:Unidad;
     usuario!:Usuario;
-    tipoTramite:TipoTramite=TipoTramite.Otros; //variable a modificar en un select
-
+    tipoTramite:TipoTramite=TipoTramite.Otros;
     constructor(
         private unidadService: UnidadService,
         private tramiteService: TramiteService,
@@ -215,16 +213,16 @@ export class TramitesComponent implements OnInit {
     this.mostrarFormularioRepuesto=false;
     this.mostrarFormularioUsuario=false;
 
-    switch (tramite.tipoTramite) {
-        case TipoTramite.BajaEquipo:
-        this.mostrarFormularioEquipo = true;
+    switch (tramite.tipoTramite?.valueOf()) {
+        case 'BajaEquipo':
+            this.mostrarFormularioEquipo = true;
         break;
 
-        case TipoTramite.SolicitudRepuesto:
+        case 'SolicitudRepuesto':
         this.mostrarFormularioRepuesto = true;
         break;
 
-        case TipoTramite.SolicitudUsuario:
+        case 'SolicitudUsuario':
         this.mostrarFormularioUsuario = true;
         break;
 

@@ -1,8 +1,8 @@
 <div class="modal" tabindex="-1" style="display: block">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
+            <div class="modal-header text-center">
+                <h5 class="modal-title w-100 text-center">
                     {{ tramite.id ? "Actualizar trámite" : "Agregar trámite" }}
                 </h5>
                 <button
@@ -28,114 +28,143 @@
                     class="row"
                     *ngIf="!isLoading"
                 >
-                    <!-- Tipo de trámite -->
-                    <div class="col-12">
-                        <p>Tipo de Trámite</p>
-                        <select
-                            class="form-control my-2"
-                            name="tipoTramite"
-                            [(ngModel)]="tramite.tipoTramite"
-                            required
-                        >
-                            <option [ngValue]="null" disabled>
-                                Seleccione un tipo...
-                            </option>
-                            <option
-                                *ngFor="let tipo of tipoTramiteOptions"
-                                [ngValue]="tipo.key"
+                    <div class="col-4 pe-3 border-end">
+                        <!-- Tipo de trámite -->
+                        <div class="col-8">
+                            <p>Tipo de Trámite</p>
+                            <select
+                                class="form-control my-2"
+                                name="tipoTramite"
+                                [(ngModel)]="tramite.tipoTramite"
+                                disabled
                             >
-                                {{ tipo.label }}
-                            </option>
-                        </select>
+                                <option [ngValue]="null" disabled>
+                                    Seleccione un tipo...
+                                </option>
+                                <option
+                                    *ngFor="let tipo of tipoTramiteOptions"
+                                    [ngValue]="tipo.key"
+                                >
+                                    {{ tipo.label }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <!-- Estado -->
+                            <div class="col-6">
+                                <p>Estado</p>
+                                <select
+                                    class="form-control my-2"
+                                    name="estado"
+                                    [(ngModel)]="tramite.estado"
+                                    required
+                                    *ngIf="!tramite.id"
+                                    disabled
+                                >
+                                    <option [ngValue]="null" disabled>
+                                        Seleccione un estado...
+                                    </option>
+                                    <option
+                                        *ngFor="let estado of estadoOptions"
+                                        [ngValue]="estado.key"
+                                    >
+                                        {{ estado.label }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Fecha inicio -->
+                            <div class="col-6">
+                                <p>Fecha de inicio</p>
+                                <input
+                                    type="date"
+                                    class="form-control my-2"
+                                    name="fechaInicio"
+                                    [value]="
+                                        tramite.fechaInicio
+                                            | date : 'yyyy-MM-dd'
+                                    "
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Unidad Origen -->
+                            <div class="col-6">
+                                <p>Unidad de Origen</p>
+                                <input
+                                    type="text"
+                                    class="form-control my-2"
+                                    name="unidadOrigen"
+                                    [value]="tramite.unidadOrigen?.nombre"
+                                    disabled
+                                />
+                            </div>
+
+                            <!-- Unidad Destino -->
+                            <div class="col-6">
+                                <p>Unidad de Destino</p>
+                                <select
+                                    class="form-control my-2"
+                                    name="unidadDestino"
+                                    [(ngModel)]="tramite.unidadDestino"
+                                    required
+                                >
+                                    <option disabled>
+                                        Seleccione una unidad
+                                    </option>
+                                    <option [ngValue]="0">Todos</option>
+                                    <option
+                                        *ngFor="let unidad of unidades"
+                                        [ngValue]="unidad"
+                                    >
+                                        {{ unidad.nombre }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Texto -->
+                        <div class="col-12">
+                            <p>Texto</p>
+                            <textarea
+                                class="form-control my-2"
+                                [(ngModel)]="tramite.texto"
+                                name="texto"
+                                rows="3"
+                                placeholder="Ingrese información adicional..."
+                            ></textarea>
+                        </div>
                     </div>
 
-                    <!-- Estado -->
-                    <div class="col-6">
-                        <p>Estado</p>
-                        <select
-                            class="form-control my-2"
-                            name="estado"
-                            [(ngModel)]="tramite.estado"
-                            required
-                        >
-                            <option [ngValue]="null" disabled>
-                                Seleccione un estado...
-                            </option>
-                            <option
-                                *ngFor="let estado of estadoOptions"
-                                [ngValue]="estado.key"
+                    <div class="col-8 ps-3">
+                        <!-- Mitad derecha: espacio para agregar cosas -->
+                        <p><strong>Actuaciones sobre el tramite</strong></p>
+                        <div class="mb-3">
+                            <label for="nuevaActuacion" class="form-label"
+                                >Nueva actuación</label
                             >
-                                {{ estado.label }}
-                            </option>
-                        </select>
-                    </div>
+                            <textarea
+                                id="nuevaActuacion"
+                                [(ngModel)]="nuevaActuacion"
+                                name="nuevaActuacion"
+                                class="form-control"
+                                rows="5"
+                                placeholder="Escriba una nueva actuación..."
+                            ></textarea>
+                        </div>
 
-                    <!-- Fecha inicio -->
-                    <div class="col-6">
-                        <p>Fecha de inicio</p>
-                        <input
-                            type="date"
-                            class="form-control my-2"
-                            name="fechaInicio"
-                            [value]="tramite.fechaInicio | date : 'yyyy-MM-dd'"
-                            disabled
-                        />
-                    </div>
-
-                    <!-- Unidad Origen -->
-                    <div class="col-12">
-                        <p>Unidad de Origen</p>
-                        <input
-                            type="text"
-                            class="form-control my-2"
-                            name="unidadOrigen"
-                            [value]="tramite.unidadOrigen?.nombre"
-                            disabled
-                        />
-                    </div>
-
-                    <!-- Unidad Destino -->
-                    <div class="col-12">
-                        <p>Unidad de Destino</p>
-                        <select
-                            class="form-control my-2"
-                            name="unidadDestino"
-                            [(ngModel)]="tramite.unidadDestino"
-                            required
-                        >
-                            <option [ngValue]="null">
-                                Seleccione una unidad
-                            </option>
-                            <option
-                                *ngFor="let unidad of unidades"
-                                [ngValue]="unidad"
+                        <div class="text-end">
+                            <button
+                                type="button"
+                                class="btn btn-dark"
+                                (click)="guardarActuacion()"
+                                [disabled]="
+                                    !nuevaActuacion.trim() || tramite.id != 0
+                                "
                             >
-                                {{ unidad.nombre }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Usuario -->
-                    <div class="col-12">
-                        <p>Usuario</p>
-                        <input
-                            class="form-control my-2"
-                            [value]="tramite.usuario?.nombreCompleto"
-                            disabled
-                            type="text"
-                        />
-                    </div>
-
-                    <!-- Texto -->
-                    <div class="col-12">
-                        <p>Texto</p>
-                        <textarea
-                            class="form-control my-2"
-                            [(ngModel)]="tramite.texto"
-                            name="texto"
-                            rows="3"
-                            placeholder="Ingrese información adicional..."
-                        ></textarea>
+                                Guardar actuación
+                            </button>
+                        </div>
                     </div>
 
                     <!-- BOTONES -->
@@ -150,7 +179,7 @@
                                     {{ tramite.id ? "Actualizar" : "Guardar" }}
                                 </button>
                             </div>
-                            <div class="col-4">
+                            <div class="col-2">
                                 <button
                                     type="button"
                                     class="btn btn-secondary w-100"

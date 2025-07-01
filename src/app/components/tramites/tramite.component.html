@@ -8,9 +8,26 @@
                 <input matInput (keyup)="applyFilter($event)" #input />
             </mat-form-field>
         </div>
-        <div class="col-4 pe-0 text-end">
-            <button (click)="abrirFormularioTramite()" class="btn btn-dark">
-                Nuevo Tramite
+        <div class="col-4 text-end">
+            <select
+                name="tipoTramite"
+                class="form-select text-center"
+                [(ngModel)]="tipoTramite"
+            >
+                <option [ngValue]="null" disabled>
+                    Seleccione una tipo de trámite
+                </option>
+                <option *ngFor="let tipo of tipos" [ngValue]="tipo.key">
+                    {{ tipo.label }}
+                </option>
+            </select>
+        </div>
+        <div class="col-3 pe-0 text-end">
+            <button
+                (click)="abrirFormularioTramite()"
+                class="btn btn-dark col-6 my-1"
+            >
+                Nuevo Trámite
             </button>
         </div>
     </div>
