@@ -1,0 +1,168 @@
+<div class="modal" tabindex="-1" style="display: block">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {{ tramite.id ? "Actualizar trámite" : "Agregar trámite" }}
+                </h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                    (click)="onCancel()"
+                ></button>
+            </div>
+
+            <div class="modal-body">
+                <div *ngIf="isLoading" class="form text-center">
+                    <p><strong> Cargando... </strong></p>
+                    <div class="spinner-border text-dark" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+
+                <form
+                    #tramiteForm="ngForm"
+                    (ngSubmit)="onSubmit()"
+                    class="row"
+                    *ngIf="!isLoading"
+                >
+                    <!-- Tipo de trámite -->
+                    <div class="col-12">
+                        <p>Tipo de Trámite</p>
+                        <select
+                            class="form-control my-2"
+                            name="tipoTramite"
+                            [(ngModel)]="tramite.tipoTramite"
+                            required
+                        >
+                            <option [ngValue]="null" disabled>
+                                Seleccione un tipo...
+                            </option>
+                            <option
+                                *ngFor="let tipo of tipoTramiteOptions"
+                                [ngValue]="tipo.key"
+                            >
+                                {{ tipo.label }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="col-6">
+                        <p>Estado</p>
+                        <select
+                            class="form-control my-2"
+                            name="estado"
+                            [(ngModel)]="tramite.estado"
+                            required
+                        >
+                            <option [ngValue]="null" disabled>
+                                Seleccione un estado...
+                            </option>
+                            <option
+                                *ngFor="let estado of estadoOptions"
+                                [ngValue]="estado.key"
+                            >
+                                {{ estado.label }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Fecha inicio -->
+                    <div class="col-6">
+                        <p>Fecha de inicio</p>
+                        <input
+                            type="date"
+                            class="form-control my-2"
+                            name="fechaInicio"
+                            [value]="tramite.fechaInicio | date : 'yyyy-MM-dd'"
+                            disabled
+                        />
+                    </div>
+
+                    <!-- Unidad Origen -->
+                    <div class="col-12">
+                        <p>Unidad de Origen</p>
+                        <input
+                            type="text"
+                            class="form-control my-2"
+                            name="unidadOrigen"
+                            [value]="tramite.unidadOrigen?.nombre"
+                            disabled
+                        />
+                    </div>
+
+                    <!-- Unidad Destino -->
+                    <div class="col-12">
+                        <p>Unidad de Destino</p>
+                        <select
+                            class="form-control my-2"
+                            name="unidadDestino"
+                            [(ngModel)]="tramite.unidadDestino"
+                            required
+                        >
+                            <option [ngValue]="null">
+                                Seleccione una unidad
+                            </option>
+                            <option
+                                *ngFor="let unidad of unidades"
+                                [ngValue]="unidad"
+                            >
+                                {{ unidad.nombre }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Usuario -->
+                    <div class="col-12">
+                        <p>Usuario</p>
+                        <input
+                            class="form-control my-2"
+                            [value]="tramite.usuario?.nombreCompleto"
+                            disabled
+                            type="text"
+                        />
+                    </div>
+
+                    <!-- Texto -->
+                    <div class="col-12">
+                        <p>Texto</p>
+                        <textarea
+                            class="form-control my-2"
+                            [(ngModel)]="tramite.texto"
+                            name="texto"
+                            rows="3"
+                            placeholder="Ingrese información adicional..."
+                        ></textarea>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="col-12">
+                        <div class="row justify-content-between mt-3">
+                            <div class="col-4">
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary w-100"
+                                    [disabled]="tramiteForm.invalid"
+                                >
+                                    {{ tramite.id ? "Actualizar" : "Guardar" }}
+                                </button>
+                            </div>
+                            <div class="col-4">
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary w-100"
+                                    (click)="onCancel()"
+                                >
+                                    Cerrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

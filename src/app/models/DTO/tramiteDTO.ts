@@ -6,4 +6,5 @@ export class TramiteDTO {
     idUnidadDestino?: number;
     idEquipo?: number;
     idRepuesto?: number;
+    texto?: string;
 }

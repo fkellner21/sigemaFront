@@ -21,8 +21,6 @@ export class TipoFormComponent {
 
   constructor(){
     this.tipoEquipo=new TipoEquipo();
-      console.log("Enum:", this.tareasEnum);
-  console.log("Tareas:", this.tareas);
   }
 
     onSubmit(tipoForm:NgForm):void{

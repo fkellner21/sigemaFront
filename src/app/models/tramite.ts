@@ -17,6 +17,7 @@ export class Tramite{
     usuario?: Usuario;
     equipo?: Equipo;
     repuesto?: Repuesto;
+    texto?: string;
     historico?: EstadoTramiteHistorico[];
     actuaciones?: Actuacion[];
 }
