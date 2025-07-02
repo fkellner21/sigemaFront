@@ -21,6 +21,7 @@ import { TramiteUsuarioFormComponent } from "./tramite-usuario-form/tramite-usua
 import { TramiteInfoFormComponent } from "./tramite-info-form/tramite-info-form.component";
 import { Usuario } from '../../models/usuario';
 import { UsuarioService } from '../../services/usuario.service';
+import { TramiteDTO } from '../../models/DTO/tramiteDTO';
 
 @Component({
     selector: 'tramites',
@@ -91,10 +92,6 @@ export class TramitesComponent implements OnInit {
     }
 
     ngOnInit() {
-        // this.roles = Object.keys(Rol).map((key) => ({
-        //     key: key,
-        //     label: Rol[key as keyof typeof Rol],
-        // }));
 
         this.estados = Object.keys(EstadoTramite).map((key) => ({
             key: key,
@@ -137,7 +134,7 @@ export class TramitesComponent implements OnInit {
                 this.isLoading = false;
             },
             error: (err) => {
-                console.error('Error al cargar los trámites:', err);
+                console.error('Error al cargar los trámites:', err.error);
                 this.isLoading = false;
             },
         });
@@ -181,19 +178,20 @@ export class TramitesComponent implements OnInit {
     }
 
     abrirFormularioTramite(idTramite?: number) {
-        if(idTramite!=0 && idTramite!=null){
+        if(idTramite!=null && idTramite!=0 ){
             this.tramiteService.findById(idTramite ?? 0).subscribe({
                 next: (tramite: Tramite) => {
                     this.tramiteSeleccionado = tramite;
+                    console.log(tramite)
                     this.mostrarFormulario(tramite);
                 },
                 error: (err) => {
+                    console.log(err)
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text:'Ocurrió un error al cargar el tramite. ' + err.error,
                     });
-                    
                 },
             });  
         }else{
@@ -241,11 +239,12 @@ export class TramitesComponent implements OnInit {
         this.mostrarFormularioUsuario=false;
     }
 
-    guardarTramite(tramite: any) {
+    guardarTramite(tramiteObj: any) {
         this.isLoading = true;
+        var tramite:TramiteDTO=TramiteDTO.toDto(tramiteObj);
 
-        const request$ = tramite.id
-            ? this.tramiteService.edit(tramite.id, tramite)//todo tiene que ser el DTO
+        const request$ = tramiteObj.id
+            ? this.tramiteService.edit(tramiteObj.id, tramite)
             : this.tramiteService.addNew(tramite);
 
         request$.subscribe({
@@ -255,10 +254,10 @@ export class TramitesComponent implements OnInit {
 
                 Swal.fire({
                     icon: 'success',
-                    title: tramite.id
+                    title: tramiteObj.id
                         ? 'Tramite actualizado'
                         : 'Tramite creado',
-                    text: tramite.id
+                    text: tramiteObj.id
                         ? 'El tramite ha sido actualizado correctamente.'
                         : 'El tramite ha sido creado correctamente.',
                     timer: 2000,

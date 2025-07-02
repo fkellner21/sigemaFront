@@ -149,7 +149,7 @@ export class SideMenuComponent implements OnInit {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Ocurrió un error al guardar el usuario.',
+                    text: 'Ocurrió un error al guardar el usuario. '+err.error,
                 });
             },
         });
