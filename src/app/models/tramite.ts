@@ -20,4 +20,9 @@ export class Tramite{
     texto?: string;
     historico?: EstadoTramiteHistorico[];
     actuaciones?: Actuacion[];
+    idUnidadDestino?: number;
+    idUnidadOrigen?: number;
+    idEquipo?: number;
+    idRepuesto?: number;
+    idUsuario?: number;
 }

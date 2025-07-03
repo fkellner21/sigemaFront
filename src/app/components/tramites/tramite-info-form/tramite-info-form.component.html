@@ -28,9 +28,9 @@
                     class="row"
                     *ngIf="!isLoading"
                 >
-                    <div class="col-4 pe-3 border-end">
+                    <div class="col-xl-4 pe-3 border-end">
                         <!-- Tipo de trámite -->
-                        <div class="col-8">
+                        <div class="col-lg-12">
                             <p>Tipo de Trámite</p>
                             <select
                                 class="form-control my-2"
@@ -51,15 +51,14 @@
                         </div>
                         <div class="row">
                             <!-- Estado -->
-                            <div class="col-6">
+                            <div class="col-lg-6">
                                 <p>Estado</p>
                                 <select
                                     class="form-control my-2"
                                     name="estado"
                                     [(ngModel)]="tramite.estado"
                                     required
-                                    *ngIf="!tramite.id"
-                                    disabled
+                                    [disabled]="tramite.id != null"
                                 >
                                     <option [ngValue]="null" disabled>
                                         Seleccione un estado...
@@ -74,7 +73,7 @@
                             </div>
 
                             <!-- Fecha inicio -->
-                            <div class="col-6">
+                            <div class="col-lg-6">
                                 <p>Fecha de inicio</p>
                                 <input
                                     type="date"
@@ -90,24 +89,35 @@
                         </div>
                         <div class="row">
                             <!-- Unidad Origen -->
-                            <div class="col-6">
+                            <div class="col-lg-6">
                                 <p>Unidad de Origen</p>
-                                <input
-                                    type="text"
+                                <select
                                     class="form-control my-2"
                                     name="unidadOrigen"
-                                    [value]="tramite.unidadOrigen?.nombre"
+                                    [(ngModel)]="tramite.idUnidadOrigen"
+                                    required
                                     disabled
-                                />
+                                >
+                                    <option disabled>
+                                        Seleccione una unidad
+                                    </option>
+                                    <option [ngValue]="0">Todos</option>
+                                    <option
+                                        *ngFor="let unidad of unidades"
+                                        [ngValue]="unidad.id"
+                                    >
+                                        {{ unidad.nombre }}
+                                    </option>
+                                </select>
                             </div>
 
                             <!-- Unidad Destino -->
-                            <div class="col-6">
+                            <div class="col-lg-6">
                                 <p>Unidad de Destino</p>
                                 <select
                                     class="form-control my-2"
                                     name="unidadDestino"
-                                    [(ngModel)]="tramite.unidadDestino"
+                                    [(ngModel)]="tramite.idUnidadDestino"
                                     required
                                 >
                                     <option disabled>
@@ -116,7 +126,7 @@
                                     <option [ngValue]="0">Todos</option>
                                     <option
                                         *ngFor="let unidad of unidades"
-                                        [ngValue]="unidad"
+                                        [ngValue]="unidad.id"
                                     >
                                         {{ unidad.nombre }}
                                     </option>
@@ -136,7 +146,7 @@
                         </div>
                     </div>
 
-                    <div class="col-8 ps-3">
+                    <div class="col-xl-8 ps-3">
                         <!-- Mitad derecha: espacio para agregar cosas -->
                         <p><strong>Actuaciones sobre el tramite</strong></p>
                         <div class="mb-3">
@@ -159,18 +169,77 @@
                                 class="btn btn-dark"
                                 (click)="guardarActuacion()"
                                 [disabled]="
-                                    !nuevaActuacion.trim() || tramite.id != 0
+                                    !nuevaActuacion.trim() ||
+                                    (tramite.id ?? 0) == 0
                                 "
                             >
                                 Guardar actuación
                             </button>
                         </div>
+
+                        <!-- HISTORIAL DE ACTUACIONES -->
+                        <div class="mb-3">
+                            <p><strong>Historial de actuaciones</strong></p>
+                            <div
+                                class="border rounded p-2"
+                                style="
+                                    max-height: 300px;
+                                    overflow-y: auto;
+                                    background-color: #f9f9f9;
+                                "
+                            >
+                                <div
+                                    *ngFor="
+                                        let actuacion of tramite.actuaciones
+                                    "
+                                    class="mb-3"
+                                >
+                                    <div
+                                        class="d-flex justify-content-between align-items-center mb-1"
+                                    >
+                                        <strong>{{
+                                            actuacion.usuario?.nombreCompleto ??
+                                                "Usuario desconocido"
+                                        }}</strong>
+                                        <span class="text-muted">
+                                            {{
+                                                actuacion.fecha
+                                                    | date : "dd/MM/yyyy HH:mm"
+                                            }}
+                                        </span>
+                                    </div>
+                                    <textarea
+                                        #txtDesc
+                                        class="form-control"
+                                        [value]="actuacion.descripcion"
+                                        rows="3"
+                                        readonly
+                                        style="
+                                            resize: none;
+                                            background-color: #f1f1f1;
+                                            overflow: hidden;
+                                        "
+                                        (input)="autoGrow(txtDesc)"
+                                    ></textarea>
+                                </div>
+
+                                <div
+                                    *ngIf="
+                                        !tramite.actuaciones ||
+                                        tramite.actuaciones.length === 0
+                                    "
+                                    class="text-muted"
+                                >
+                                    No hay actuaciones registradas.
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- BOTONES -->
-                    <div class="col-12">
+                    <div class="col-lg-12">
                         <div class="row justify-content-between mt-3">
-                            <div class="col-4">
+                            <div class="col-lg-4">
                                 <button
                                     type="submit"
                                     class="btn btn-primary w-100"
@@ -179,7 +248,7 @@
                                     {{ tramite.id ? "Actualizar" : "Guardar" }}
                                 </button>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-2">
                                 <button
                                     type="button"
                                     class="btn btn-secondary w-100"

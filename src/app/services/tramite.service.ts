@@ -1,7 +1,7 @@
 // unidad.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Tramite } from '../models/tramite';
 import { Actuacion } from '../models/actuacion';
@@ -22,10 +22,16 @@ export class TramiteService {
         return this.http.get<Tramite[]>(`${environment.apiUrl}/api/tramites`);
     }
 
-    findById(id: number): Observable<Tramite> {
-        return this.http.get<Tramite>(
-            `${environment.apiUrl}/api/tramites/${id}`);
-    }
+
+findById(id: number): Observable<Tramite> {
+    return this.http.get<Tramite>(`${environment.apiUrl}/api/tramites/${id}`).pipe(
+        catchError((error) => {
+            console.error('Error fetching tramite by ID:', error);
+            return throwError(() => error);
+        })
+    );
+}
+
 
     addNew(tramite:TramiteDTO): Observable<Tramite> {
         return this.http.post<Tramite>(

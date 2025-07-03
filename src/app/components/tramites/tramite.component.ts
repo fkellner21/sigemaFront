@@ -182,7 +182,13 @@ export class TramitesComponent implements OnInit {
             this.tramiteService.findById(idTramite ?? 0).subscribe({
                 next: (tramite: Tramite) => {
                     this.tramiteSeleccionado = tramite;
-                    console.log(tramite)
+                    this.tramiteSeleccionado.idUnidadDestino = tramite.unidadDestino?.id ?? 0;
+                    this.tramiteSeleccionado.idUnidadOrigen = tramite.unidadOrigen?.id ?? 0;
+                    this.tramiteSeleccionado.idEquipo = tramite.equipo?.id ?? 0;
+                    this.tramiteSeleccionado.idRepuesto = tramite.repuesto?.id ?? 0;
+                    this.tramiteSeleccionado.tipoTramite = TipoTramite[tramite.tipoTramite as keyof typeof TipoTramite];
+                    this.tramiteSeleccionado.estado = EstadoTramite[tramite.estado as keyof typeof EstadoTramite];
+
                     this.mostrarFormulario(tramite);
                 },
                 error: (err) => {
@@ -200,6 +206,7 @@ export class TramitesComponent implements OnInit {
             this.tramiteSeleccionado.estado=EstadoTramite.Iniciado;
             this.tramiteSeleccionado.fechaInicio=new Date();
             this.tramiteSeleccionado.unidadOrigen=this.unidadOrigen;
+            this.tramiteSeleccionado.idUnidadOrigen=this.unidadOrigen?.id??0;
             this.tramiteSeleccionado.usuario=this.usuario;
             this.mostrarFormulario(this.tramiteSeleccionado);
         }
@@ -242,6 +249,9 @@ export class TramitesComponent implements OnInit {
     guardarTramite(tramiteObj: any) {
         this.isLoading = true;
         var tramite:TramiteDTO=TramiteDTO.toDto(tramiteObj);
+
+        console.log("DTO: ", tramite);
+        console.log("Original: ", tramiteObj);
 
         const request$ = tramiteObj.id
             ? this.tramiteService.edit(tramiteObj.id, tramite)
