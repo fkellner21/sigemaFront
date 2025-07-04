@@ -9,10 +9,10 @@
         <form (ngSubmit)="onSubmit(login)" #login="ngForm">
             <h3>Login</h3>
 
-            <label for="username">Cedula</label>
+            <label for="username">Cédula</label>
             <input
                 type="text"
-                placeholder="Cedula"
+                placeholder="Cédula"
                 id="username"
                 name="username"
                 [(ngModel)]="loginDTO.username"
@@ -22,7 +22,7 @@
             @if(username.invalid && (username.dirty || username.touched)){
             @if(username.errors!['required']){
             <div class="alert" style="background-color: rgb(255, 122, 122)">
-                Debe ingresar la Cedula
+                Debe ingresar la Cédula
             </div>
             } }
 

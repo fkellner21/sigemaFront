@@ -58,7 +58,7 @@
                                     name="estado"
                                     [(ngModel)]="tramite.estado"
                                     required
-                                    [disabled]="tramite.id != null"
+                                    [disabled]="tramite.id == null"
                                 >
                                     <option [ngValue]="null" disabled>
                                         Seleccione un estado...
@@ -197,10 +197,16 @@
                                     <div
                                         class="d-flex justify-content-between align-items-center mb-1"
                                     >
-                                        <strong>{{
-                                            actuacion.usuario?.nombreCompleto ??
-                                                "Usuario desconocido"
-                                        }}</strong>
+                                        <strong>
+                                            {{
+                                                (actuacion.usuario?.grado
+                                                    ?.nombre || " ") +
+                                                    " " +
+                                                    (actuacion.usuario
+                                                        ?.nombreCompleto ||
+                                                        "Sin solicitante")
+                                            }}</strong
+                                        >
                                         <span class="text-muted">
                                             {{
                                                 actuacion.fecha

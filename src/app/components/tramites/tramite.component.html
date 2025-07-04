@@ -90,9 +90,10 @@
                 </th>
                 <td mat-cell *matCellDef="let element">
                     {{
-                        element.usuario?.grado?.nombre +
+                        (element.usuario?.grado?.nombre || " ") +
                             " " +
-                            element.usuario?.nombreCompleto || "Sin solicitante"
+                            (element.usuario?.nombreCompleto ||
+                                "Sin solicitante")
                     }}
                 </td>
             </ng-container>
@@ -175,14 +176,23 @@
 <tramite-equipo-form
     *ngIf="mostrarFormularioEquipo"
     [tramite]="tramiteSeleccionado"
+    [unidades]="unidades"
+    (cancelEventEmiter)="cerrarFormularios()"
+    (newTramiteEventEmitter)="guardarTramite($event)"
 ></tramite-equipo-form>
 <tramite-repuesto-form
     *ngIf="mostrarFormularioRepuesto"
     [tramite]="tramiteSeleccionado"
+    [unidades]="unidades"
+    (cancelEventEmiter)="cerrarFormularios()"
+    (newTramiteEventEmitter)="guardarTramite($event)"
 ></tramite-repuesto-form>
 <tramite-usuario-form
     *ngIf="mostrarFormularioUsuario"
     [tramite]="tramiteSeleccionado"
+    [unidades]="unidades"
+    (cancelEventEmiter)="cerrarFormularios()"
+    (newTramiteEventEmitter)="guardarTramite($event)"
 ></tramite-usuario-form>
 <tramite-info-form
     *ngIf="mostrarFormularioInfo"

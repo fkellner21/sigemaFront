@@ -27,8 +27,10 @@ export class TramiteInfoFormComponent {
     @Input() tramite: Tramite = new Tramite();
     @Input() unidades!: Unidad[];
     @Output() cancelEventEmiter = new EventEmitter();
-    @Output() newTramiteEventEmitter: EventEmitter<Tramite> =
-        new EventEmitter();
+    @Output() newTramiteEventEmitter: EventEmitter<Tramite> = new EventEmitter();
+    isLoading = false;
+    estadoOptions: { key: string; label: string }[] = [];
+    tipoTramiteOptions: { key: string; label: string }[] = [];
 
     nuevaActuacion: string = '';
 
@@ -37,10 +39,6 @@ export class TramiteInfoFormComponent {
             this.tramite = new Tramite();
         }
     }
-
-    isLoading = false;
-    estadoOptions: { key: string; label: string }[] = [];
-    tipoTramiteOptions: { key: string; label: string }[] = [];
 
     ngOnInit() {
         this.estadoOptions = this.enumToOptions(EstadoTramite);

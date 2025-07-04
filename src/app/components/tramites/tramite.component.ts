@@ -186,8 +186,8 @@ export class TramitesComponent implements OnInit {
                     this.tramiteSeleccionado.idUnidadOrigen = tramite.unidadOrigen?.id ?? 0;
                     this.tramiteSeleccionado.idEquipo = tramite.equipo?.id ?? 0;
                     this.tramiteSeleccionado.idRepuesto = tramite.repuesto?.id ?? 0;
-                    this.tramiteSeleccionado.tipoTramite = TipoTramite[tramite.tipoTramite as keyof typeof TipoTramite];
-                    this.tramiteSeleccionado.estado = EstadoTramite[tramite.estado as keyof typeof EstadoTramite];
+                    this.tramiteSeleccionado.tipoTramite = tramite.tipoTramite;
+                    this.tramiteSeleccionado.estado = tramite.estado;
 
                     this.mostrarFormulario(tramite);
                 },
@@ -249,9 +249,6 @@ export class TramitesComponent implements OnInit {
     guardarTramite(tramiteObj: any) {
         this.isLoading = true;
         var tramite:TramiteDTO=TramiteDTO.toDto(tramiteObj);
-
-        console.log("DTO: ", tramite);
-        console.log("Original: ", tramiteObj);
 
         const request$ = tramiteObj.id
             ? this.tramiteService.edit(tramiteObj.id, tramite)
