@@ -16,7 +16,11 @@ th {
 }
 
 .colNombre{
-  width: 85%;
+  width: 65%;
+}
+
+.colTipo{
+  width: 20%;
 }
 
 .colBtn{

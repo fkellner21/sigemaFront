@@ -113,32 +113,32 @@ export class UsuariosComponent implements OnInit {
         });
     }
 
-applyFilter(event: Event) {
-  const filterValue = (event.target as HTMLInputElement).value
-    .trim()
-    .toLowerCase();
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value
+            .trim()
+            .toLowerCase();
 
-  if (!filterValue) {
-    this.dataSource = this.dataSourceOriginal;
-    return;
-  }
+        if (!filterValue) {
+            this.dataSource = this.dataSourceOriginal;
+            return;
+        }
 
-  this.dataSource = this.dataSourceOriginal.filter((usuario) => {
-    const nombre = usuario.nombreCompleto?.toLowerCase() ?? '';
-    const cedula = usuario.cedula?.toLowerCase() ?? '';
-    const unidad = usuario.unidad?.nombre?.toLowerCase() ?? '';
-    const grado = usuario.grado?.nombre?.toLowerCase() ?? '';
-    const rol = this.getRolLabel(usuario.rol)?.toLowerCase() ?? '';
+        this.dataSource = this.dataSourceOriginal.filter((usuario) => {
+            const nombre = usuario.nombreCompleto?.toLowerCase() ?? '';
+            const cedula = usuario.cedula?.toLowerCase() ?? '';
+            const unidad = usuario.unidad?.nombre?.toLowerCase() ?? '';
+            const grado = usuario.grado?.nombre?.toLowerCase() ?? '';
+            const rol = this.getRolLabel(usuario.rol)?.toLowerCase() ?? '';
 
-    return (
-      nombre.includes(filterValue) ||
-      cedula.includes(filterValue) ||
-      unidad.includes(filterValue) ||
-      grado.includes(filterValue) ||
-      rol.includes(filterValue)
-    );
-  });
-}
+            return (
+                nombre.includes(filterValue) ||
+                cedula.includes(filterValue) ||
+                unidad.includes(filterValue) ||
+                grado.includes(filterValue) ||
+                rol.includes(filterValue)
+            );
+        });
+    }
 
     abrirFormularioUsuario(usuario?: any) {
         this.usuarioSeleccionado = usuario ? { ...usuario } : {};
@@ -179,17 +179,43 @@ applyFilter(event: Event) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Ocurrió un error al guardar el usuario. '+err.error,
+                    text:
+                        'Ocurrió un error al guardar el usuario. ' + err.error,
                 });
             },
         });
     }
 
     eliminarUsuario(id: number) {
-        if (confirm('¿Está seguro de eliminar este usuario?')) {
-            this.usuarioService.delete(id).subscribe(() => {
-                this.cargarUsuarios();
-            });
-        }
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.usuarioService.delete(id).subscribe({
+                    next: () => {
+                        Swal.fire(
+                            'Eliminado',
+                            'El usuario fue eliminado',
+                            'success'
+                        );
+                        this.cargarUsuarios();
+                    },
+                    error: (err) => {
+                        Swal.fire(
+                            'Error',
+                            'No se pudo eliminar el usuario. ' + err.error,
+                            'error'
+                        );
+                    },
+                });
+            }
+        });
     }
 }

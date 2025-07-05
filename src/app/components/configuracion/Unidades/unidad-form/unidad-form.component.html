@@ -50,7 +50,17 @@
                             type="number"
                         />
                     </div>
-                    <div class="row justify-content-between mt-3">
+                    <p class="mb-0 mt-3" for="flexSwitchCheck">¿Es gran unidad?</p>
+                    <div class="form-check form-switch mt-0 mb-3">
+                        <input style="width: 2.7rem; height: 1.5rem;"
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheck"
+                            [(ngModel)]="unidad.esGranUnidad"
+                            name="esGranUnidad"
+                        />
+                    </div>
+                    <div class="row justify-content-between mt-5">
                         <div class="col-4">
                             <button
                                 type="submit"

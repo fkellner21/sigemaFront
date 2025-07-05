@@ -1,5 +1,5 @@
 export enum TipoTramite {
-    BajaEquipo = 'Alta o baja de Equipo',
+    BajaEquipo = 'Baja de Equipo',
     SolicitudRepuesto = 'Solicitud o entrega de Repuesto',
     SolicitudUsuario = 'Alta o baja de Usuario',
     PedidoInformacion = 'Pedido de Información',

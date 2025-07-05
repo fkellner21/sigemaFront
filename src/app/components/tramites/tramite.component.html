@@ -1,34 +1,42 @@
-<div class="titulo text-center my-1">Listado de tramites</div>
+<div class="titulo text-center my-1">Listado de trámites</div>
 
 <div class="row me-0">
     <div class="row pe-0 justify-content-between align-items-center">
-        <div class="col-4">
+        <div class="col-md-4">
             <mat-form-field class="w-100">
                 <mat-label>Buscar</mat-label>
                 <input matInput (keyup)="applyFilter($event)" #input />
             </mat-form-field>
         </div>
-        <div class="col-4 text-end">
-            <select
-                name="tipoTramite"
-                class="form-select text-center"
-                [(ngModel)]="tipoTramite"
+        <div class="col-md-8 row justify-content-end">
+            <div
+                class="col-md-6 col-lg-4 text-end"
+                *ngIf="usuario.unidad != null"
             >
-                <option [ngValue]="null" disabled>
-                    Seleccione una tipo de trámite
-                </option>
-                <option *ngFor="let tipo of tipos" [ngValue]="tipo.key">
-                    {{ tipo.label }}
-                </option>
-            </select>
-        </div>
-        <div class="col-3 pe-0 text-end">
-            <button
-                (click)="abrirFormularioTramite()"
-                class="btn btn-dark col-6 my-1"
+                <select
+                    name="tipoTramite"
+                    class="form-select text-center"
+                    [(ngModel)]="tipoTramite"
+                >
+                    <option [ngValue]="null" disabled>
+                        Seleccione una tipo de trámite
+                    </option>
+                    <option *ngFor="let tipo of tipos" [ngValue]="tipo.key">
+                        {{ tipo.label }}
+                    </option>
+                </select>
+            </div>
+            <div
+                class="col-md-5 col-lg-3 pe-0 text-end"
+                *ngIf="usuario.unidad != null"
             >
-                Nuevo Trámite
-            </button>
+                <button
+                    (click)="abrirFormularioTramite()"
+                    class="btn btn-dark w-100"
+                >
+                    Nuevo Trámite
+                </button>
+            </div>
         </div>
     </div>
     <div>
@@ -135,7 +143,10 @@
                 </th>
                 <td mat-cell *matCellDef="let element" class="text-center">
                     <button
-                        *ngIf="element.estado == 'Iniciado'"
+                        *ngIf="
+                            element.estado == 'Iniciado' &&
+                            usuario.unidad != null
+                        "
                         class="btn btn-dark btn-sm me-2"
                         (click)="abrirFormularioTramite(element.id)"
                         title="Editar tramite"
@@ -145,7 +156,8 @@
                     <button
                         *ngIf="
                             authservice.getRol() == 'ROLE_ADMINISTRADOR' &&
-                            element.estado == 'Resuelto'
+                            element.estado == 'Resuelto' &&
+                            usuario.unidad != null
                         "
                         class="btn btn-danger btn-sm"
                         (click)="eliminarTramite(element.id)"
