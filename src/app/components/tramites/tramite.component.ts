@@ -15,10 +15,10 @@ import { EstadoTramite } from '../../models/enum/EstadoTramite';
 import { TramiteService } from '../../services/tramite.service';
 import { Tramite } from '../../models/tramite';
 import Swal from 'sweetalert2';
-import { TramiteEquipoFormComponent } from "./tramite-equipo-form/tramite-equipo-form.component";
-import { TramiteRepuestoFormComponent } from "./tramite-repuesto-form/tramite-repuesto-form.component";
-import { TramiteUsuarioFormComponent } from "./tramite-usuario-form/tramite-usuario-form.component";
-import { TramiteInfoFormComponent } from "./tramite-info-form/tramite-info-form.component";
+import { TramiteEquipoFormComponent } from './tramite-equipo-form/tramite-equipo-form.component';
+import { TramiteRepuestoFormComponent } from './tramite-repuesto-form/tramite-repuesto-form.component';
+import { TramiteUsuarioFormComponent } from './tramite-usuario-form/tramite-usuario-form.component';
+import { TramiteInfoFormComponent } from './tramite-info-form/tramite-info-form.component';
 import { Usuario } from '../../models/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { TramiteDTO } from '../../models/DTO/tramiteDTO';
@@ -27,18 +27,18 @@ import { TramiteDTO } from '../../models/DTO/tramiteDTO';
     selector: 'tramites',
     standalone: true,
     imports: [
-    CommonModule,
-    FormsModule,
-    MatTableModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    TramiteEquipoFormComponent,
-    TramiteRepuestoFormComponent,
-    TramiteUsuarioFormComponent,
-    TramiteInfoFormComponent
-],
+        CommonModule,
+        FormsModule,
+        MatTableModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        TramiteEquipoFormComponent,
+        TramiteRepuestoFormComponent,
+        TramiteUsuarioFormComponent,
+        TramiteInfoFormComponent,
+    ],
     templateUrl: './tramite.component.html',
     styleUrls: ['./tramite.component.css'],
 })
@@ -61,17 +61,17 @@ export class TramitesComponent implements OnInit {
     mostrarFormularioRepuesto: boolean = false;
     mostrarFormularioUsuario: boolean = false;
     mostrarFormularioInfo: boolean = false;
-    
+
     estados!: { key: string; label: string }[];
     tipos!: { key: string; label: string }[];
     unidades!: any;
     Rol = Rol;
     TipoTramite = TipoTramite;
     EstadoTramite = EstadoTramite;
-    tramiteSeleccionado: Tramite = new Tramite;
-    unidadOrigen!:Unidad;
-    usuario!:Usuario;
-    tipoTramite:TipoTramite=TipoTramite.Otros;
+    tramiteSeleccionado: Tramite = new Tramite();
+    unidadOrigen!: Unidad;
+    usuario!: Usuario;
+    tipoTramite: TipoTramite = TipoTramite.Otros;
     constructor(
         private unidadService: UnidadService,
         private tramiteService: TramiteService,
@@ -92,19 +92,20 @@ export class TramitesComponent implements OnInit {
     }
 
     ngOnInit() {
-
         this.estados = Object.keys(EstadoTramite).map((key) => ({
             key: key,
             label: EstadoTramite[key as keyof typeof EstadoTramite],
         }));
 
-        this.tipos = Object.keys(TipoTramite).map((key) => ({
-            key: key,
-            label: TipoTramite[key as keyof typeof TipoTramite],
-        }));
+        this.tipos = Object.keys(TipoTramite)
+            .filter((key) => (key !== 'BajaEquipo' && key !== 'AltaEquipo' && key !== 'AltaUsuario' && key !== 'BajaUsuario'))
+            .map((key) => ({
+                key: key,
+                label: TipoTramite[key as keyof typeof TipoTramite],
+            }));
 
-        this.unidadService.findAll().subscribe((unidadesRecibidas)=>{
-            this.unidades=unidadesRecibidas ?? [];
+        this.unidadService.findAll().subscribe((unidadesRecibidas) => {
+            this.unidades = unidadesRecibidas ?? [];
         });
 
         const idUnidad = this.authservice.getIdUnidad();
@@ -114,15 +115,14 @@ export class TramitesComponent implements OnInit {
             });
         }
 
-        const idUsuario=this.authservice.getIdUsuario();
-        if(idUsuario!=null){
-            this.usuarioService.findById(idUsuario).subscribe((user)=>{
-                this.usuario=user;
-            })
+        const idUsuario = this.authservice.getIdUsuario();
+        if (idUsuario != null) {
+            this.usuarioService.findById(idUsuario).subscribe((user) => {
+                this.usuario = user;
+            });
         }
 
         this.cargarTramites();
-        
     }
 
     cargarTramites() {
@@ -178,77 +178,82 @@ export class TramitesComponent implements OnInit {
     }
 
     abrirFormularioTramite(idTramite?: number) {
-        if(idTramite!=null && idTramite!=0 ){
+        if (idTramite != null && idTramite != 0) {
             this.tramiteService.findById(idTramite ?? 0).subscribe({
                 next: (tramite: Tramite) => {
                     this.tramiteSeleccionado = tramite;
-                    this.tramiteSeleccionado.idUnidadDestino = tramite.unidadDestino?.id ?? 0;
-                    this.tramiteSeleccionado.idUnidadOrigen = tramite.unidadOrigen?.id ?? 0;
+                    this.tramiteSeleccionado.idUnidadDestino =
+                        tramite.unidadDestino?.id ?? 0;
+                    this.tramiteSeleccionado.idUnidadOrigen =
+                        tramite.unidadOrigen?.id ?? 0;
                     this.tramiteSeleccionado.idEquipo = tramite.equipo?.id ?? 0;
-                    this.tramiteSeleccionado.idRepuesto = tramite.repuesto?.id ?? 0;
+                    this.tramiteSeleccionado.idRepuesto =
+                        tramite.repuesto?.id ?? 0;
                     this.tramiteSeleccionado.tipoTramite = tramite.tipoTramite;
                     this.tramiteSeleccionado.estado = tramite.estado;
 
                     this.mostrarFormulario(tramite);
                 },
                 error: (err) => {
-                    console.log(err)
+                    console.log(err);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text:'Ocurrió un error al cargar el tramite. ' + err.error,
+                        text:
+                            'Ocurrió un error al cargar el tramite. ' +
+                            err.error,
                     });
                 },
-            });  
-        }else{
-            this.tramiteSeleccionado=new Tramite;
-            this.tramiteSeleccionado.tipoTramite=this.tipoTramite;
-            this.tramiteSeleccionado.estado=EstadoTramite.Iniciado;
-            this.tramiteSeleccionado.fechaInicio=new Date();
-            this.tramiteSeleccionado.unidadOrigen=this.unidadOrigen;
-            this.tramiteSeleccionado.idUnidadOrigen=this.unidadOrigen?.id??0;
-            this.tramiteSeleccionado.usuario=this.usuario;
+            });
+        } else {
+            this.tramiteSeleccionado = new Tramite();
+            this.tramiteSeleccionado.tipoTramite = this.tipoTramite;
+            this.tramiteSeleccionado.estado = EstadoTramite.Iniciado;
+            this.tramiteSeleccionado.fechaInicio = new Date();
+            this.tramiteSeleccionado.unidadOrigen = this.unidadOrigen;
+            this.tramiteSeleccionado.idUnidadOrigen =
+                this.unidadOrigen?.id ?? 0;
+            this.tramiteSeleccionado.usuario = this.usuario;
             this.mostrarFormulario(this.tramiteSeleccionado);
         }
     }
 
     mostrarFormulario(tramite: Tramite) {
-    this.mostrarFormularioEquipo = false;
-    this.mostrarFormularioInfo=false;
-    this.mostrarFormularioRepuesto=false;
-    this.mostrarFormularioUsuario=false;
+        this.mostrarFormularioEquipo = false;
+        this.mostrarFormularioInfo = false;
+        this.mostrarFormularioRepuesto = false;
+        this.mostrarFormularioUsuario = false;
 
-    switch (tramite.tipoTramite?.valueOf()) {
-        case 'BajaEquipo':
-            this.mostrarFormularioEquipo = true;
-        break;
+        switch (tramite.tipoTramite?.valueOf()) {
+            case 'BajaEquipo':
+                this.mostrarFormularioEquipo = true;
+                break;
 
-        case 'SolicitudRepuesto':
-        this.mostrarFormularioRepuesto = true;
-        break;
+            case 'SolicitudRepuesto':
+                this.mostrarFormularioRepuesto = true;
+                break;
 
-        case 'SolicitudUsuario':
-        this.mostrarFormularioUsuario = true;
-        break;
+            case 'SolicitudUsuario':
+                this.mostrarFormularioUsuario = true;
+                break;
 
-        default:
-        this.mostrarFormularioInfo = true;
-        break;
+            default:
+                this.mostrarFormularioInfo = true;
+                break;
         }
     }
 
-
     cerrarFormularios() {
-        this.tramiteSeleccionado=new Tramite;
+        this.tramiteSeleccionado = new Tramite();
         this.mostrarFormularioEquipo = false;
-        this.mostrarFormularioInfo=false;
-        this.mostrarFormularioRepuesto=false;
-        this.mostrarFormularioUsuario=false;
+        this.mostrarFormularioInfo = false;
+        this.mostrarFormularioRepuesto = false;
+        this.mostrarFormularioUsuario = false;
     }
 
     guardarTramite(tramiteObj: any) {
         this.isLoading = true;
-        var tramite:TramiteDTO=TramiteDTO.toDto(tramiteObj);
+        var tramite: TramiteDTO = TramiteDTO.toDto(tramiteObj);
 
         const request$ = tramiteObj.id
             ? this.tramiteService.edit(tramiteObj.id, tramite)

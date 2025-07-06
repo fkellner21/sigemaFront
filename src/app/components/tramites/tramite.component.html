@@ -156,7 +156,8 @@
                     <button
                         *ngIf="
                             authservice.getRol() == 'ROLE_ADMINISTRADOR' &&
-                            element.estado == 'Resuelto' &&
+                            (element.estado == 'Aprobado' ||
+                                element.estado == 'Rechazado') &&
                             usuario.unidad != null
                         "
                         class="btn btn-danger btn-sm"
