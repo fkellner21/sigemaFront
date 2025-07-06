@@ -14,4 +14,5 @@ export class Equipo{
     unidad!:Unidad;
     idModeloEquipo?:number;
     idUnidad!:number;
+    activo:boolean = true;
 }

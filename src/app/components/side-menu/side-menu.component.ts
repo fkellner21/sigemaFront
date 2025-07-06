@@ -49,9 +49,10 @@ export class SideMenuComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        if(this.authService.isAuthenticated()){
-
-            this.roles = Object.keys(Rol).map((key) => ({
+             this.authService.isTokenValid().then((isValid) => {
+    if (isValid) {
+      
+         this.roles = Object.keys(Rol).map((key) => ({
                 key: key,
                 label: Rol[key as keyof typeof Rol],
             }));
@@ -81,7 +82,13 @@ export class SideMenuComponent implements OnInit {
                     });
                 },
             });
-
+            } else {
+                    this.router.navigate(['/login']);
+                }
+            }).catch(() => {
+                this.router.navigate(['/login']);
+            });
+           
             
             let idUsuario = this.authService.getIdUsuario();
             if(idUsuario!=null){
@@ -102,7 +109,6 @@ export class SideMenuComponent implements OnInit {
             }
                 
         }
-    }
 
     toggleConfig() {
         this.isConfigOpen = !this.isConfigOpen;
@@ -117,7 +123,32 @@ export class SideMenuComponent implements OnInit {
 
     abrirModalPerfil() {
         this.usuario= { ...this.usuarioOriginal }
-        this.mostrarFormularioPerfil = true;
+            this.gradosService.findAll().subscribe({
+                next: (resp) => {
+                    this.grados = resp;
+                },
+                error: (err) => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudieron cargar los grados. ' + err.error,
+                        icon: 'error',
+                    });
+                },
+            });
+            
+            this.unidadService.findAll().subscribe({
+                next: (resp) => {
+                    this.unidades = resp;
+                    this.mostrarFormularioPerfil = true;
+                },
+                error: (err) => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudieron cargar las unidades. ' + err.error,
+                        icon: 'error',
+                    });
+                },
+            });
     }
 
     cerrarModalPerfil() {
@@ -149,7 +180,7 @@ export class SideMenuComponent implements OnInit {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Ocurrió un error al guardar el usuario.',
+                    text: 'Ocurrió un error al guardar el usuario. '+err.error,
                 });
             },
         });

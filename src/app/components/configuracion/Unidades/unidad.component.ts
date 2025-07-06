@@ -97,7 +97,7 @@ export class UnidadComponent {
     this.refresh();
   }
 
-  displayedColumns: string[] = [ 'Nombre', 'Modificar'];
+  displayedColumns: string[] = [ 'Nombre', 'EsGranUnidad', 'Modificar'];
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

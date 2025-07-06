@@ -13,4 +13,5 @@ import { Unidad } from "./Unidad";
         cedula!:string;
         grado:Grado = new Grado();
         unidad:Unidad = new Unidad();
+        activo:boolean = true;
     }

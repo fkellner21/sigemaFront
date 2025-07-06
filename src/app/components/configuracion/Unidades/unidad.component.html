@@ -43,6 +43,17 @@
                     {{ element.nombre }}
                 </td>
             </ng-container>
+            <ng-container matColumnDef="EsGranUnidad">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    class="bg-dark text-white colTipo"
+                >
+                </th>
+                <td mat-cell class="colTipo" *matCellDef="let element">
+                    {{ element.esGranUnidad ? "Gran Unidad" : "" }}
+                </td>
+            </ng-container>
             <!-- Symbol Column -->
             <ng-container matColumnDef="Modificar">
                 <th

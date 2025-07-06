@@ -1,4 +1,12 @@
-import { Component, EventEmitter, input, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    input,
+    Input,
+    OnInit,
+    Output,
+    SimpleChanges,
+} from '@angular/core';
 import { Equipo } from '../../../../models/equipo';
 import { MaquinaService } from '../../../../services/equipo.service';
 import { modeloEquipo } from '../../../../models/modeloEquipo';
@@ -18,63 +26,69 @@ import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
 import { AuthService } from '../../../../services/auth.service';
 
 @Component({
-  selector: 'maquina',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MaquinaFormComponent,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-    MatSelectModule,
-    MatOptionModule
-  ],
-  templateUrl: './maquina.component.html',
-  styleUrls: ['./maquina.component.css']
+    selector: 'maquina',
+    standalone: true,
+    imports: [
+        CommonModule,
+        FormsModule,
+        MaquinaFormComponent,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTableModule,
+        MatSelectModule,
+        MatOptionModule,
+    ],
+    templateUrl: './maquina.component.html',
+    styleUrls: ['./maquina.component.css'],
 })
-export class MaquinaComponent{
-  
-  maquinaSelected: Equipo = new Equipo();
-  open: boolean = false;
-  dataSource!: MatTableDataSource<Equipo>;
+export class MaquinaComponent {
+    maquinaSelected: Equipo = new Equipo();
+    open: boolean = false;
+    dataSource!: MatTableDataSource<Equipo>;
 
-  @Input() maquinas: Equipo[] = [];
-  @Input() isLoadingMaquinas = false; 
-  @Input() modelos: modeloEquipo[] = [];
-  @Input() tiposEquipo: TipoEquipo[] = [];
-  @Input() marcas: Marca[] = [];
+    @Input() maquinas: Equipo[] = [];
+    @Input() isLoadingMaquinas = false;
+    @Input() modelos: modeloEquipo[] = [];
+    @Input() tiposEquipo: TipoEquipo[] = [];
+    @Input() marcas: Marca[] = [];
 
-  @Output() actualizarMaquinasEventEmmiter: EventEmitter<void> =new EventEmitter()
-  
-  displayedColumns: string[] = [
-  'unidad',
-  'tipoMaquina',
-  'matricula',
-  'marca',
-  'modelo',
-  'estado',
-  'capacidad',
-  'tiempoDeTrabajo',
-  'acciones'
-  ];
- 
-  constructor(private service: MaquinaService, public authservice:AuthService) {}
+    @Output() actualizarMaquinasEventEmmiter: EventEmitter<void> =
+        new EventEmitter();
 
-  refresh(): void {
-    this.actualizarMaquinasEventEmmiter.emit();
-  }
+    displayedColumns: string[] = [
+        'unidad',
+        'tipoMaquina',
+        'matricula',
+        'marca',
+        'modelo',
+        'estado',
+        'capacidad',
+        'tiempoDeTrabajo',
+        'acciones',
+    ];
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['maquinas'] && this.maquinas) {
-      this.dataSource = new MatTableDataSource(this.maquinas);
+    constructor(
+        private service: MaquinaService,
+        public authservice: AuthService
+    ) {}
+
+    refresh(): void {
+        this.actualizarMaquinasEventEmmiter.emit();
     }
 
-    this.dataSource.filterPredicate = (data: Equipo, filter: string): boolean => {
-    const filterValue = filter.trim().toLowerCase();
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['maquinas'] && this.maquinas) {
+            this.dataSource = new MatTableDataSource(this.maquinas);
+        }
 
-    // Crear un string con todos los campos relevantes para la búsqueda
-    const dataStr = `
+        this.dataSource.filterPredicate = (
+            data: Equipo,
+            filter: string
+        ): boolean => {
+            const filterValue = filter.trim().toLowerCase();
+
+            // Crear un string con todos los campos relevantes para la búsqueda
+            const dataStr = `
       ${data.unidad?.nombre || ''}
       ${data.modeloEquipo?.tipoEquipo?.codigo || ''}
       ${data.matricula || ''}
@@ -86,87 +100,145 @@ export class MaquinaComponent{
       ${data.modeloEquipo?.unidadMedida || ''}
     `.toLowerCase();
 
-    return dataStr.includes(filterValue);
-    };
+            return dataStr.includes(filterValue);
+        };
 
-    if (changes['modelos'] && this.modelos) {
-      this.modelos = [...this.modelos];
-    }
-
-    if (changes['tiposEquipo'] && this.tiposEquipo) {
-      this.tiposEquipo = [...this.tiposEquipo];
-    }
-
-    if (changes['marcas'] && this.marcas) {
-      this.marcas = [...this.marcas];
-    }
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  setNew() {
-    this.maquinaSelected = new Equipo();
-    this.open = true;
-  }
-
-  setOpen() {
-    this.open = !this.open;
-  }
-
-  setSelectedMaquina(maquina: Equipo) {
-    this.maquinaSelected = maquina;
-    this.setOpen();
-  }
-
-  addMaquina(maquina: Equipo) {
-    if (maquina.id > 0) {
-      this.service.edit(maquina.id, maquina).subscribe({
-        next: () => {
-          Swal.fire('Editado', 'Máquina actualizada correctamente', 'success');
-          this.refresh();
-        },
-        error: err => {
-          Swal.fire('Error', 'No se pudo editar la máquina. ' + err.error, 'error');
+        if (changes['modelos'] && this.modelos) {
+            this.modelos = [...this.modelos];
         }
-      });
-    } else {
-      this.service.addNew(maquina).subscribe({
-        next: () => {
-          Swal.fire('Guardado', 'Máquina agregada con éxito', 'success');
-          this.refresh();
-        },
-        error: err => {
-          Swal.fire('Error', 'No se pudo agregar la máquina. ' + err.error, 'error');
-        }
-      });
-    }
-  }
 
-  deleteMaquina(id: number) {
-    Swal.fire({
-      title: '¿Está seguro?',
-      text: "Esta acción no se puede deshacer",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.service.delete(id).subscribe({
-          next: () => {
-            Swal.fire('Eliminado', 'La máquina fue eliminada', 'success');
-            this.refresh();
-          },
-          error: err => {
-            Swal.fire('Error', 'No se pudo eliminar la máquina. ' + err.error, 'error');
-          }
+        if (changes['tiposEquipo'] && this.tiposEquipo) {
+            this.tiposEquipo = [...this.tiposEquipo];
+        }
+
+        if (changes['marcas'] && this.marcas) {
+            this.marcas = [...this.marcas];
+        }
+    }
+
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+
+    setNew() {
+        this.maquinaSelected = new Equipo();
+        this.open = true;
+    }
+
+    setOpen() {
+        this.open = !this.open;
+    }
+
+    setSelectedMaquina(maquina: Equipo) {
+        this.maquinaSelected = maquina;
+        this.setOpen();
+    }
+
+    addMaquina(maquina: Equipo) {
+        if (maquina.id > 0) {
+            this.service.edit(maquina.id, maquina).subscribe({
+                next: () => {
+                    Swal.fire(
+                        'Editado',
+                        'Máquina actualizada correctamente',
+                        'success'
+                    );
+                    this.refresh();
+                },
+                error: (err) => {
+                    Swal.fire(
+                        'Error',
+                        'No se pudo editar la máquina. ' + err.error,
+                        'error'
+                    );
+                    this.refresh();
+                },
+            });
+        } else {
+            this.service.addNew(maquina).subscribe({
+                next: () => {
+                    Swal.fire(
+                        'Guardado',
+                        'Máquina agregada con éxito',
+                        'success'
+                    );
+                    this.refresh();
+                },
+                error: (err) => {
+                    Swal.fire(
+                        'Error',
+                        'No se pudo agregar la máquina. ' + err.error,
+                        'error'
+                    );
+                    this.refresh();
+                },
+            });
+        }
+    }
+
+    deleteMaquina(id: number) {
+        let texto = 'Se generará un trámite para dar de baja el equipo';
+
+        if (
+            this.authservice.getRol() === 'ROLE_ADMIN' ||
+            this.authservice.getRol() === 'ROLE_BRIGADA'
+        ) {
+            texto = 'Esta acción no se puede desacer';
+        }
+
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: texto,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, confirmar',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.service.delete(id).subscribe({
+                    next: () => {
+                        if (
+                            this.authservice.getRol() === 'ROLE_ADMIN' ||
+                            this.authservice.getRol() === 'ROLE_BRIGADA'
+                        ) {
+                            Swal.fire(
+                                'Eliminado',
+                                'La máquina fue eliminada, y se generó un trámite informativo',
+                                'success'
+                            );
+                        } else {
+                            Swal.fire(
+                                'Trámite generado',
+                                'Se generó un trámite para dar de baja el equipo',
+                                'success'
+                            );
+                        }
+                        this.refresh();
+                    },
+                    error: (err) => {
+                        if (
+                            this.authservice.getRol() === 'ROLE_ADMIN' ||
+                            this.authservice.getRol() === 'ROLE_BRIGADA'
+                        ) {
+                            Swal.fire(
+                                'Error',
+                                'No se pudo eliminar la máquina. ' + err.error,
+                                'error'
+                            );
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                'No se pudo generar el trámite para dar de baja el equipo. ' +
+                                    err.error,
+                                'error'
+                            );
+                        }
+                    },
+                });
+            }
         });
-      }
-    });
-  }
+    }
 }

@@ -81,10 +81,16 @@ export class AuthService {
         }
 
         return firstValueFrom(
-            this.tipoEquipoService.findAll().pipe(
+        this.tipoEquipoService.findAll().pipe(
             map(() => true),
-            catchError(() => of(false))
-            )
-        );
+            catchError((err) => {
+                console.error('Error al validar token:', err);
+                return of(false);
+            })
+        )
+        ).catch(err => {
+            console.error('Error inesperado:', err);
+            return false;
+        });
     }
 }

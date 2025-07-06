@@ -45,3 +45,7 @@ mat-nav-list {
 .logout-wrapper {
   border-top: 1px solid #ccc;
 }
+
+.sub-menu{
+  padding-left: 15px;
+}

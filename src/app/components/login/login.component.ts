@@ -28,7 +28,11 @@ export class LoginComponent implements OnInit{
     }
   }).catch(() => {
     this.isLoading = false;
-  });}
+  });
+
+  this.loginDTO.username = '12345678';
+  this.loginDTO.password = '123';
+}
 
   onSubmit(login: NgForm): void {
     if (login.valid) {
