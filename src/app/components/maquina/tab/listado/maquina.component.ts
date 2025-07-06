@@ -152,6 +152,7 @@ export class MaquinaComponent {
                         'No se pudo editar la máquina. ' + err.error,
                         'error'
                     );
+                    this.refresh();
                 },
             });
         } else {
@@ -170,6 +171,7 @@ export class MaquinaComponent {
                         'No se pudo agregar la máquina. ' + err.error,
                         'error'
                     );
+                    this.refresh();
                 },
             });
         }
