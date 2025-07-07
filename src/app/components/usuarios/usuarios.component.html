@@ -8,13 +8,7 @@
                 <input matInput (keyup)="applyFilter($event)" #input />
             </mat-form-field>
         </div>
-        <div
-            class="col-4 pe-0 text-end"
-            *ngIf="
-                authservice.getRol() == 'ROLE_ADMINISTRADOR' ||
-                authservice.getRol() == 'ROLE_BRIGADA'
-            "
-        >
+        <div class="col-4 pe-0 text-end">
             <button (click)="abrirFormularioUsuario()" class="btn btn-dark">
                 Nuevo usuario
             </button>
@@ -118,7 +112,11 @@
                             (authservice.getRol() == 'ROLE_ADMINISTRADOR' ||
                                 (authservice.getRol() == 'ROLE_BRIGADA' &&
                                     element.rol != 'ADMINISTRADOR' &&
-                                    element.rol != 'BRIGADA'))
+                                    element.rol != 'BRIGADA') ||
+                                (authservice.getIdUnidad() ==
+                                    element.getIdUnidad() &&
+                                    authservice.getIdUsuario() !=
+                                        element.getIdUsuario()))
                         "
                         class="btn btn-danger btn-sm"
                         (click)="eliminarUsuario(element.id)"

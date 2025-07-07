@@ -3,6 +3,7 @@ import { EstadoTramite } from "./enum/EstadoTramite";
 import { TipoTramite } from "./enum/TipoTramite";
 import { Equipo } from "./equipo";
 import { EstadoTramiteHistorico } from "./estadoTramiteHistorico";
+import { Grado } from "./grado";
 import { Repuesto } from "./Repuesto";
 import { Unidad } from "./Unidad";
 import { Usuario } from "./usuario";
@@ -25,4 +26,9 @@ export class Tramite{
     idEquipo?: number;
     idRepuesto?: number;
     idUsuario?: number;
+    gradoUsuarioSolicitado?:Grado;
+    nombreCompletoUsuarioSolicitado?:string;
+    cedulaUsuarioSolicitado?:string;
+    telefonoUsuarioSolicitado?:number;
+    idUsuarioBajaSolicitada?:number;
 }
