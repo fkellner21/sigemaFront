@@ -16,10 +16,12 @@ import { FormsModule } from '@angular/forms';
 import { TramiteService } from '../../../services/tramite.service';
 import Swal from 'sweetalert2';
 import { Actuacion } from '../../../models/actuacion';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
     selector: 'tramite-info-form',
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, MatTabsModule, MatTableModule],
     templateUrl: './tramite-info-form.component.html',
     styleUrl: './tramite-info-form.component.css',
 })
@@ -27,12 +29,14 @@ export class TramiteInfoFormComponent {
     @Input() tramite: Tramite = new Tramite();
     @Input() unidades!: Unidad[];
     @Output() cancelEventEmiter = new EventEmitter();
-    @Output() newTramiteEventEmitter: EventEmitter<Tramite> = new EventEmitter();
+    @Output() newTramiteEventEmitter: EventEmitter<Tramite> =
+        new EventEmitter();
     isLoading = false;
     estadoOptions: { key: string; label: string }[] = [];
     tipoTramiteOptions: { key: string; label: string }[] = [];
-
     nuevaActuacion: string = '';
+    dataSourceVisualizaciones: any[] = [];
+    displayedColumnsVisualizaciones: string[] = ['usuario', 'fecha'];
 
     constructor(private tramiteService: TramiteService) {
         if (this.tramite == null) {
@@ -51,6 +55,14 @@ export class TramiteInfoFormComponent {
                 return fechaB - fechaA;
             }
         );
+
+        this.dataSourceVisualizaciones = (
+            this.tramite.visualizaciones ?? []
+        ).sort((a, b) => {
+            const fechaA = a.fecha ? new Date(a.fecha).getTime() : 0;
+            const fechaB = b.fecha ? new Date(b.fecha).getTime() : 0;
+            return fechaB - fechaA;
+        });
     }
 
     private enumToOptions(enumObj: any): { key: string; label: string }[] {

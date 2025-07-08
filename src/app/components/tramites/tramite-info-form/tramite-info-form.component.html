@@ -159,97 +159,180 @@
                             (tramite.id ?? 0 !== undefined)
                         "
                     >
-                        <p><strong>Actuaciones sobre el trámite</strong></p>
-                        <div class="mb-3">
-                            <label for="nuevaActuacion" class="form-label"
-                                >Nueva actuación</label
-                            >
-                            <textarea
-                                id="nuevaActuacion"
-                                [(ngModel)]="nuevaActuacion"
-                                name="nuevaActuacion"
-                                class="form-control"
-                                rows="5"
-                                placeholder="Escriba una nueva actuación..."
-                            ></textarea>
-                        </div>
-
-                        <div class="text-end">
-                            <button
-                                type="button"
-                                class="btn btn-dark"
-                                (click)="guardarActuacion()"
-                                [disabled]="
-                                    !nuevaActuacion.trim() ||
-                                    (tramite.id ?? 0) == 0
-                                "
-                            >
-                                Guardar actuación
-                            </button>
-                        </div>
-
-                        <div class="mb-3">
-                            <p><strong>Historial de actuaciones</strong></p>
-                            <div
-                                class="border rounded p-2"
-                                style="
-                                    max-height: 300px;
-                                    overflow-y: auto;
-                                    background-color: #f9f9f9;
-                                "
-                            >
-                                <div
-                                    *ngFor="
-                                        let actuacion of tramite.actuaciones
-                                    "
-                                    class="mb-3"
-                                >
-                                    <div
-                                        class="d-flex justify-content-between align-items-center mb-1"
+                        <mat-tab-group>
+                            <mat-tab label="Actuaciones">
+                                <p>
+                                    <strong
+                                        >Actuaciones sobre el trámite</strong
                                     >
-                                        <strong>
-                                            {{
-                                                (actuacion.usuario?.grado
-                                                    ?.nombre || " ") +
-                                                    " " +
-                                                    (actuacion.usuario
-                                                        ?.nombreCompleto ||
-                                                        "Sin solicitante")
-                                            }}</strong
-                                        >
-                                        <span class="text-muted">
-                                            {{
-                                                actuacion.fecha
-                                                    | date : "dd/MM/yyyy HH:mm"
-                                            }}
-                                        </span>
-                                    </div>
+                                </p>
+                                <div class="mb-3">
+                                    <label
+                                        for="nuevaActuacion"
+                                        class="form-label"
+                                        >Nueva actuación</label
+                                    >
                                     <textarea
-                                        #txtDesc
+                                        id="nuevaActuacion"
+                                        [(ngModel)]="nuevaActuacion"
+                                        name="nuevaActuacion"
                                         class="form-control"
-                                        [value]="actuacion.descripcion"
-                                        rows="3"
-                                        readonly
-                                        style="
-                                            resize: none;
-                                            background-color: #f1f1f1;
-                                            overflow: hidden;
-                                        "
-                                        (input)="autoGrow(txtDesc)"
+                                        rows="5"
+                                        placeholder="Escriba una nueva actuación..."
                                     ></textarea>
                                 </div>
 
-                                <div
-                                    *ngIf="
-                                        !tramite.actuaciones ||
-                                        tramite.actuaciones.length === 0
-                                    "
-                                    class="text-muted"
-                                >
-                                    No hay actuaciones registradas.
+                                <div class="text-end">
+                                    <button
+                                        type="button"
+                                        class="btn btn-dark"
+                                        (click)="guardarActuacion()"
+                                        [disabled]="
+                                            !nuevaActuacion.trim() ||
+                                            (tramite.id ?? 0) == 0
+                                        "
+                                    >
+                                        Guardar actuación
+                                    </button>
                                 </div>
-                            </div>
-                        </div>
+
+                                <div class="mb-3">
+                                    <p>
+                                        <strong
+                                            >Historial de actuaciones</strong
+                                        >
+                                    </p>
+                                    <div
+                                        class="border rounded p-2"
+                                        style="
+                                            max-height: 300px;
+                                            overflow-y: auto;
+                                            background-color: #f9f9f9;
+                                        "
+                                    >
+                                        <div
+                                            *ngFor="
+                                                let actuacion of tramite.actuaciones
+                                            "
+                                            class="mb-3"
+                                        >
+                                            <div
+                                                class="d-flex justify-content-between align-items-center mb-1"
+                                            >
+                                                <strong>
+                                                    {{
+                                                        (actuacion.usuario
+                                                            ?.grado?.nombre ||
+                                                            " ") +
+                                                            " " +
+                                                            (actuacion.usuario
+                                                                ?.nombreCompleto ||
+                                                                "Sin solicitante")
+                                                    }}</strong
+                                                >
+                                                <span class="text-muted">
+                                                    {{
+                                                        actuacion.fecha
+                                                            | date
+                                                                : "dd/MM/yyyy HH:mm"
+                                                    }}
+                                                </span>
+                                            </div>
+                                            <textarea
+                                                #txtDesc
+                                                class="form-control"
+                                                [value]="actuacion.descripcion"
+                                                rows="3"
+                                                readonly
+                                                style="
+                                                    resize: none;
+                                                    background-color: #f1f1f1;
+                                                    overflow: hidden;
+                                                "
+                                                (input)="autoGrow(txtDesc)"
+                                            ></textarea>
+                                        </div>
+
+                                        <div
+                                            *ngIf="
+                                                !tramite.actuaciones ||
+                                                tramite.actuaciones.length === 0
+                                            "
+                                            class="text-muted"
+                                        >
+                                            No hay actuaciones registradas.
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-tab>
+                            <mat-tab label="Visualizaciones">
+                                <p>
+                                    <strong
+                                        >Usuarios que visualizaron este
+                                        trámite</strong
+                                    >
+                                </p>
+
+                                <table
+                                    mat-table
+                                    [dataSource]="dataSourceVisualizaciones"
+                                    class="mat-elevation-z8 table table-striped table-hover mt-2"
+                                >
+                                    <ng-container matColumnDef="usuario">
+                                        <th
+                                            mat-header-cell
+                                            *matHeaderCellDef
+                                            class="bg-dark text-white"
+                                        >
+                                            Usuario
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            {{
+                                                (element.usuario?.grado
+                                                    ?.nombre || "") +
+                                                    " " +
+                                                    (element.usuario
+                                                        ?.nombreCompleto || "")
+                                            }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="fecha">
+                                        <th
+                                            mat-header-cell
+                                            *matHeaderCellDef
+                                            class="bg-dark text-white"
+                                        >
+                                            Última Visualización
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            {{
+                                                element.fecha
+                                                    | date : "dd/MM/yyyy HH:mm"
+                                            }}
+                                        </td>
+                                    </ng-container>
+
+                                    <tr
+                                        mat-header-row
+                                        *matHeaderRowDef="['usuario', 'fecha']"
+                                    ></tr>
+                                    <tr
+                                        mat-row
+                                        *matRowDef="
+                                            let row;
+                                            columns: ['usuario', 'fecha']
+                                        "
+                                    ></tr>
+
+                                    <tr class="mat-row" *matNoDataRow>
+                                        <td class="mat-cell" colspan="2">
+                                            No hay visualizaciones registradas.
+                                        </td>
+                                    </tr>
+                                </table>
+                            </mat-tab>
+                        </mat-tab-group>
                     </div>
 
                     <div class="col-lg-12">

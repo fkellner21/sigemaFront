@@ -1,4 +1,12 @@
-import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    Output,
+    QueryList,
+    ViewChildren,
+} from '@angular/core';
 import { Tramite } from '../../../models/tramite';
 import Swal from 'sweetalert2';
 import { Actuacion } from '../../../models/actuacion';
@@ -8,24 +16,27 @@ import { TramiteService } from '../../../services/tramite.service';
 import { Unidad } from '../../../models/Unidad';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Usuario } from '../../../models/usuario';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
-  selector: 'tramite-usuario-form',
-  imports: [CommonModule, FormsModule],
-  templateUrl: './tramite-usuario-form.component.html',
-  styleUrl: './tramite-usuario-form.component.css'
+    selector: 'tramite-usuario-form',
+    imports: [CommonModule, FormsModule, MatTabsModule, MatTableModule],
+    templateUrl: './tramite-usuario-form.component.html',
+    styleUrl: './tramite-usuario-form.component.css',
 })
 export class TramiteUsuarioFormComponent {
     @Input() tramite: Tramite = new Tramite();
     @Input() unidades!: Unidad[];
     @Output() cancelEventEmiter = new EventEmitter();
-    @Output() newTramiteEventEmitter: EventEmitter<Tramite> = new EventEmitter();
+    @Output() newTramiteEventEmitter: EventEmitter<Tramite> =
+        new EventEmitter();
     isLoading = false;
     estadoOptions: { key: string; label: string }[] = [];
     tipoTramiteOptions: { key: string; label: string }[] = [];
-
     nuevaActuacion: string = '';
+    dataSourceVisualizaciones: any[] = [];
+    displayedColumnsVisualizaciones: string[] = ['usuario', 'fecha'];
 
     constructor(private tramiteService: TramiteService) {
         if (this.tramite == null) {
@@ -44,6 +55,14 @@ export class TramiteUsuarioFormComponent {
                 return fechaB - fechaA;
             }
         );
+
+        this.dataSourceVisualizaciones = (
+            this.tramite.visualizaciones ?? []
+        ).sort((a, b) => {
+            const fechaA = a.fecha ? new Date(a.fecha).getTime() : 0;
+            const fechaB = b.fecha ? new Date(b.fecha).getTime() : 0;
+            return fechaB - fechaA;
+        });
     }
 
     private enumToOptions(enumObj: any): { key: string; label: string }[] {
