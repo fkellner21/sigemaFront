@@ -70,7 +70,7 @@ export class TramitesComponent implements OnInit {
     EstadoTramite = EstadoTramite;
     tramiteSeleccionado: Tramite = new Tramite();
     unidadOrigen!: Unidad;
-    usuario!: Usuario;
+    usuario: Usuario = new Usuario();
     tipoTramite: TipoTramite = TipoTramite.Otros;
     constructor(
         private unidadService: UnidadService,
@@ -296,4 +296,70 @@ export class TramitesComponent implements OnInit {
             });
         }
     }
-}
+
+    aprobarTramite(id:number){
+                Swal.fire({
+                    title: '¿Está seguro?',
+                    text: 'Esta acción no se puede deshacer',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, confirmar',
+                    cancelButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.tramiteService.changeEstado(id, EstadoTramite.Aprobado).subscribe({
+                            next: () => {
+                                    Swal.fire(
+                                        'Aprobado',
+                                        'Se aprobó el trámite',
+                                        'success'
+                                    );
+                                this.cargarTramites();
+                            },
+                            error: (err) => {
+                                    Swal.fire(
+                                        'Error',
+                                        'No se pudo aprobar el trámite. ' + err.error,
+                                        'error'
+                                    );
+                            },
+                        });
+                    }
+                });
+            }
+
+    rechazarTramite(id:number){
+                Swal.fire({
+                    title: '¿Está seguro?',
+                    text: 'Esta acción no se puede deshacer',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, confirmar',
+                    cancelButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.tramiteService.changeEstado(id, EstadoTramite.Rechazado).subscribe({
+                            next: () => {
+                                    Swal.fire(
+                                        'Rechazado',
+                                        'El trámite fue rechazado',
+                                        'success'
+                                    );
+                                this.cargarTramites();
+                            },
+                            error: (err) => {
+                                    Swal.fire(
+                                        'Error',
+                                        'No se pudo rechazar el trámite. ' + err.error,
+                                        'error'
+                                    );
+                            },
+                        });
+                    }
+                });
+            }
+    }

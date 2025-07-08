@@ -18,6 +18,7 @@ export class TramiteService {
     constructor(private http: HttpClient) {
     }
 
+
     findAll(): Observable<Tramite[]> {
         return this.http.get<Tramite[]>(`${environment.apiUrl}/api/tramites`);
     }
@@ -56,7 +57,10 @@ findById(id: number): Observable<Tramite> {
     }
 
     changeEstado(id:number, estado:EstadoTramite): Observable<Tramite>{
+        let estadoNuevo={
+            estadoTramite:estado
+        }
         return this.http.post<Tramite>(
-            `${environment.apiUrl}/api/tramites/${id}/estado`, estado);
+            `${environment.apiUrl}/api/tramites/${id}/estado`, estadoNuevo);
     }
 }

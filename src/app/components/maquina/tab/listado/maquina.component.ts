@@ -184,7 +184,7 @@ export class MaquinaComponent {
             this.authservice.getRol() === 'ROLE_ADMIN' ||
             this.authservice.getRol() === 'ROLE_BRIGADA'
         ) {
-            texto = 'Esta acción no se puede desacer';
+            texto = 'Esta acción no se puede deshacer';
         }
 
         Swal.fire({

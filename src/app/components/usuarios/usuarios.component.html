@@ -114,9 +114,9 @@
                                     element.rol != 'ADMINISTRADOR' &&
                                     element.rol != 'BRIGADA') ||
                                 (authservice.getIdUnidad() ==
-                                    element.getIdUnidad() &&
+                                    element.unidad.id &&
                                     authservice.getIdUsuario() !=
-                                        element.getIdUsuario()))
+                                        element.usuario?.id))
                         "
                         class="btn btn-danger btn-sm"
                         (click)="eliminarUsuario(element.id)"
