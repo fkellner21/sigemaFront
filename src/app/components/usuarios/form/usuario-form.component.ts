@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { Grado } from '../../../models/grado';
 import { Unidad } from '../../../models/Unidad';
 import { AuthService } from '../../../services/auth.service';
+import { Rol } from '../../../models/enum/Rol';
 
 @Component({
     selector: 'app-usuario-form',
@@ -40,18 +41,14 @@ export class UsuarioFormComponent implements OnInit {
 
 ngOnChanges(changes: SimpleChanges): void {
     if (changes['usuario'] && this.usuario) {
+        
+        let rol = this.authService.getRol()
+        let idUsuario = this.authService.getIdUsuario();
+        let idUnidad=this.authService.getIdUnidad();
 
-            let idUsuario = this.authService.getIdUsuario();
-
-            this.usuario.idUnidad ??= null;
-            this.usuario.idGrado ??= null;
-            this.usuario.rol ??= '';
-
-            if (this.authService.getRol() == 'ROLE_BRIGADA' && idUsuario != this.usuario.id) {
-                this.roles = [...this.rolesOriginal.filter(x => x.key != 'ADMINISTRADOR' && x.key != 'BRIGADA')];
-            } else {
-                this.roles = [...this.rolesOriginal];
-            }
+        this.usuario.idUnidad ??= null;
+        this.usuario.idGrado ??= null;
+        this.usuario.rol ??= '';
 
             if (this.usuario.grado != null) {
                 this.usuario.idGrado = this.usuario.grado.id;
@@ -61,14 +58,30 @@ ngOnChanges(changes: SimpleChanges): void {
                 this.usuario.idUnidad = this.usuario.unidad.id;
             }
 
+            if(rol != 'ROLE_BRIGADA' && rol != 'ROLE_ADMINISTRADOR'){
+                this.noPermitirEditarRol=true;
+                this.noPermitirEditarUnidad=true;
+                if(this.usuario?.id==null||this.usuario.id==0){
+                    this.usuario.idUnidad=idUnidad;
+                    const unidadEncontrada = this.unidades.find(u => u.id === idUnidad);
+                    if (unidadEncontrada) {
+                    this.usuario.unidad = unidadEncontrada;
+                    }
+                    this.usuario.rol=Rol.UNIDAD;
+                }
+            }
+
+            if (rol == 'ROLE_BRIGADA' && idUsuario != this.usuario.id) {
+                this.roles = [...this.rolesOriginal.filter(x => x.key != 'ADMINISTRADOR' && x.key != 'BRIGADA')];
+            } else{
+                this.roles=[...this.rolesOriginal]
+            }
+
             if (idUsuario == this.usuario.id) {
                 this.noPermitirEditarRol = true;
                 if (this.authService.getRol() != 'ROLE_ADMINISTRADOR') {
                     this.noPermitirEditarUnidad = true;
                 }
-            } else {
-                this.noPermitirEditarRol = false;
-                this.noPermitirEditarUnidad = false;
             }
     }
 }

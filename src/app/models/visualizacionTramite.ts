@@ -6,4 +6,5 @@ export class VisualizacionTramite {
     fecha?: Date;
     usuario?: Usuario;
     tramite?: Tramite;
+    descripcion?: string;
 }

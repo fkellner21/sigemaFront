@@ -22,23 +22,27 @@ import { TramiteInfoFormComponent } from './tramite-info-form/tramite-info-form.
 import { Usuario } from '../../models/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { TramiteDTO } from '../../models/DTO/tramiteDTO';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+
 
 @Component({
     selector: 'tramites',
     standalone: true,
     imports: [
-        CommonModule,
-        FormsModule,
-        MatTableModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatProgressSpinnerModule,
-        TramiteEquipoFormComponent,
-        TramiteRepuestoFormComponent,
-        TramiteUsuarioFormComponent,
-        TramiteInfoFormComponent,
-    ],
+    CommonModule,
+    FormsModule,
+    MatTab,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    TramiteEquipoFormComponent,
+    TramiteRepuestoFormComponent,
+    TramiteUsuarioFormComponent,
+    TramiteInfoFormComponent,
+    MatTabGroup
+],
     templateUrl: './tramite.component.html',
     styleUrls: ['./tramite.component.css'],
 })
@@ -56,6 +60,9 @@ export class TramitesComponent implements OnInit {
     dataSource: any[] = [];
     dataSourceOriginal: any[] = [];
     isLoading: boolean = false;
+    dataSourcePendientes: any[] = [];
+    dataSourceFinalizados: any[] = [];
+    filtroActual: string = '';
 
     mostrarFormularioEquipo: boolean = false;
     mostrarFormularioRepuesto: boolean = false;
@@ -64,6 +71,7 @@ export class TramitesComponent implements OnInit {
 
     estados!: { key: string; label: string }[];
     tipos!: { key: string; label: string }[];
+    tiposParaFiltro!: { key: string; label: string }[];
     unidades!: any;
     Rol = Rol;
     TipoTramite = TipoTramite;
@@ -72,6 +80,8 @@ export class TramitesComponent implements OnInit {
     unidadOrigen!: Unidad;
     usuario: Usuario = new Usuario();
     tipoTramite: TipoTramite = TipoTramite.Otros;
+
+
     constructor(
         private unidadService: UnidadService,
         private tramiteService: TramiteService,
@@ -103,6 +113,12 @@ export class TramitesComponent implements OnInit {
                 key: key,
                 label: TipoTramite[key as keyof typeof TipoTramite],
             }));
+        
+        this.tiposParaFiltro = Object.keys(TipoTramite)
+            .map((key) => ({
+                key: key,
+                label: TipoTramite[key as keyof typeof TipoTramite],
+            }));
 
         this.unidadService.findAll().subscribe((unidadesRecibidas) => {
             this.unidades = unidadesRecibidas ?? [];
@@ -129,8 +145,8 @@ export class TramitesComponent implements OnInit {
         this.isLoading = true;
         this.tramiteService.findAll().subscribe({
             next: (data) => {
-                this.dataSource = data;
                 this.dataSourceOriginal = data;
+                this.filtrarTramites();
                 this.isLoading = false;
             },
             error: (err) => {
@@ -140,41 +156,45 @@ export class TramitesComponent implements OnInit {
         });
     }
 
+    filtrarTramites() {
+    const filtro = this.filtroActual.trim().toLowerCase();
+
+    const filtrados = this.dataSourceOriginal.filter((tramite) => {
+        const origen = tramite.unidadOrigen?.nombre?.toLowerCase() ?? '';
+        const destino = tramite.unidadDestino?.nombre?.toLowerCase() ?? '';
+        const fecha = tramite.fechaInicio
+            ? new Date(tramite.fechaInicio).toLocaleDateString().toLowerCase()
+            : '';
+        const solicitante =
+            tramite.usuario?.nombreCompleto?.toLowerCase() ?? '';
+        const tipo =
+            this.tiposParaFiltro.find((t) => t.key === tramite.tipoTramite)?.label.toLowerCase() ?? '';
+        const estado =
+            this.estados.find((e) => e.key === tramite.estado)?.label.toLowerCase() ?? '';
+
+        return (
+            origen.includes(filtro) ||
+            destino.includes(filtro) ||
+            fecha.includes(filtro) ||
+            solicitante.includes(filtro) ||
+            tipo.includes(filtro) ||
+            estado.includes(filtro)
+        );
+    });
+
+    this.dataSourcePendientes = filtrados.filter(t =>
+        t.estado === 'Iniciado' || t.estado === 'EnTramite'
+    );
+
+    this.dataSourceFinalizados = filtrados.filter(t =>
+        t.estado === 'Aprobado' || t.estado === 'Rechazado'
+    );
+}
+
+
     applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value
-            .trim()
-            .toLowerCase();
-
-        if (!filterValue) {
-            this.dataSource = this.dataSourceOriginal;
-            return;
-        }
-        this.dataSource = this.dataSourceOriginal.filter((tramite) => {
-            const origen = tramite.unidadOrigen?.nombre?.toLowerCase() ?? '';
-            const destino = tramite.unidadDestino?.nombre?.toLowerCase() ?? '';
-            const fecha = new Date(tramite.fecha)
-                .toLocaleDateString()
-                .toLowerCase();
-            const solicitante =
-                tramite.solicitante?.nombreCompleto?.toLowerCase() ?? '';
-            const tipo =
-                this.tipos
-                    .find((t) => t.key === tramite.tipo)
-                    ?.label.toLowerCase() ?? '';
-            const estado =
-                this.estados
-                    .find((e) => e.key === tramite.estado)
-                    ?.label.toLowerCase() ?? '';
-
-            return (
-                origen.includes(filterValue) ||
-                destino.includes(filterValue) ||
-                fecha.includes(filterValue) ||
-                solicitante.includes(filterValue) ||
-                tipo.includes(filterValue) ||
-                estado.includes(filterValue)
-            );
-        });
+    this.filtroActual = (event.target as HTMLInputElement).value;
+    this.filtrarTramites();
     }
 
     abrirFormularioTramite(idTramite?: number) {
@@ -226,6 +246,7 @@ export class TramitesComponent implements OnInit {
 
         switch (tramite.tipoTramite?.valueOf()) {
             case 'BajaEquipo':
+                case 'AltaEquipo':
                 this.mostrarFormularioEquipo = true;
                 break;
 
@@ -233,7 +254,8 @@ export class TramitesComponent implements OnInit {
                 this.mostrarFormularioRepuesto = true;
                 break;
 
-            case 'SolicitudUsuario':
+            case 'AltaUsuario':
+                case 'BajaUsuario':
                 this.mostrarFormularioUsuario = true;
                 break;
 
