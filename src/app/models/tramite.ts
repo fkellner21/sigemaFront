@@ -3,7 +3,7 @@ import { EstadoTramite } from './enum/EstadoTramite';
 import { Rol } from './enum/Rol';
 import { TipoTramite } from './enum/TipoTramite';
 import { Equipo } from './equipo';
-import { EstadoTramiteHistorico } from './estadoTramiteHistorico';
+
 import { Grado } from './grado';
 import { Repuesto } from './Repuesto';
 import { Unidad } from './Unidad';
@@ -21,7 +21,7 @@ export class Tramite {
     equipo?: Equipo;
     repuesto?: Repuesto;
     texto?: string;
-    historico?: EstadoTramiteHistorico[];
+    
     actuaciones?: Actuacion[];
     idUnidadDestino?: number;
     idUnidadOrigen?: number;

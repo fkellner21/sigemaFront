@@ -36,7 +36,7 @@ export class TramiteInfoFormComponent {
     tipoTramiteOptions: { key: string; label: string }[] = [];
     nuevaActuacion: string = '';
     dataSourceVisualizaciones: any[] = [];
-    displayedColumnsVisualizaciones: string[] = ['usuario', 'fecha'];
+    displayedColumnsVisualizaciones: string[] = ['usuario', 'descripcion', 'fecha'];
 
     constructor(private tramiteService: TramiteService) {
         if (this.tramite == null) {

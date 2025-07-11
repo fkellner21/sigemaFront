@@ -179,11 +179,11 @@ export class TramitesComponent implements OnInit {
         const start = fechaGroup.get('start')?.value as Date;
         const end = fechaGroup.get('end')?.value as Date;
         const desdeIso =
-            start?.toISOString().split('T')[0] ??
-            new Date().toISOString().split('T')[0];
+            start?.toISOString()??
+            new Date().toISOString();
         const hastaIso =
-            end?.toISOString().split('T')[0] ??
-            new Date().toISOString().split('T')[0];
+            end?.toISOString()??
+            new Date().toISOString();
 
         this.tramiteService.findAll(desdeIso, hastaIso).subscribe({
             next: (data) => {

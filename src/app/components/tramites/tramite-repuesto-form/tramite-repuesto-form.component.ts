@@ -44,7 +44,7 @@ export class TramiteRepuestoFormComponent {
     repuestos: Repuesto[] = [];
     nuevaActuacion: string = '';
     dataSourceVisualizaciones: any[] = [];
-    displayedColumnsVisualizaciones: string[] = ['usuario', 'fecha'];
+    displayedColumnsVisualizaciones: string[] = ['usuario', 'descripcion', 'fecha'];
 
     constructor(
         private tramiteService: TramiteService,

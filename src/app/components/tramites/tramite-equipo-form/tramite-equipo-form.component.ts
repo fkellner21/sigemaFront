@@ -40,7 +40,7 @@ export class TramiteEquipoFormComponent {
     estadoTramite = EstadoTramite;
     nuevaActuacion: string = '';
     dataSourceVisualizaciones: any[] = [];
-    displayedColumnsVisualizaciones: string[] = ['usuario', 'fecha'];
+    displayedColumnsVisualizaciones: string[] = ['usuario', 'descripcion', 'fecha'];
 
     constructor(
         private tramiteService: TramiteService,
