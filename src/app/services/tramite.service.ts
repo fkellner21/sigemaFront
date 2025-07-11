@@ -15,53 +15,61 @@ export class TramiteService {
     token: string | null = null;
     headers: HttpHeaders = new HttpHeaders();
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient) {}
+
+    findAll(desde: string, hasta: string): Observable<Tramite[]> {
+        return this.http.get<Tramite[]>(
+            `${environment.apiUrl}/api/tramites?desde=${encodeURIComponent(
+                desde
+            )}&hasta=${encodeURIComponent(hasta)}`
+        );
     }
 
-findAll(desde: string, hasta: string): Observable<Tramite[]> {
-  return this.http.get<Tramite[]>(
-    `${environment.apiUrl}/api/tramites?desde=${encodeURIComponent(desde)}&hasta=${encodeURIComponent(hasta)}`
-  );
-}
+    findById(id: number): Observable<Tramite> {
+        return this.http
+            .get<Tramite>(`${environment.apiUrl}/api/tramites/${id}`)
+            .pipe(
+                catchError((error) => {
+                    console.error('Error fetching tramite by ID:', error);
+                    return throwError(() => error);
+                })
+            );
+    }
 
-
-findById(id: number): Observable<Tramite> {
-    return this.http.get<Tramite>(`${environment.apiUrl}/api/tramites/${id}`).pipe(
-        catchError((error) => {
-            console.error('Error fetching tramite by ID:', error);
-            return throwError(() => error);
-        })
-    );
-}
-
-
-    addNew(tramite:TramiteDTO): Observable<Tramite> {
+    addNew(tramite: TramiteDTO): Observable<Tramite> {
         return this.http.post<Tramite>(
             `${environment.apiUrl}/api/tramites`,
-            tramite);
+            tramite
+        );
     }
 
     edit(id: number, tramite: TramiteDTO): Observable<Tramite> {
         return this.http.put<Tramite>(
             `${environment.apiUrl}/api/tramites/${id}`,
-            tramite);
+            tramite
+        );
     }
 
     delete(id: number): Observable<void> {
         return this.http.delete<void>(
-            `${environment.apiUrl}/api/tramites/${id}`);
+            `${environment.apiUrl}/api/tramites/${id}`
+        );
     }
 
-    newActuacion(id:number, actuacion:Actuacion): Observable<Actuacion>{
+    newActuacion(id: number, actuacion: Actuacion): Observable<Actuacion> {
         return this.http.post<Actuacion>(
-            `${environment.apiUrl}/api/tramites/${id}/actuacion`, actuacion);
+            `${environment.apiUrl}/api/tramites/${id}/actuacion`,
+            actuacion
+        );
     }
 
-    changeEstado(id:number, estado:EstadoTramite): Observable<Tramite>{
-        let estadoNuevo={
-            estadoTramite:estado
-        }
+    changeEstado(id: number, estado: EstadoTramite): Observable<Tramite> {
+        let estadoNuevo = {
+            estadoTramite: estado,
+        };
         return this.http.post<Tramite>(
-            `${environment.apiUrl}/api/tramites/${id}/estado`, estadoNuevo);
+            `${environment.apiUrl}/api/tramites/${id}/estado`,
+            estadoNuevo
+        );
     }
 }

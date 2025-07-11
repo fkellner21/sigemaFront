@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
-import { FormsModule } from '@angular/forms';
+import {
+    FormControl,
+    FormGroup,
+    FormsModule,
+    ReactiveFormsModule,
+} from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -23,33 +28,33 @@ import { Usuario } from '../../models/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { TramiteDTO } from '../../models/DTO/tramiteDTO';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { DateRange, MatDateRangePicker } from '@angular/material/datepicker'
+import { DateRange, MatDateRangePicker } from '@angular/material/datepicker';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-
 
 @Component({
     selector: 'tramites',
     standalone: true,
     imports: [
-    CommonModule,
-    FormsModule,
-    MatTab,
-    MatTableModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    TramiteEquipoFormComponent,
-    TramiteRepuestoFormComponent,
-    TramiteUsuarioFormComponent,
-    TramiteInfoFormComponent,
-    MatTabGroup, 
-    MatDateRangePicker,
-    MatDatepickerModule,
-    MatNativeDateModule
-],
+        CommonModule,
+        FormsModule,
+        MatTab,
+        MatTableModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        TramiteEquipoFormComponent,
+        TramiteRepuestoFormComponent,
+        TramiteUsuarioFormComponent,
+        TramiteInfoFormComponent,
+        MatTabGroup,
+        MatDateRangePicker,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        ReactiveFormsModule,
+    ],
     templateUrl: './tramite.component.html',
     styleUrls: ['./tramite.component.css'],
 })
@@ -87,11 +92,14 @@ export class TramitesComponent implements OnInit {
     unidadOrigen!: Unidad;
     usuario: Usuario = new Usuario();
     tipoTramite: TipoTramite = TipoTramite.Otros;
-fechaRango: { start: Date | null, end: Date | null } = { 
-  start: new Date(new Date().setDate(new Date().getDate() - 7)), 
-  end: new Date() 
-};
-    
+    form = new FormGroup({
+        fechaRango: new FormGroup({
+            start: new FormControl<Date>(
+                new Date(new Date().setDate(new Date().getDate() - 7))
+            ),
+            end: new FormControl<Date>(new Date()),
+        }),
+    });
 
     constructor(
         private unidadService: UnidadService,
@@ -119,17 +127,22 @@ fechaRango: { start: Date | null, end: Date | null } = {
         }));
 
         this.tipos = Object.keys(TipoTramite)
-            .filter((key) => (key !== 'BajaEquipo' && key !== 'AltaEquipo' && key !== 'AltaUsuario' && key !== 'BajaUsuario'))
+            .filter(
+                (key) =>
+                    key !== 'BajaEquipo' &&
+                    key !== 'AltaEquipo' &&
+                    key !== 'AltaUsuario' &&
+                    key !== 'BajaUsuario'
+            )
             .map((key) => ({
                 key: key,
                 label: TipoTramite[key as keyof typeof TipoTramite],
             }));
-        
-        this.tiposParaFiltro = Object.keys(TipoTramite)
-            .map((key) => ({
-                key: key,
-                label: TipoTramite[key as keyof typeof TipoTramite],
-            }));
+
+        this.tiposParaFiltro = Object.keys(TipoTramite).map((key) => ({
+            key: key,
+            label: TipoTramite[key as keyof typeof TipoTramite],
+        }));
 
         this.unidadService.findAll().subscribe((unidadesRecibidas) => {
             this.unidades = unidadesRecibidas ?? [];
@@ -152,10 +165,26 @@ fechaRango: { start: Date | null, end: Date | null } = {
         this.cargarTramites();
     }
 
+    onDateRangeSelected() {
+        const fechaRango = this.form.get('fechaRango')?.value;
+        if (fechaRango?.start && fechaRango?.end) {
+            this.cargarTramites();
+        }
+    }
+
     cargarTramites() {
         this.isLoading = true;
-        const desdeIso = this.fechaRango.start?.toISOString() ?? new Date().toISOString();
-        const hastaIso = this.fechaRango.end?.toISOString() ?? new Date().toISOString();
+
+        const fechaGroup = this.form.get('fechaRango') as FormGroup;
+        const start = fechaGroup.get('start')?.value as Date;
+        const end = fechaGroup.get('end')?.value as Date;
+        const desdeIso =
+            start?.toISOString().split('T')[0] ??
+            new Date().toISOString().split('T')[0];
+        const hastaIso =
+            end?.toISOString().split('T')[0] ??
+            new Date().toISOString().split('T')[0];
+
         this.tramiteService.findAll(desdeIso, hastaIso).subscribe({
             next: (data) => {
                 this.dataSourceOriginal = data;
@@ -170,44 +199,53 @@ fechaRango: { start: Date | null, end: Date | null } = {
     }
 
     filtrarTramites() {
-    const filtro = this.filtroActual.trim().toLowerCase();
+        const filtro = this.filtroActual.trim().toLowerCase();
 
-    const filtrados = this.dataSourceOriginal.filter((tramite) => {
-        const origen = tramite.unidadOrigen?.nombre?.toLowerCase() ?? '';
-        const destino = tramite.unidadDestino?.nombre?.toLowerCase() ?? '';
-        const fecha = tramite.fechaInicio
-            ? new Date(tramite.fechaInicio).toLocaleDateString().toLowerCase()
-            : '';
-        const solicitante =
-            tramite.usuario?.nombreCompleto?.toLowerCase() ?? '';
-        const tipo =
-            this.tiposParaFiltro.find((t) => t.key === tramite.tipoTramite)?.label.toLowerCase() ?? '';
-        const estado =
-            this.estados.find((e) => e.key === tramite.estado)?.label.toLowerCase() ?? '';
+        const filtrados = this.dataSourceOriginal.filter((tramite) => {
+            const origen = tramite.unidadOrigen?.nombre?.toLowerCase() ?? '';
+            const destino = tramite.unidadDestino?.nombre?.toLowerCase() ?? '';
+            const fecha = tramite.fechaInicio
+                ? new Date(tramite.fechaInicio)
+                      .toLocaleDateString()
+                      .toLowerCase()
+                : '';
+            const solicitante =
+                tramite.usuario?.nombreCompleto?.toLowerCase() ?? '';
+            const tipo =
+                this.tiposParaFiltro
+                    .find((t) => t.key === tramite.tipoTramite)
+                    ?.label.toLowerCase() ?? '';
+            const estado =
+                this.estados
+                    .find((e) => e.key === tramite.estado)
+                    ?.label.toLowerCase() ?? '';
 
-        return (
-            origen.includes(filtro) ||
-            destino.includes(filtro) ||
-            fecha.includes(filtro) ||
-            solicitante.includes(filtro) ||
-            tipo.includes(filtro) ||
-            estado.includes(filtro)
+            return (
+                origen.includes(filtro) ||
+                destino.includes(filtro) ||
+                fecha.includes(filtro) ||
+                solicitante.includes(filtro) ||
+                tipo.includes(filtro) ||
+                estado.includes(filtro)
+            );
+        });
+
+        this.dataSourcePendientes = filtrados.filter(
+            (t) => t.estado === 'Iniciado' || t.estado === 'EnTramite'
         );
-    });
 
-    this.dataSourcePendientes = filtrados.filter(t =>
-        t.estado === 'Iniciado' || t.estado === 'EnTramite'
-    );
-
-    this.dataSourceFinalizados = filtrados.filter(t =>
-        t.estado === 'Aprobado' || t.estado === 'Rechazado'
-    ).sort((a, b) => new Date(b.fechaInicio).getTime() - new Date(a.fechaInicio).getTime());
-}
-
+        this.dataSourceFinalizados = filtrados
+            .filter((t) => t.estado === 'Aprobado' || t.estado === 'Rechazado')
+            .sort(
+                (a, b) =>
+                    new Date(b.fechaInicio).getTime() -
+                    new Date(a.fechaInicio).getTime()
+            );
+    }
 
     applyFilter(event: Event) {
-    this.filtroActual = (event.target as HTMLInputElement).value;
-    this.filtrarTramites();
+        this.filtroActual = (event.target as HTMLInputElement).value;
+        this.filtrarTramites();
     }
 
     abrirFormularioTramite(idTramite?: number) {
@@ -259,7 +297,7 @@ fechaRango: { start: Date | null, end: Date | null } = {
 
         switch (tramite.tipoTramite?.valueOf()) {
             case 'BajaEquipo':
-                case 'AltaEquipo':
+            case 'AltaEquipo':
                 this.mostrarFormularioEquipo = true;
                 break;
 
@@ -268,7 +306,7 @@ fechaRango: { start: Date | null, end: Date | null } = {
                 break;
 
             case 'AltaUsuario':
-                case 'BajaUsuario':
+            case 'BajaUsuario':
                 this.mostrarFormularioUsuario = true;
                 break;
 
@@ -332,70 +370,74 @@ fechaRango: { start: Date | null, end: Date | null } = {
         }
     }
 
-    aprobarTramite(id:number){
-                Swal.fire({
-                    title: '¿Está seguro?',
-                    text: 'Esta acción no se puede deshacer',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Sí, confirmar',
-                    cancelButtonText: 'Cancelar',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.tramiteService.changeEstado(id, EstadoTramite.Aprobado).subscribe({
-                            next: () => {
-                                    Swal.fire(
-                                        'Aprobado',
-                                        'Se aprobó el trámite',
-                                        'success'
-                                    );
-                                this.cargarTramites();
-                            },
-                            error: (err) => {
-                                    Swal.fire(
-                                        'Error',
-                                        'No se pudo aprobar el trámite. ' + err.error,
-                                        'error'
-                                    );
-                                this.cargarTramites();
-                            },
-                        });
-                    }
-                });
+    aprobarTramite(id: number) {
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, confirmar',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.tramiteService
+                    .changeEstado(id, EstadoTramite.Aprobado)
+                    .subscribe({
+                        next: () => {
+                            Swal.fire(
+                                'Aprobado',
+                                'Se aprobó el trámite',
+                                'success'
+                            );
+                            this.cargarTramites();
+                        },
+                        error: (err) => {
+                            Swal.fire(
+                                'Error',
+                                'No se pudo aprobar el trámite. ' + err.error,
+                                'error'
+                            );
+                            this.cargarTramites();
+                        },
+                    });
             }
-
-    rechazarTramite(id:number){
-                Swal.fire({
-                    title: '¿Está seguro?',
-                    text: 'Esta acción no se puede deshacer',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Sí, confirmar',
-                    cancelButtonText: 'Cancelar',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.tramiteService.changeEstado(id, EstadoTramite.Rechazado).subscribe({
-                            next: () => {
-                                    Swal.fire(
-                                        'Rechazado',
-                                        'El trámite fue rechazado',
-                                        'success'
-                                    );
-                                this.cargarTramites();
-                            },
-                            error: (err) => {
-                                    Swal.fire(
-                                        'Error',
-                                        'No se pudo rechazar el trámite. ' + err.error,
-                                        'error'
-                                    );
-                            },
-                        });
-                    }
-                });
-            }
+        });
     }
+
+    rechazarTramite(id: number) {
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, confirmar',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.tramiteService
+                    .changeEstado(id, EstadoTramite.Rechazado)
+                    .subscribe({
+                        next: () => {
+                            Swal.fire(
+                                'Rechazado',
+                                'El trámite fue rechazado',
+                                'success'
+                            );
+                            this.cargarTramites();
+                        },
+                        error: (err) => {
+                            Swal.fire(
+                                'Error',
+                                'No se pudo rechazar el trámite. ' + err.error,
+                                'error'
+                            );
+                        },
+                    });
+            }
+        });
+    }
+}
