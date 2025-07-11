@@ -18,10 +18,11 @@ export class TramiteService {
     constructor(private http: HttpClient) {
     }
 
-
-    findAll(): Observable<Tramite[]> {
-        return this.http.get<Tramite[]>(`${environment.apiUrl}/api/tramites`);
-    }
+findAll(desde: string, hasta: string): Observable<Tramite[]> {
+  return this.http.get<Tramite[]>(
+    `${environment.apiUrl}/api/tramites?desde=${encodeURIComponent(desde)}&hasta=${encodeURIComponent(hasta)}`
+  );
+}
 
 
 findById(id: number): Observable<Tramite> {

@@ -139,7 +139,7 @@ export class SideMenuComponent implements OnInit {
             this.unidadService.findAll().subscribe({
                 next: (resp) => {
                     this.unidades = resp;
-                    this.mostrarFormularioPerfil = true;
+                    
                 },
                 error: (err) => {
                     Swal.fire({
@@ -149,6 +149,24 @@ export class SideMenuComponent implements OnInit {
                     });
                 },
             });
+
+            let idUsuario = this.authService.getIdUsuario();
+            if(idUsuario!=null){
+                this.usuarioService.findById(idUsuario ?? 0).subscribe({
+                    next: (resp) => {
+                        this.usuarioOriginal = resp;
+                        this.usuario={...this.usuarioOriginal}
+                        this.mostrarFormularioPerfil = true;
+                    },
+                    error: (err) => {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'No se pudo cargar el usuario. ' + err.error,
+                            icon: 'error',
+                        });
+                    },
+                });
+            }
     }
 
     cerrarModalPerfil() {

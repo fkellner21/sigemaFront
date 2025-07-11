@@ -38,6 +38,25 @@
                 </button>
             </div>
         </div>
+        <div class="col-md-3">
+            <mat-form-field>
+                <mat-label>Defina un rango de fechas</mat-label>
+                <mat-date-range-input
+                    [rangePicker]="picker"
+                    [(ngModel)]="fechaRango"
+                    (ngModelChange)="cargarTramites()"
+                >
+                    <input matStartDate placeholder="Desde" />
+                    <input matEndDate placeholder="Hasta" />
+                </mat-date-range-input>
+                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+        </div>
     </div>
     <mat-tab-group class="my-3">
         <mat-tab label="Pendientes / En Curso">

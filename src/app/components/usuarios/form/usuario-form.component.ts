@@ -67,7 +67,7 @@ ngOnChanges(changes: SimpleChanges): void {
                     if (unidadEncontrada) {
                     this.usuario.unidad = unidadEncontrada;
                     }
-                    this.usuario.rol=Rol.UNIDAD;
+                    this.usuario.rol='UNIDAD';
                 }
             }
 

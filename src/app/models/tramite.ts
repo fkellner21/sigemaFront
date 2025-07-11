@@ -1,5 +1,6 @@
 import { Actuacion } from './actuacion';
 import { EstadoTramite } from './enum/EstadoTramite';
+import { Rol } from './enum/Rol';
 import { TipoTramite } from './enum/TipoTramite';
 import { Equipo } from './equipo';
 import { EstadoTramiteHistorico } from './estadoTramiteHistorico';
@@ -33,4 +34,5 @@ export class Tramite {
     telefonoUsuarioSolicitado?: number;
     idUsuarioBajaSolicitada?: number;
     visualizaciones?: VisualizacionTramite[];
+    rolSolicitado?: Rol;
 }

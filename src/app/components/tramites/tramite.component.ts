@@ -23,6 +23,10 @@ import { Usuario } from '../../models/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { TramiteDTO } from '../../models/DTO/tramiteDTO';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { DateRange, MatDateRangePicker } from '@angular/material/datepicker'
+
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 @Component({
@@ -41,7 +45,10 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
     TramiteRepuestoFormComponent,
     TramiteUsuarioFormComponent,
     TramiteInfoFormComponent,
-    MatTabGroup
+    MatTabGroup, 
+    MatDateRangePicker,
+    MatDatepickerModule,
+    MatNativeDateModule
 ],
     templateUrl: './tramite.component.html',
     styleUrls: ['./tramite.component.css'],
@@ -80,7 +87,11 @@ export class TramitesComponent implements OnInit {
     unidadOrigen!: Unidad;
     usuario: Usuario = new Usuario();
     tipoTramite: TipoTramite = TipoTramite.Otros;
-
+fechaRango: { start: Date | null, end: Date | null } = { 
+  start: new Date(new Date().setDate(new Date().getDate() - 7)), 
+  end: new Date() 
+};
+    
 
     constructor(
         private unidadService: UnidadService,
@@ -143,7 +154,9 @@ export class TramitesComponent implements OnInit {
 
     cargarTramites() {
         this.isLoading = true;
-        this.tramiteService.findAll().subscribe({
+        const desdeIso = this.fechaRango.start?.toISOString() ?? new Date().toISOString();
+        const hastaIso = this.fechaRango.end?.toISOString() ?? new Date().toISOString();
+        this.tramiteService.findAll(desdeIso, hastaIso).subscribe({
             next: (data) => {
                 this.dataSourceOriginal = data;
                 this.filtrarTramites();
@@ -188,7 +201,7 @@ export class TramitesComponent implements OnInit {
 
     this.dataSourceFinalizados = filtrados.filter(t =>
         t.estado === 'Aprobado' || t.estado === 'Rechazado'
-    );
+    ).sort((a, b) => new Date(b.fechaInicio).getTime() - new Date(a.fechaInicio).getTime());
 }
 
 
@@ -346,6 +359,7 @@ export class TramitesComponent implements OnInit {
                                         'No se pudo aprobar el trámite. ' + err.error,
                                         'error'
                                     );
+                                this.cargarTramites();
                             },
                         });
                     }
