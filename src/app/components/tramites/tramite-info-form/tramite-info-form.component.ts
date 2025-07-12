@@ -37,7 +37,7 @@ export class TramiteInfoFormComponent {
     nuevaActuacion: string = '';
     dataSourceVisualizaciones: any[] = [];
     displayedColumnsVisualizaciones: string[] = ['usuario', 'descripcion', 'fecha'];
-
+    estadosTramites = EstadoTramite;
     constructor(private tramiteService: TramiteService) {
         if (this.tramite == null) {
             this.tramite = new Tramite();

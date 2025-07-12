@@ -61,6 +61,7 @@
                                 name="equipo"
                                 [(ngModel)]="tramite.equipo"
                                 (ngModelChange)="onEquipoChange()"
+                                [compareWith]="compareEquipos"
                                 [disabled]="
                                     tramite.id != null &&
                                     tramite.estado != estadoTramite.Iniciado
@@ -85,16 +86,17 @@
                                 class="form-control my-2"
                                 name="repuesto"
                                 [(ngModel)]="tramite.repuesto"
+                                [compareWith]="compareRpuestos"
                                 [disabled]="
                                     (tramite.id != null &&
-                                        tramite.estado !=
+                                        tramite.estado !==
                                             estadoTramite.Iniciado) ||
                                     tramite.equipo == null
                                 "
                                 required
                             >
                                 <option [ngValue]="null" disabled>
-                                    Seleccione un equipo...
+                                    Seleccione un repuesto...
                                 </option>
                                 <option
                                     *ngFor="let repuesto of repuestos"
@@ -177,6 +179,10 @@
                                     name="unidadDestino"
                                     [(ngModel)]="tramite.idUnidadDestino"
                                     required
+                                    [disabled]="
+                                        tramite.estado !==
+                                        estadoTramite.Iniciado
+                                    "
                                 >
                                     <option disabled>
                                         Seleccione una unidad
@@ -195,6 +201,9 @@
                         <div class="col-12">
                             <p>Texto</p>
                             <textarea
+                                [disabled]="
+                                    tramite.estado !== estadoTramite.Iniciado
+                                "
                                 class="form-control my-2"
                                 [(ngModel)]="tramite.texto"
                                 name="texto"
@@ -242,7 +251,12 @@
                                         (click)="guardarActuacion()"
                                         [disabled]="
                                             !nuevaActuacion.trim() ||
-                                            (tramite.id ?? 0) == 0
+                                            (tramite.id ?? 0) == 0 ||
+                                            (tramite.estado !==
+                                                estadoTramite.Iniciado &&
+                                                tramite.estado !==
+                                                    estadoTramite.EnTramite) ||
+                                            (tramite.estado !== estadoTramite.Iniciado && tramite.estado !== estadoTramite.EnTramite)
                                         "
                                     >
                                         Guardar actuación
@@ -415,7 +429,8 @@
                                     class="btn btn-primary w-100"
                                     [disabled]="
                                         tramiteForm.invalid ||
-                                        tramite.estado != 'Iniciado'
+                                        tramite.estado !==
+                                            estadoTramite.Iniciado
                                     "
                                 >
                                     {{ tramite.id ? "Actualizar" : "Guardar" }}

@@ -178,14 +178,10 @@ export class TramitesComponent implements OnInit {
         const fechaGroup = this.form.get('fechaRango') as FormGroup;
         const start = fechaGroup.get('start')?.value as Date;
         const end = fechaGroup.get('end')?.value as Date;
-        const desdeIso =
-            start?.toISOString()??
-            new Date().toISOString();
-        const hastaIso =
-            end?.toISOString()??
-            new Date().toISOString();
+        const desde = start.toISOString().substring(0, 10);
+        const hasta = end.toISOString().substring(0, 10);
 
-        this.tramiteService.findAll(desdeIso, hastaIso).subscribe({
+        this.tramiteService.findAll(desde, hasta).subscribe({
             next: (data) => {
                 this.dataSourceOriginal = data;
                 this.filtrarTramites();
@@ -376,8 +372,7 @@ export class TramitesComponent implements OnInit {
             text: 'Esta acción no se puede deshacer',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            confirmButtonColor: '#3085d6',
             confirmButtonText: 'Sí, confirmar',
             cancelButtonText: 'Cancelar',
         }).then((result) => {
@@ -412,8 +407,7 @@ export class TramitesComponent implements OnInit {
             text: 'Esta acción no se puede deshacer',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            confirmButtonColor: '#3085d6',
             confirmButtonText: 'Sí, confirmar',
             cancelButtonText: 'Cancelar',
         }).then((result) => {

@@ -193,8 +193,7 @@ export class UsuariosComponent implements OnInit {
             text: 'Esta acción no se puede deshacer',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            confirmButtonColor: '#3085d6',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar',
         }).then((result) => {

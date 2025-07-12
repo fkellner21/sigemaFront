@@ -44,7 +44,11 @@ export class TramiteRepuestoFormComponent {
     repuestos: Repuesto[] = [];
     nuevaActuacion: string = '';
     dataSourceVisualizaciones: any[] = [];
-    displayedColumnsVisualizaciones: string[] = ['usuario', 'descripcion', 'fecha'];
+    displayedColumnsVisualizaciones: string[] = [
+        'usuario',
+        'descripcion',
+        'fecha',
+    ];
 
     constructor(
         private tramiteService: TramiteService,
@@ -81,6 +85,7 @@ export class TramiteRepuestoFormComponent {
                 });
             },
         });
+        
         if (this.tramite.equipo?.modeloEquipo.id) {
             this.modeloService
                 .cargarRepuestos(
@@ -103,6 +108,28 @@ export class TramiteRepuestoFormComponent {
                 });
         }
 
+        if (this.tramite.equipo?.modeloEquipo.id) {
+            this.modeloService
+                .cargarRepuestos(
+                    this.tramite.equipo?.modeloEquipo.id,
+                    TipoRepuesto.Pieza
+                )
+                .subscribe({
+                    next: (resp) => {
+                        this.repuestos.push(...resp);
+                    },
+                    error: (error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al cargar el formulario',
+                            text:
+                                'Ocurrió un error al cargar los repuestos. ' +
+                                error.error.message,
+                        });
+                    },
+                });
+        }
+
         this.dataSourceVisualizaciones = (
             this.tramite.visualizaciones ?? []
         ).sort((a, b) => {
@@ -112,15 +139,25 @@ export class TramiteRepuestoFormComponent {
         });
     }
 
+
+    compareEquipos(e1: Equipo, e2: Equipo): boolean {
+        return e1 && e2 ? e1.id === e2.id : e1 === e2;
+    }
+
+    compareRpuestos(r1: Repuesto, r2: Repuesto): boolean {
+        return r1 && r2 ? r1.id === r2.id : r1 === r2;
+    }
+
     onEquipoChange() {
         const modeloId = this.tramite.equipo?.modeloEquipo?.id;
+        console.log(modeloId)
         if (modeloId) {
             this.modeloService
                 .cargarRepuestos(modeloId, TipoRepuesto.Lubricante)
                 .subscribe({
                     next: (resp) => {
+                        console.log(resp);
                         this.repuestos = resp;
-                        // Si querés, podrías resetear el repuesto seleccionado
                         this.tramite.repuesto = null as any;
                     },
                     error: (error) => {
@@ -136,6 +173,26 @@ export class TramiteRepuestoFormComponent {
         } else {
             this.repuestos = [];
             this.tramite.repuesto = null as any;
+        }
+
+        if (modeloId) {
+            this.modeloService
+                .cargarRepuestos(modeloId, TipoRepuesto.Pieza)
+                .subscribe({
+                    next: (resp) => {
+                        this.repuestos.push(...resp);
+                        this.tramite.repuesto = null as any;
+                    },
+                    error: (error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al cargar los repuestos',
+                            text:
+                                'Ocurrió un error al cargar los repuestos. ' +
+                                error.error.message,
+                        });
+                    },
+                });
         }
     }
 

@@ -16,7 +16,7 @@ export class TramiteService {
 
     constructor(private http: HttpClient) {}
 
-    findAll(desde: string, hasta: string): Observable<Tramite[]> {
+    findAll(desde: string, hasta: string): Observable<Tramite[]> {        
         return this.http.get<Tramite[]>(
             `${environment.apiUrl}/api/tramites?desde=${encodeURIComponent(
                 desde

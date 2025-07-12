@@ -167,7 +167,7 @@
                         <!-- Texto -->
                         <div class="col-12">
                             <p>Texto</p>
-                            <textarea
+                            <textarea disabled
                                 class="form-control my-2"
                                 [(ngModel)]="tramite.texto"
                                 name="texto"
@@ -215,7 +215,8 @@
                                         (click)="guardarActuacion()"
                                         [disabled]="
                                             !nuevaActuacion.trim() ||
-                                            (tramite.id ?? 0) == 0
+                                            (tramite.id ?? 0) == 0 ||
+                                            (tramite.estado !== estadoTramite.Iniciado && tramite.estado !== estadoTramite.EnTramite)
                                         "
                                     >
                                         Guardar actuación
@@ -381,19 +382,7 @@
                     </div>
 
                     <div class="col-lg-12">
-                        <div class="row justify-content-between mt-3">
-                            <div class="col-lg-4">
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary w-100"
-                                    [disabled]="
-                                        tramiteForm.invalid ||
-                                        tramite.estado != 'Iniciado'
-                                    "
-                                >
-                                    {{ tramite.id ? "Actualizar" : "Guardar" }}
-                                </button>
-                            </div>
+                        <div class="row justify-content-end mt-3">
                             <div class="col-lg-3">
                                 <button
                                     type="button"

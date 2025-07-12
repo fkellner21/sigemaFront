@@ -63,20 +63,10 @@ export class TramiteEquipoFormComponent {
                 return fechaB - fechaA;
             }
         );
-        this.equiposService.findAll().subscribe({
-            next: (resp) => {
-                this.equipos = resp;
-            },
-            error: (error) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error al cargar el formulario',
-                    text:
-                        'Ocurrió un error al cargar los equipos. ' +
-                        error.error.message,
-                });
-            },
-        });
+
+        if(this.tramite.equipo != null){
+            this.equipos.push(this.tramite.equipo);
+        }
 
         this.dataSourceVisualizaciones = (
             this.tramite.visualizaciones ?? []
