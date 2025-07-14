@@ -58,8 +58,9 @@
                         [(ngModel)]="usuario.password"
                         [required]="!usuario.id"
                         placeholder="{{
-                            usuario.id ? 'Dejar vacío para no cambiar' : ''
+                            usuario.id ? 'Dejar vacío para no cambiar' : '123'
                         }}"
+                        [disabled]="!usuario.id"
                     />
 
                     <!-- Grado -->

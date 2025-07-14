@@ -184,7 +184,7 @@ export class MaquinaComponent {
             this.authservice.getRol() === 'ROLE_ADMIN' ||
             this.authservice.getRol() === 'ROLE_BRIGADA'
         ) {
-            texto = 'Esta acción no se puede desacer';
+            texto = 'Esta acción no se puede deshacer';
         }
 
         Swal.fire({
@@ -192,8 +192,7 @@ export class MaquinaComponent {
             text: texto,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            confirmButtonColor: '#3085d6',
             confirmButtonText: 'Sí, confirmar',
             cancelButtonText: 'Cancelar',
         }).then((result) => {

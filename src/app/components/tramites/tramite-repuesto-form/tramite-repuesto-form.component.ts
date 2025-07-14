@@ -1,4 +1,12 @@
-import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    Output,
+    QueryList,
+    ViewChildren,
+} from '@angular/core';
 import { Tramite } from '../../../models/tramite';
 import Swal from 'sweetalert2';
 import { Actuacion } from '../../../models/actuacion';
@@ -13,28 +21,40 @@ import { MaquinaService } from '../../../services/equipo.service';
 import { modeloService } from '../../../services/modelo.service';
 import { Repuesto } from '../../../models/Repuesto';
 import { TipoRepuesto } from '../../../models/enum/TipoRepuesto';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
-  selector: 'tramite-repuesto-form',
-  imports: [CommonModule, FormsModule],
-  templateUrl: './tramite-repuesto-form.component.html',
-  styleUrl: './tramite-repuesto-form.component.css'
+    selector: 'tramite-repuesto-form',
+    imports: [CommonModule, FormsModule, MatTabsModule, MatTableModule],
+    templateUrl: './tramite-repuesto-form.component.html',
+    styleUrl: './tramite-repuesto-form.component.css',
 })
 export class TramiteRepuestoFormComponent {
     @Input() tramite: Tramite = new Tramite();
     @Input() unidades!: Unidad[];
     @Output() cancelEventEmiter = new EventEmitter();
-    @Output() newTramiteEventEmitter: EventEmitter<Tramite> = new EventEmitter();
+    @Output() newTramiteEventEmitter: EventEmitter<Tramite> =
+        new EventEmitter();
     isLoading = false;
     estadoOptions: { key: string; label: string }[] = [];
     tipoTramiteOptions: { key: string; label: string }[] = [];
-    equipos:Equipo[]=[];
-    estadoTramite=EstadoTramite;
-    repuestos:Repuesto[]=[];
-
+    equipos: Equipo[] = [];
+    estadoTramite = EstadoTramite;
+    repuestos: Repuesto[] = [];
     nuevaActuacion: string = '';
+    dataSourceVisualizaciones: any[] = [];
+    displayedColumnsVisualizaciones: string[] = [
+        'usuario',
+        'descripcion',
+        'fecha',
+    ];
 
-    constructor(private tramiteService: TramiteService,private equiposService: MaquinaService, private modeloService:modeloService) {
+    constructor(
+        private tramiteService: TramiteService,
+        private equiposService: MaquinaService,
+        private modeloService: modeloService
+    ) {
         if (this.tramite == null) {
             this.tramite = new Tramite();
         }
@@ -52,62 +72,129 @@ export class TramiteRepuestoFormComponent {
             }
         );
         this.equiposService.findAll().subscribe({
-                next: (resp) => {
-                    this.equipos=resp;
-                },
-                error: (error) => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error al cargar el formulario',
-                        text:
-                        'Ocurrió un error al cargar los equipos. '+
-                            error.error.message,
-                    });
-                },
-            });
-        if(this.tramite.equipo?.modeloEquipo.id){
-
-            this.modeloService.cargarRepuestos(this.tramite.equipo?.modeloEquipo.id, TipoRepuesto.Lubricante).subscribe({
-                next: (resp)=>{
-                    this.repuestos=resp;
-                },
-                error: (error)=>{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error al cargar el formulario',
-                        text:
-                        'Ocurrió un error al cargar los repuestos. '+
-                            error.error.message,
-                    });
-                },
-            });
-        }
-    }
-    
-    onEquipoChange() {
-    const modeloId = this.tramite.equipo?.modeloEquipo?.id;
-    if (modeloId) {
-        this.modeloService.cargarRepuestos(modeloId, TipoRepuesto.Lubricante).subscribe({
             next: (resp) => {
-                this.repuestos = resp;
-                // Si querés, podrías resetear el repuesto seleccionado
-                this.tramite.repuesto = null as any;
+                this.equipos = resp;
             },
             error: (error) => {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al cargar los repuestos',
+                    title: 'Error al cargar el formulario',
                     text:
-                        'Ocurrió un error al cargar los repuestos. ' +
+                        'Ocurrió un error al cargar los equipos. ' +
                         error.error.message,
                 });
             },
         });
-    } else {
-        this.repuestos = [];
-        this.tramite.repuesto = null as any;
+        
+        if (this.tramite.equipo?.modeloEquipo.id) {
+            this.modeloService
+                .cargarRepuestos(
+                    this.tramite.equipo?.modeloEquipo.id,
+                    TipoRepuesto.Lubricante
+                )
+                .subscribe({
+                    next: (resp) => {
+                        this.repuestos = resp;
+                    },
+                    error: (error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al cargar el formulario',
+                            text:
+                                'Ocurrió un error al cargar los repuestos. ' +
+                                error.error.message,
+                        });
+                    },
+                });
+        }
+
+        if (this.tramite.equipo?.modeloEquipo.id) {
+            this.modeloService
+                .cargarRepuestos(
+                    this.tramite.equipo?.modeloEquipo.id,
+                    TipoRepuesto.Pieza
+                )
+                .subscribe({
+                    next: (resp) => {
+                        this.repuestos.push(...resp);
+                    },
+                    error: (error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al cargar el formulario',
+                            text:
+                                'Ocurrió un error al cargar los repuestos. ' +
+                                error.error.message,
+                        });
+                    },
+                });
+        }
+
+        this.dataSourceVisualizaciones = (
+            this.tramite.visualizaciones ?? []
+        ).sort((a, b) => {
+            const fechaA = a.fecha ? new Date(a.fecha).getTime() : 0;
+            const fechaB = b.fecha ? new Date(b.fecha).getTime() : 0;
+            return fechaB - fechaA;
+        });
     }
-}
+
+
+    compareEquipos(e1: Equipo, e2: Equipo): boolean {
+        return e1 && e2 ? e1.id === e2.id : e1 === e2;
+    }
+
+    compareRpuestos(r1: Repuesto, r2: Repuesto): boolean {
+        return r1 && r2 ? r1.id === r2.id : r1 === r2;
+    }
+
+    onEquipoChange() {
+        const modeloId = this.tramite.equipo?.modeloEquipo?.id;
+        console.log(modeloId)
+        if (modeloId) {
+            this.modeloService
+                .cargarRepuestos(modeloId, TipoRepuesto.Lubricante)
+                .subscribe({
+                    next: (resp) => {
+                        console.log(resp);
+                        this.repuestos = resp;
+                        this.tramite.repuesto = null as any;
+                    },
+                    error: (error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al cargar los repuestos',
+                            text:
+                                'Ocurrió un error al cargar los repuestos. ' +
+                                error.error.message,
+                        });
+                    },
+                });
+        } else {
+            this.repuestos = [];
+            this.tramite.repuesto = null as any;
+        }
+
+        if (modeloId) {
+            this.modeloService
+                .cargarRepuestos(modeloId, TipoRepuesto.Pieza)
+                .subscribe({
+                    next: (resp) => {
+                        this.repuestos.push(...resp);
+                        this.tramite.repuesto = null as any;
+                    },
+                    error: (error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al cargar los repuestos',
+                            text:
+                                'Ocurrió un error al cargar los repuestos. ' +
+                                error.error.message,
+                        });
+                    },
+                });
+        }
+    }
 
     private enumToOptions(enumObj: any): { key: string; label: string }[] {
         return Object.entries(enumObj).map(([key, label]) => ({

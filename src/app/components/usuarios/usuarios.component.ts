@@ -64,6 +64,7 @@ export class UsuariosComponent implements OnInit {
     }
 
     ngOnInit() {
+
         this.roles = Object.keys(Rol).map((key) => ({
             key: key,
             label: Rol[key as keyof typeof Rol],
@@ -165,10 +166,10 @@ export class UsuariosComponent implements OnInit {
                     icon: 'success',
                     title: usuario.id
                         ? 'Usuario actualizado'
-                        : 'Usuario creado',
+                        : 'Usuario/trámite creado',
                     text: usuario.id
                         ? 'El usuario ha sido actualizado correctamente.'
-                        : 'El usuario ha sido creado correctamente.',
+                        : 'El usuario ha sido creado/solicitado correctamente.',
                     timer: 2000,
                     showConfirmButton: false,
                 });
@@ -192,19 +193,26 @@ export class UsuariosComponent implements OnInit {
             text: 'Esta acción no se puede deshacer',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            confirmButtonColor: '#3085d6',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar',
         }).then((result) => {
             if (result.isConfirmed) {
                 this.usuarioService.delete(id).subscribe({
                     next: () => {
-                        Swal.fire(
-                            'Eliminado',
-                            'El usuario fue eliminado',
-                            'success'
-                        );
+                        if(this.authservice.getRol()=='ROLE_ADMINISTRADOR'||this.authservice.getRol()=='ROLE_BRIGADA'){
+                            Swal.fire(
+                                'Eliminado',
+                                'El usuario fue eliminado',
+                                'success'
+                            );
+                        }else{
+                            Swal.fire(
+                                'En proceso',
+                                'Se generó un trámite solicitando la baja',
+                                'success'
+                            );
+                        }
                         this.cargarUsuarios();
                     },
                     error: (err) => {
