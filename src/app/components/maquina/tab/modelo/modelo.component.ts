@@ -60,6 +60,8 @@ export class ModeloComponent {
         ${data.capacidad}
         ${data.marca?.nombre}
         ${data.tipoEquipo?.codigo}
+        ${data.frecuenciaServiceKM}
+        ${data.frecuenciaServiceHT}
       `.toLowerCase();
 
       return dataStr.includes(filter.trim().toLowerCase());
@@ -131,6 +133,7 @@ export class ModeloComponent {
     'Modelo',
     'Capacidad',
     'Tipo',
+    'Mantenimiento',
     'VerEquipos',
     'VerRepuestos',
     'VerLubricantes',

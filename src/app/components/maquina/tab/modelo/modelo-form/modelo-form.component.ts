@@ -53,5 +53,13 @@ onSubmit(form: NgForm): void {
 onOpen(): void {
   this.openEventEmitter.emit();
 }
+onUnidadMedidaChange(): void {
+  if (this.modeloEquipo.unidadMedida === UnidadMedida.HT) {
+    this.modeloEquipo.frecuenciaServiceKM = 0;
+  } else if (this.modeloEquipo.unidadMedida === UnidadMedida.KMs) {
+    this.modeloEquipo.frecuenciaServiceHT = 0;
+  }
+}
+
 
 }
