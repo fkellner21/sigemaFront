@@ -4,5 +4,4 @@ export class Notificacion{
     idUsuario?:number;
     texto?:string;
     fecha?:Date;
-
 }

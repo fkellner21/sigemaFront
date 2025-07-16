@@ -14,8 +14,8 @@ export class NotificacionesService {
 
     }
 
-    findAllByUser(idUsuario:number):Observable<Notificacion[]>{
-        return this.http.get<Notificacion[]>(`${environment.apiUrl}/api/notificaciones/${idUsuario}`);
+    findAll():Observable<Notificacion[]>{
+        return this.http.get<Notificacion[]>(`${environment.apiUrl}/api/notificaciones`);
     }
 
     delete(id: number): Observable<void> {

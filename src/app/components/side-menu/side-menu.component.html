@@ -15,14 +15,16 @@
         <a mat-list-item
             ><mat-icon>bar_chart</mat-icon><span class="ms-2">Reportes</span></a
         >
-        <a mat-list-item (click)="mostrarFormularioNotificaciones()"
-            ><mat-icon>notifications</mat-icon
-            ><span class="ms-2"
-                >Notificaciones<span *ngIf="notificaciones.length > 0">{{
-                    notificaciones.length
-                }}</span></span
-            ></a
-        >
+
+        <a mat-list-item (click)="mostrarFormularioNotificaciones()">
+            <mat-icon>notifications</mat-icon>
+            <span class="ms-2">
+                Notificaciones
+                <span *ngIf="notificaciones.length > 0" class="badge-red">
+                    {{ notificaciones.length }}
+                </span>
+            </span>
+        </a>
 
         <mat-list-item (click)="toggleConfig()" style="cursor: pointer">
             <mat-icon>settings</mat-icon>
@@ -70,3 +72,12 @@
     (cerrar)="cerrarModalPerfil()"
     (guardarUsuario)="guardarUsuario($event)"
 ></app-usuario-form>
+
+<notificaciones
+    *ngIf="abrirFormularioNotificaciones"
+    [notificaciones]="notificaciones"
+    [unidades]="unidades"
+    (actualizarNotificaciones)="cargarNotificaciones()"
+    (cancelEventEmiter)="cerrarFormularioNotificaciones()"
+>
+</notificaciones>

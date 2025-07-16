@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RedirectCommand, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -17,6 +17,9 @@ import { Usuario } from '../../models/usuario';
 import { UsuarioFormComponent } from '../usuarios/form/usuario-form.component';
 import { NotificacionesService } from '../../services/notificacion.service';
 import { Notificacion } from '../../models/notificacion';
+import { interval, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { NotificacionesComponent } from '../notificaciones/notificaciones.component';
 
 @Component({
     selector: 'side-menu',
@@ -28,20 +31,22 @@ import { Notificacion } from '../../models/notificacion';
         MatBadgeModule,
         CommonModule,
         UsuarioFormComponent,
+        NotificacionesComponent,
     ],
     templateUrl: './side-menu.component.html',
     styleUrl: './side-menu.component.css',
 })
-export class SideMenuComponent implements OnInit {
+export class SideMenuComponent implements OnInit, OnDestroy {
     isConfigOpen = false;
     roles!: { key: string; label: string }[];
     grados: Grado[] = [];
     unidades: Unidad[] = [];
     usuarioOriginal!: Usuario;
     usuario!: Usuario;
-    notificaciones: Notificacion[]=[];
+    notificaciones: Notificacion[] = [];
     mostrarFormularioPerfil = false;
-    abrirFormularioNotificaciones= false;
+    abrirFormularioNotificaciones = false;
+    intervaloSub?: Subscription;
 
     constructor(
         private router: Router,
@@ -49,75 +54,91 @@ export class SideMenuComponent implements OnInit {
         private usuarioService: UsuarioService,
         private gradosService: gradoService,
         private unidadService: UnidadService,
-        private notificacionesService: NotificacionesService,
+        private notificacionesService: NotificacionesService
     ) {}
 
     ngOnInit() {
-             this.authService.isTokenValid().then((isValid) => {
-    if (isValid) {
-      
-         this.roles = Object.keys(Rol).map((key) => ({
-                key: key,
-                label: Rol[key as keyof typeof Rol],
-            }));
-            
-            this.gradosService.findAll().subscribe({
-                next: (resp) => {
-                    this.grados = resp;
-                },
-                error: (err) => {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'No se pudieron cargar los grados. ' + err.error,
-                        icon: 'error',
+        this.authService
+            .isTokenValid()
+            .then((isValid) => {
+                if (isValid) {
+                    this.roles = Object.keys(Rol).map((key) => ({
+                        key: key,
+                        label: Rol[key as keyof typeof Rol],
+                    }));
+
+                    this.gradosService.findAll().subscribe({
+                        next: (resp) => {
+                            this.grados = resp;
+                        },
+                        error: (err) => {
+                            Swal.fire({
+                                title: 'Error',
+                                text:
+                                    'No se pudieron cargar los grados. ' +
+                                    err.error,
+                                icon: 'error',
+                            });
+                        },
                     });
-                },
-            });
-            
-            this.unidadService.findAll().subscribe({
-                next: (resp) => {
-                    this.unidades = resp;
-                },
-                error: (err) => {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'No se pudieron cargar las unidades. ' + err.error,
-                        icon: 'error',
+
+                    this.unidadService.findAll().subscribe({
+                        next: (resp) => {
+                            this.unidades = resp;
+                        },
+                        error: (err) => {
+                            Swal.fire({
+                                title: 'Error',
+                                text:
+                                    'No se pudieron cargar las unidades. ' +
+                                    err.error,
+                                icon: 'error',
+                            });
+                        },
                     });
-                },
-            });
-            } else {
+                } else {
                     this.router.navigate(['/login']);
                 }
-            }).catch(() => {
+            })
+            .catch(() => {
                 this.router.navigate(['/login']);
             });
-           
-            
-            let idUsuario = this.authService.getIdUsuario();
-            if(idUsuario!=null){
-                this.usuarioService.findById(idUsuario ?? 0).subscribe({
-                    next: (resp) => {
-                        this.usuarioOriginal = resp;
-                    },
-                    error: (err) => {
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'No se pudo cargar el usuario. ' + err.error,
-                            icon: 'error',
-                        });
-                    },
-                });
-            }else{
-                this.router.navigate(['/login'])
-            }
-                
+
+        let idUsuario = this.authService.getIdUsuario();
+        if (idUsuario != null) {
+            this.usuarioService.findById(idUsuario ?? 0).subscribe({
+                next: (resp) => {
+                    this.usuarioOriginal = resp;
+
+                    this.cargarNotificaciones();
+
+                    this.intervaloSub = interval(3 * 60 * 1000).subscribe(
+                        () => {
+                            this.cargarNotificaciones();
+                        }
+                    );
+                },
+                error: (err) => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudo cargar el usuario. ' + err.error,
+                        icon: 'error',
+                    });
+                },
+            });
+        } else {
+            this.router.navigate(['/login']);
         }
+    }
+
+    ngOnDestroy(): void {
+        if (this.intervaloSub) {
+            this.intervaloSub.unsubscribe();
+        }
+    }
 
     toggleConfig() {
         this.isConfigOpen = !this.isConfigOpen;
-
-        this.cargarNotificaciones();
     }
 
     onClick(event: MouseEvent) {
@@ -127,71 +148,76 @@ export class SideMenuComponent implements OnInit {
         this.router.navigate(['/login']);
     }
 
-    cargarNotificaciones(){
-            this.notificacionesService.findAllByUser(this.usuarioOriginal.id).subscribe({
-                next: (resp) => {
-                    this.notificaciones = resp;
-                },
-                error: (err) => {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'No se pudieron cargar las notificaciones. ' + err.error,
-                        icon: 'error',
-                    });
-                },
-            });
+    cargarNotificaciones() {
+        this.notificacionesService.findAll().subscribe({
+            next: (resp) => {
+                this.notificaciones = resp;
+            },
+            error: (err) => {
+                Swal.fire({
+                    title: 'Error',
+                    text:
+                        'No se pudieron cargar las notificaciones. ' +
+                        err.error,
+                    icon: 'error',
+                });
+            },
+        });
     }
 
-    mostrarFormularioNotificaciones(){
-        this.abrirFormularioNotificaciones=true
+    mostrarFormularioNotificaciones() {
+        this.abrirFormularioNotificaciones = true;
+    }
+
+    cerrarFormularioNotificaciones() {
+        this.abrirFormularioNotificaciones = false;
     }
 
     abrirModalPerfil() {
-        this.usuario= { ...this.usuarioOriginal }
-            this.gradosService.findAll().subscribe({
-                next: (resp) => {
-                    this.grados = resp;
-                },
-                error: (err) => {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'No se pudieron cargar los grados. ' + err.error,
-                        icon: 'error',
-                    });
-                },
-            });
-            
-            this.unidadService.findAll().subscribe({
-                next: (resp) => {
-                    this.unidades = resp;
-                    
-                },
-                error: (err) => {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'No se pudieron cargar las unidades. ' + err.error,
-                        icon: 'error',
-                    });
-                },
-            });
-
-            let idUsuario = this.authService.getIdUsuario();
-            if(idUsuario!=null){
-                this.usuarioService.findById(idUsuario ?? 0).subscribe({
-                    next: (resp) => {
-                        this.usuarioOriginal = resp;
-                        this.usuario={...this.usuarioOriginal}
-                        this.mostrarFormularioPerfil = true;
-                    },
-                    error: (err) => {
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'No se pudo cargar el usuario. ' + err.error,
-                            icon: 'error',
-                        });
-                    },
+        this.usuario = { ...this.usuarioOriginal };
+        this.gradosService.findAll().subscribe({
+            next: (resp) => {
+                this.grados = resp;
+            },
+            error: (err) => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudieron cargar los grados. ' + err.error,
+                    icon: 'error',
                 });
-            }
+            },
+        });
+
+        this.unidadService.findAll().subscribe({
+            next: (resp) => {
+                this.unidades = resp;
+            },
+            error: (err) => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudieron cargar las unidades. ' + err.error,
+                    icon: 'error',
+                });
+            },
+        });
+
+        let idUsuario = this.authService.getIdUsuario();
+        if (idUsuario != null) {
+            this.usuarioService.findById(idUsuario ?? 0).subscribe({
+                next: (resp) => {
+                    this.usuarioOriginal = resp;
+                    this.usuario = { ...this.usuarioOriginal };
+                    this.mostrarFormularioPerfil = true;
+                },
+                error: (err) => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudo cargar el usuario. ' + err.error,
+                        icon: 'error',
+                    });
+                },
+            });
+        }
     }
 
     cerrarModalPerfil() {
@@ -223,7 +249,8 @@ export class SideMenuComponent implements OnInit {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Ocurrió un error al guardar el usuario. '+err.error,
+                    text:
+                        'Ocurrió un error al guardar el usuario. ' + err.error,
                 });
             },
         });
