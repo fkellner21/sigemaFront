@@ -15,9 +15,13 @@
         <a mat-list-item
             ><mat-icon>bar_chart</mat-icon><span class="ms-2">Reportes</span></a
         >
-        <a mat-list-item
+        <a mat-list-item (click)="mostrarFormularioNotificaciones()"
             ><mat-icon>notifications</mat-icon
-            ><span class="ms-2">Notificaciones</span></a
+            ><span class="ms-2"
+                >Notificaciones<span *ngIf="notificaciones.length > 0">{{
+                    notificaciones.length
+                }}</span></span
+            ></a
         >
 
         <mat-list-item (click)="toggleConfig()" style="cursor: pointer">
@@ -33,8 +37,7 @@
                 ><mat-icon>person</mat-icon><span class="ms-2">Perfil</span></a
             >
             <a mat-list-item routerLink="/usuarios"
-                ><mat-icon>group</mat-icon
-                ><span class="ms-2">Usuarios</span></a
+                ><mat-icon>group</mat-icon><span class="ms-2">Usuarios</span></a
             >
             <a mat-list-item routerLink="/unidades"
                 ><mat-icon>home_work</mat-icon

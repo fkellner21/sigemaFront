@@ -15,6 +15,8 @@ import { Grado } from '../../models/grado';
 import { Unidad } from '../../models/Unidad';
 import { Usuario } from '../../models/usuario';
 import { UsuarioFormComponent } from '../usuarios/form/usuario-form.component';
+import { NotificacionesService } from '../../services/notificacion.service';
+import { Notificacion } from '../../models/notificacion';
 
 @Component({
     selector: 'side-menu',
@@ -31,21 +33,23 @@ import { UsuarioFormComponent } from '../usuarios/form/usuario-form.component';
     styleUrl: './side-menu.component.css',
 })
 export class SideMenuComponent implements OnInit {
-    notificationCount = 2;
     isConfigOpen = false;
     roles!: { key: string; label: string }[];
     grados: Grado[] = [];
     unidades: Unidad[] = [];
     usuarioOriginal!: Usuario;
     usuario!: Usuario;
+    notificaciones: Notificacion[]=[];
     mostrarFormularioPerfil = false;
+    abrirFormularioNotificaciones= false;
 
     constructor(
         private router: Router,
         private authService: AuthService,
         private usuarioService: UsuarioService,
         private gradosService: gradoService,
-        private unidadService: UnidadService
+        private unidadService: UnidadService,
+        private notificacionesService: NotificacionesService,
     ) {}
 
     ngOnInit() {
@@ -112,6 +116,8 @@ export class SideMenuComponent implements OnInit {
 
     toggleConfig() {
         this.isConfigOpen = !this.isConfigOpen;
+
+        this.cargarNotificaciones();
     }
 
     onClick(event: MouseEvent) {
@@ -119,6 +125,25 @@ export class SideMenuComponent implements OnInit {
         setTimeout(() => el.blur(), 0);
         localStorage.clear();
         this.router.navigate(['/login']);
+    }
+
+    cargarNotificaciones(){
+            this.notificacionesService.findAllByUser(this.usuarioOriginal.id).subscribe({
+                next: (resp) => {
+                    this.notificaciones = resp;
+                },
+                error: (err) => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudieron cargar las notificaciones. ' + err.error,
+                        icon: 'error',
+                    });
+                },
+            });
+    }
+
+    mostrarFormularioNotificaciones(){
+        this.abrirFormularioNotificaciones=true
     }
 
     abrirModalPerfil() {
