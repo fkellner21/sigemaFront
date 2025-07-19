@@ -1,0 +1,228 @@
+<div class="modal" tabindex="-1" style="display: block">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {{ mantenimiento.id ? "Editar" : "Agregar" }} mantenimiento
+                </h5>
+                <button
+                    (click)="onOpen()"
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+
+            <div class="modal-body">
+                <form
+                    (ngSubmit)="onSubmit(mantenimientoForm)"
+                    #mantenimientoForm="ngForm"
+                >
+                    <!-- Equipo -->
+                    <div>
+                        <p>Equipo</p>
+                        <input
+                            class="form-control my-2"
+                            [value]="equipo.matricula"
+                            disabled
+                            type="text"
+                        />
+                    </div>
+
+                    <!-- Fecha de mantenimiento -->
+                    <div>
+                        <p>Fecha de mantenimiento</p>
+                        <input
+                            name="fechaMantenimiento"
+                            type="date"
+                            [(ngModel)]="mantenimiento.fechaMantenimiento"
+                            class="form-control my-2"
+                            required
+                            #fechaMantenimiento="ngModel"
+                        />
+                        <div
+                            *ngIf="
+                                fechaMantenimiento.invalid &&
+                                (fechaMantenimiento.dirty ||
+                                    fechaMantenimiento.touched)
+                            "
+                        >
+                            <div
+                                *ngIf="fechaMantenimiento.errors?.['required']"
+                                class="alert alert-danger"
+                            >
+                                Fecha requerida
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fecha de registro (solo si id !== 0) -->
+                    <div
+                        *ngIf="mantenimiento.id && mantenimiento.fechaRegistro"
+                    >
+                        <p>Fecha de registro</p>
+                        <input
+                            class="form-control my-2"
+                            [value]="
+                                mantenimiento.fechaRegistro
+                                    | date : 'yyyy-MM-dd'
+                            "
+                            disabled
+                            type="date"
+                        />
+                    </div>
+
+                    <!-- Descripción -->
+                    <div>
+                        <p>Descripción</p>
+                        <input
+                            name="descripcion"
+                            [(ngModel)]="mantenimiento.descripcion"
+                            class="form-control my-2"
+                            type="text"
+                            required
+                            #descripcion="ngModel"
+                        />
+                        <div
+                            *ngIf="
+                                descripcion.invalid &&
+                                (descripcion.dirty || descripcion.touched)
+                            "
+                        >
+                            <div
+                                *ngIf="descripcion.errors?.['required']"
+                                class="alert alert-danger"
+                            >
+                                Descripción requerida
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Unidad de medida -->
+                    <div>
+                        <p>Unidad de medida</p>
+                        <input
+                            class="form-control my-2"
+                            [value]="
+                                mantenimiento.unidadMedida === 'HT'
+                                    ? 'Horas de trabajo'
+                                    : 'KM'
+                            "
+                            disabled
+                            type="text"
+                        />
+                    </div>
+
+                    <!-- Cantidad unidad de medida -->
+                    <div>
+                        <p>
+                            Cantidad ({{
+                                mantenimiento.unidadMedida === "HT"
+                                    ? "Horas de trabajo"
+                                    : "Kilómetros"
+                            }})
+                        </p>
+                        <input
+                            type="number"
+                            name="cantidadUnidadMedida"
+                            [(ngModel)]="mantenimiento.cantidadUnidadMedida"
+                            class="form-control my-2"
+                            min="1"
+                            required
+                            #cantidadUnidadMedida="ngModel"
+                        />
+                        <div
+                            *ngIf="
+                                cantidadUnidadMedida.invalid &&
+                                (cantidadUnidadMedida.dirty ||
+                                    cantidadUnidadMedida.touched)
+                            "
+                        >
+                            <div
+                                *ngIf="cantidadUnidadMedida.errors?.['required']"
+                                class="alert alert-danger"
+                            >
+                                Este campo es obligatorio
+                            </div>
+                            <div
+                                *ngIf="cantidadUnidadMedida.errors?.['min']"
+                                class="alert alert-danger"
+                            >
+                                Debe ser mayor a 0
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tipo de repuesto -->
+                    <div>
+                        <p>Tipo de repuesto</p>
+                        <select
+                            class="form-select my-2"
+                            [(ngModel)]="tipoRepuestoSeleccionado"
+                            name="tipoRepuesto"
+                            (ngModelChange)="onTipoRepuestoChange()"
+                        >
+                            <option [value]="TipoRepuesto.Pieza">Pieza</option>
+                            <option [value]="TipoRepuesto.Lubricante">
+                                Lubricante
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Repuestos -->
+                    <div *ngIf="repuestos && repuestos.length > 0">
+                        <p>Repuesto</p>
+                        <!-- <select
+                            class="form-select my-2"
+                            [(ngModel)]="mantenimiento.idRepuesto"
+                            name="idRepuesto"
+                            required
+                            >
+                            <option *ngFor="let repuesto of repuestos" [value]="repuesto.id">
+                                {{ repuesto.nombre }}
+                            </option>
+                            </select> -->
+                    </div>
+
+                    <!-- Es servicio -->
+                    <div class="form-check my-2">
+                        <input
+                            type="checkbox"
+                            class="form-check-input"
+                            id="esServicio"
+                            name="esServicio"
+                            [(ngModel)]="mantenimiento.esServicio"
+                        />
+                        <label for="esServicio" class="form-check-label">
+                            ¿Es servicio?
+                        </label>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="row justify-content-between mt-3">
+                        <div class="col-4">
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                                [disabled]="mantenimientoForm.invalid"
+                            >
+                                {{ mantenimiento.id ? "Modificar" : "Agregar" }}
+                            </button>
+                        </div>
+                        <div class="col-4">
+                            <button
+                                type="button"
+                                class="btn btn-secondary w-100"
+                                data-bs-dismiss="modal"
+                                (click)="onOpen()"
+                            >
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

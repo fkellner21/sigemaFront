@@ -24,10 +24,10 @@ import { MatOptionModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
 import { AuthService } from '../../../../services/auth.service';
+import { MantenimientosComponent } from '../../../mantenimientos/mantenimiento.component';
 
 @Component({
     selector: 'maquina',
-    standalone: true,
     imports: [
         CommonModule,
         FormsModule,
@@ -37,6 +37,7 @@ import { AuthService } from '../../../../services/auth.service';
         MatTableModule,
         MatSelectModule,
         MatOptionModule,
+        MantenimientosComponent,
     ],
     templateUrl: './maquina.component.html',
     styleUrls: ['./maquina.component.css'],
@@ -45,6 +46,7 @@ export class MaquinaComponent {
     maquinaSelected: Equipo = new Equipo();
     open: boolean = false;
     dataSource!: MatTableDataSource<Equipo>;
+    openMantenimientos: boolean = false;
 
     @Input() maquinas: Equipo[] = [];
     @Input() isLoadingMaquinas = false;
@@ -130,9 +132,18 @@ export class MaquinaComponent {
         this.open = !this.open;
     }
 
+    setOpenMantenimientos() {
+        this.openMantenimientos = !this.openMantenimientos;
+    }
+
     setSelectedMaquina(maquina: Equipo) {
         this.maquinaSelected = maquina;
         this.setOpen();
+    }
+
+    setSelectedMaquinaMantenimientos(maquina: Equipo) {
+        this.maquinaSelected = maquina;
+        this.setOpenMantenimientos();
     }
 
     addMaquina(maquina: Equipo) {

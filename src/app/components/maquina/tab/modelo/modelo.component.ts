@@ -60,8 +60,8 @@ export class ModeloComponent {
         ${data.capacidad}
         ${data.marca?.nombre}
         ${data.tipoEquipo?.codigo}
-        ${data.frecuenciaServiceKM}
-        ${data.frecuenciaServiceHT}
+        ${data.frecuenciaUnidadMedida}
+        ${data.frecuenciaTiempo}
       `.toLowerCase();
 
       return dataStr.includes(filter.trim().toLowerCase());
@@ -147,7 +147,7 @@ export class ModeloComponent {
   } 
 
   setSelectedModelo(modelo: modeloEquipo) {
-    this.modeloSelected = modelo;
+    this.modeloSelected = { ...modelo };
     this.setOpen();
   }
 

@@ -8,7 +8,7 @@ export class Equipo{
     matricula!:string;
     observaciones!:string;
     cantidadUnidadMedida!:number;
-    ultimaPosicion!:Posicion;//todo cambiar por el objeto
+    ultimaPosicion!:Posicion;
     modeloEquipo!:modeloEquipo;
     estado!:EstadoEquipo;
     unidad!:Unidad;
