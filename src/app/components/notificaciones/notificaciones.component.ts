@@ -108,25 +108,23 @@ export class NotificacionesComponent implements OnInit, OnChanges {
                 this.tramiteSeleccionado.tipoTramite = tramite.tipoTramite;
                 this.tramiteSeleccionado.estado = tramite.estado;
 
-                console.log(this.tramiteSeleccionado)
-
                 if (
-                    tramite.tipoTramite === TipoTramite.AltaEquipo ||
-                    tramite.tipoTramite === TipoTramite.BajaEquipo
+                    tramite.tipoTramite === TipoTramite.AltaEquipo.valueOf() ||
+                    tramite.tipoTramite === TipoTramite.BajaEquipo.valueOf()
                 ) {
                     this.mostrarFormularioEquipo = true;
                 } else if (
-                    tramite.tipoTramite === TipoTramite.SolicitudRepuesto
+                    tramite.tipoTramite === TipoTramite.SolicitudRepuesto.valueOf()
                 ) {
                     this.mostrarFormularioRepuesto = true;
                 } else if (
-                    tramite.tipoTramite === TipoTramite.AltaUsuario ||
-                    tramite.tipoTramite === TipoTramite.BajaUsuario
+                    tramite.tipoTramite === TipoTramite.AltaUsuario.valueOf() ||
+                    tramite.tipoTramite === TipoTramite.BajaUsuario.valueOf()
                 ) {
                     this.mostrarFormularioUsuario = true;
                 } else if (
-                    tramite.tipoTramite === TipoTramite.Otros ||
-                    tramite.tipoTramite === TipoTramite.PedidoInformacion
+                    tramite.tipoTramite === TipoTramite.Otros.valueOf() ||
+                    tramite.tipoTramite === TipoTramite.PedidoInformacion.valueOf()
                 ) {
                     this.mostrarFormularioInfo = true;
                 }

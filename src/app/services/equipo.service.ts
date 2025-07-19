@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Equipo } from '../models/equipo';
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
+import { EquipoDashboardDTO } from '../models/DTO/EquipoDashboardDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -30,6 +31,11 @@ export class MaquinaService {
                     })
                 )
             );
+    }
+
+    findAllDashboard(): Observable<EquipoDashboardDTO[]> {
+        return this.http
+            .get<EquipoDashboardDTO[]>(`${this.baseUrl}/dashboard`);
     }
 
     // Crear una nueva máquina
