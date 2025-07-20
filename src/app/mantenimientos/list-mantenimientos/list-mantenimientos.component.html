@@ -1,0 +1,85 @@
+<div class="modal-backdrop" (click)="cerrarModal()"></div>
+<div class="modal-contenido" (click)="$event.stopPropagation()">
+  <div class="modal-header d-flex justify-content-between align-items-center">
+    <h5 class="modal-title">Mantenimientos de {{ equipo?.matricula }}</h5>
+    <button class="btn btn-close" (click)="cerrarModal()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <button 
+      class="btn btn-primary mb-3" 
+      (click)="abrirFormulario()"
+      *ngIf="!mostrarFormulario">
+      <i class="bi bi-plus"></i> Agregar mantenimiento
+    </button>
+
+    <div *ngIf="!mostrarFormulario">
+      <!-- Loading spinner -->
+      <div class="text-center my-3" *ngIf="isLoading">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <!-- No hay mantenimientos -->
+      <div *ngIf="!isLoading && mantenimientos.length === 0" class="alert alert-info">
+        <i class="bi bi-info-circle"></i> No hay mantenimientos registrados para este equipo.
+      </div>
+
+      <!-- Lista de mantenimientos -->
+      <div *ngIf="!isLoading && mantenimientos.length > 0" class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>Fecha</th>
+                  <th>Descripción</th>
+                  <th>Cantidad</th>
+                  <th>Unidad</th>
+                  <th>¿Es servicio?</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let mantenimiento of mantenimientos">
+                  <td>{{ mantenimiento.fechaMantenimiento | date:'dd/MM/yyyy' }}</td>
+                  <td>{{ mantenimiento.descripcion }}</td>
+                  <td>{{ mantenimiento.cantidadUnidadMedida }}</td>
+                  <td>{{ mantenimiento.unidadMedida === 'HT' ? 'Horas' : 'Km' }}</td>
+                  <td>
+                    <span class="badge" 
+                          [class.bg-success]="mantenimiento.esServicio" 
+                          [class.bg-secondary]="!mantenimiento.esServicio">
+                      {{ mantenimiento.esServicio ? 'Sí' : 'No' }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary" title="Editar">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger ms-1" title="Eliminar">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario de mantenimiento -->
+    <div *ngIf="mostrarFormulario">
+      <mantenimiento-form
+        [equipo]="equipo"
+        [mantenimiento]="nuevoMantenimiento"
+        (cerrarFormulario)="cerrarFormulario()"
+        (mantenimientoAgregado)="recargarLista()"
+      ></mantenimiento-form>
+    </div>
+  </div>
+</div>

@@ -25,6 +25,7 @@ import { CommonModule } from '@angular/common';
 import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
 import { AuthService } from '../../../../services/auth.service';
 import { MantenimientosComponent } from '../../../mantenimientos/mantenimiento.component';
+import { ListMantenimientosComponent } from '../../../../mantenimientos/list-mantenimientos/list-mantenimientos.component';
 
 @Component({
     selector: 'maquina',
@@ -38,6 +39,7 @@ import { MantenimientosComponent } from '../../../mantenimientos/mantenimiento.c
         MatSelectModule,
         MatOptionModule,
         MantenimientosComponent,
+        ListMantenimientosComponent, 
     ],
     templateUrl: './maquina.component.html',
     styleUrls: ['./maquina.component.css'],
@@ -132,18 +134,20 @@ export class MaquinaComponent {
         this.open = !this.open;
     }
 
-    setOpenMantenimientos() {
-        this.openMantenimientos = !this.openMantenimientos;
-    }
-
     setSelectedMaquina(maquina: Equipo) {
         this.maquinaSelected = maquina;
         this.setOpen();
     }
 
-    setSelectedMaquinaMantenimientos(maquina: Equipo) {
+    abrirMantenimientos(maquina: Equipo) {
+        console.log('Abriendo mantenimientos para equipo:', maquina);
         this.maquinaSelected = maquina;
-        this.setOpenMantenimientos();
+        this.openMantenimientos = true;
+    }
+
+    setOpenMantenimientos() {
+        console.log('Cerrando mantenimientos'); // DEBUG
+        this.openMantenimientos = false;
     }
 
     addMaquina(maquina: Equipo) {

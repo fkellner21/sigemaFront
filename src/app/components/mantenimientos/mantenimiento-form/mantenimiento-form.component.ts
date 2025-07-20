@@ -7,6 +7,8 @@ import { UnidadMedida } from '../../../models/enum/UnidadMedida';
 import { TipoRepuesto } from '../../../models/enum/TipoRepuesto';
 import { Repuesto } from '../../../models/Repuesto';
 import { modeloService } from '../../../services/modelo.service';
+import { MantenimientoService } from '../../../services/mantenimiento.service'; // AGREGAR
+import Swal from 'sweetalert2'; // AGREGAR
 
 @Component({
     selector: 'mantenimiento-form',
@@ -18,8 +20,9 @@ export class MantenimientoFormComponent implements OnInit {
     @Input() mantenimiento: Mantenimiento = new Mantenimiento();
     @Input() equipo!: Equipo;
 
-    @Output() newMantenimientoEventEmitter = new EventEmitter<Mantenimiento>();
-    @Output() openEventEmitter = new EventEmitter<void>();
+    // CAMBIAR LOS NOMBRES DE LOS OUTPUTS PARA COINCIDIR CON EL HTML
+    @Output() cerrarFormulario = new EventEmitter<void>();
+    @Output() mantenimientoAgregado = new EventEmitter<void>();
 
     unidadesDeMedida = [
         { label: 'Kilómetros', value: UnidadMedida.KMs },
@@ -35,9 +38,17 @@ export class MantenimientoFormComponent implements OnInit {
     TipoRepuesto = TipoRepuesto;
     repuestos: Repuesto[] = [];
 
-    constructor(private modeloService: modeloService) {}
+    constructor(
+        private modeloService: modeloService,
+        private mantenimientoService: MantenimientoService 
+    ) {}
 
     ngOnInit(): void {
+        console.log('MantenimientoFormComponent initialized with:', { 
+            mantenimiento: this.mantenimiento, 
+            equipo: this.equipo 
+        }); // DEBUG
+        
         if (
             typeof this.mantenimiento.unidadMedida === 'string' &&
             Object.values(UnidadMedida).includes(
@@ -58,14 +69,43 @@ export class MantenimientoFormComponent implements OnInit {
 
     onSubmit(form: NgForm): void {
         if (form.valid) {
-            this.newMantenimientoEventEmitter.emit(this.mantenimiento);
-            form.reset();
-            this.onOpen();
+            console.log('Enviando mantenimiento:', this.mantenimiento); 
+            
+            // AGREGAR LÓGICA PARA GUARDAR EL MANTENIMIENTO
+            if (this.mantenimiento.id && this.mantenimiento.id > 0) {
+                // Editar
+                this.mantenimientoService.edit(this.mantenimiento.id, this.mantenimiento).subscribe({
+                    next: () => {
+                        console.log('Mantenimiento editado exitosamente');
+                        Swal.fire('Éxito', 'Mantenimiento actualizado correctamente', 'success');
+                        this.mantenimientoAgregado.emit();
+                        form.reset();
+                    },
+                    error: (error) => {
+                        console.error('Error al editar mantenimiento:', error);
+                        Swal.fire('Error', 'No se pudo actualizar el mantenimiento', 'error');
+                    }
+                });
+            } else {
+                // Agregar nuevo
+                this.mantenimientoService.addNew(this.mantenimiento).subscribe({
+                    next: () => {
+                        console.log('Mantenimiento agregado exitosamente');
+                        Swal.fire('Éxito', 'Mantenimiento agregado correctamente', 'success');
+                        this.mantenimientoAgregado.emit();
+                        form.reset();
+                    },
+                    error: (error) => {
+                        console.error('Error al agregar mantenimiento:', error);
+                        Swal.fire('Error', 'No se pudo agregar el mantenimiento', 'error');
+                    }
+                });
+            }
         }
     }
 
     onOpen(): void {
-        this.openEventEmitter.emit();
+        this.cerrarFormulario.emit();
     }
 
     onUnidadMedidaChange(): void {
@@ -78,7 +118,9 @@ export class MantenimientoFormComponent implements OnInit {
             next: (data) => {
                 this.repuestos = data;
             },
-            error: (err) => {},
+            error: (err) => {
+                console.error('Error al cargar repuestos:', err);
+            },
         });
     }
 
