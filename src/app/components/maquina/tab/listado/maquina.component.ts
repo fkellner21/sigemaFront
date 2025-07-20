@@ -24,8 +24,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
 import { AuthService } from '../../../../services/auth.service';
-import { MantenimientosComponent } from '../../../mantenimientos/mantenimiento.component';
-import { ListMantenimientosComponent } from '../../../../mantenimientos/list-mantenimientos/list-mantenimientos.component';
+import { ListMantenimientosComponent } from '../../../mantenimientos/list-mantenimientos/list-mantenimientos.component';
 
 @Component({
     selector: 'maquina',
@@ -38,7 +37,6 @@ import { ListMantenimientosComponent } from '../../../../mantenimientos/list-man
         MatTableModule,
         MatSelectModule,
         MatOptionModule,
-        MantenimientosComponent,
         ListMantenimientosComponent, 
     ],
     templateUrl: './maquina.component.html',

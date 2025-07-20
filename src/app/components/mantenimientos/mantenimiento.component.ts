@@ -8,7 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { MantenimientoService } from '../../services/mantenimiento.service';
 import Swal from 'sweetalert2';
-import { Mantenimiento } from '../../models/mantenimiento';
 import { Equipo } from '../../models/equipo';
 
 @Component({

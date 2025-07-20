@@ -156,16 +156,16 @@
                     *matCellDef="let element"
                     class="d-flex w-100 justify-content-center align-items-center"
                 >
-<button
-  class="btn btn-dark"
-  (click)="abrirMantenimientos(element)"
-  title="Mantenimientos"
->
-  <i class="bi bi-wrench"></i>
-</button>
-
                     <button
                         class="btn btn-dark"
+                        (click)="abrirMantenimientos(element)"
+                        title="Mantenimientos"
+                    >
+                        <i class="bi bi-wrench"></i>
+                    </button>
+
+                    <button
+                        class="btn btn-dark ms-2"
                         (click)="setSelectedMaquina(element)"
                         title="Modificar"
                     >
@@ -208,10 +208,9 @@
 >
 </app-maquina-form>
 
-
-<app-list-mantenimientos 
+<app-list-mantenimientos
     *ngIf="openMantenimientos"
     [equipo]="maquinaSelected"
-    (cerrar)="setOpenMantenimientos()">
+    (cerrar)="setOpenMantenimientos()"
+>
 </app-list-mantenimientos>
-

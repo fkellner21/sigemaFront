@@ -9,6 +9,7 @@ import { Repuesto } from '../../../models/Repuesto';
 import { modeloService } from '../../../services/modelo.service';
 import { MantenimientoService } from '../../../services/mantenimiento.service'; // AGREGAR
 import Swal from 'sweetalert2'; // AGREGAR
+import { MantenimientoDTO } from '../../../models/DTO/mantenimientoDTO';
 
 @Component({
     selector: 'mantenimiento-form',
@@ -40,15 +41,15 @@ export class MantenimientoFormComponent implements OnInit {
 
     constructor(
         private modeloService: modeloService,
-        private mantenimientoService: MantenimientoService 
+        private mantenimientoService: MantenimientoService
     ) {}
 
     ngOnInit(): void {
-        console.log('MantenimientoFormComponent initialized with:', { 
-            mantenimiento: this.mantenimiento, 
-            equipo: this.equipo 
+        console.log('MantenimientoFormComponent initialized with:', {
+            mantenimiento: this.mantenimiento,
+            equipo: this.equipo,
         }); // DEBUG
-        
+
         if (
             typeof this.mantenimiento.unidadMedida === 'string' &&
             Object.values(UnidadMedida).includes(
@@ -67,38 +68,78 @@ export class MantenimientoFormComponent implements OnInit {
         }
     }
 
+    formatDateOnly(input: string | Date): string {
+        const date =
+            typeof input === 'string' ? new Date(input + 'T00:00:00') : input;
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     onSubmit(form: NgForm): void {
         if (form.valid) {
-            console.log('Enviando mantenimiento:', this.mantenimiento); 
-            
-            // AGREGAR LÓGICA PARA GUARDAR EL MANTENIMIENTO
-            if (this.mantenimiento.id && this.mantenimiento.id > 0) {
-                // Editar
-                this.mantenimientoService.edit(this.mantenimiento.id, this.mantenimiento).subscribe({
-                    next: () => {
-                        console.log('Mantenimiento editado exitosamente');
-                        Swal.fire('Éxito', 'Mantenimiento actualizado correctamente', 'success');
-                        this.mantenimientoAgregado.emit();
-                        form.reset();
-                    },
-                    error: (error) => {
-                        console.error('Error al editar mantenimiento:', error);
-                        Swal.fire('Error', 'No se pudo actualizar el mantenimiento', 'error');
-                    }
-                });
+            const mantenimientoDTO = new MantenimientoDTO();
+
+            mantenimientoDTO.id = this.mantenimiento.id;
+            mantenimientoDTO.idEquipo = this.equipo?.id;
+            mantenimientoDTO.descripcion = this.mantenimiento.descripcion;
+            mantenimientoDTO.unidadMedida = this.mantenimiento.unidadMedida;
+            mantenimientoDTO.cantidadUnidadMedida =
+                this.mantenimiento.cantidadUnidadMedida;
+            mantenimientoDTO.esService = this.mantenimiento.esService;
+
+            if (this.mantenimiento.fechaMantenimiento) {
+                mantenimientoDTO.fechaMantenimiento = this.formatDateOnly(
+                    this.mantenimiento.fechaMantenimiento
+                );
+            }
+
+            if (this.mantenimiento.fechaRegistro) {
+                mantenimientoDTO.fechaRegistro = this.formatDateOnly(
+                    this.mantenimiento.fechaRegistro
+                );
+            }
+
+            if (mantenimientoDTO.id && mantenimientoDTO.id > 0) {
+                this.mantenimientoService
+                    .edit(mantenimientoDTO.id, mantenimientoDTO)
+                    .subscribe({
+                        next: () => {
+                            Swal.fire(
+                                'Éxito',
+                                'Mantenimiento actualizado correctamente',
+                                'success'
+                            );
+                            this.mantenimientoAgregado.emit();
+                            form.resetForm();
+                        },
+                        error: () => {
+                            Swal.fire(
+                                'Error',
+                                'No se pudo actualizar el mantenimiento',
+                                'error'
+                            );
+                        },
+                    });
             } else {
-                // Agregar nuevo
-                this.mantenimientoService.addNew(this.mantenimiento).subscribe({
+                this.mantenimientoService.addNew(mantenimientoDTO).subscribe({
                     next: () => {
-                        console.log('Mantenimiento agregado exitosamente');
-                        Swal.fire('Éxito', 'Mantenimiento agregado correctamente', 'success');
+                        Swal.fire(
+                            'Éxito',
+                            'Mantenimiento agregado correctamente',
+                            'success'
+                        );
                         this.mantenimientoAgregado.emit();
-                        form.reset();
+                        form.resetForm();
                     },
-                    error: (error) => {
-                        console.error('Error al agregar mantenimiento:', error);
-                        Swal.fire('Error', 'No se pudo agregar el mantenimiento', 'error');
-                    }
+                    error: () => {
+                        Swal.fire(
+                            'Error',
+                            'No se pudo agregar el mantenimiento',
+                            'error'
+                        );
+                    },
                 });
             }
         }
@@ -125,7 +166,10 @@ export class MantenimientoFormComponent implements OnInit {
     }
 
     onTipoRepuestoChange(): void {
-        if (this.equipo?.modeloEquipo?.id) {
+        if (
+            this.equipo?.modeloEquipo?.id &&
+            this.tipoRepuestoSeleccionado != null
+        ) {
             this.obtenerRepuestosDelEquipo(
                 this.equipo,
                 this.tipoRepuestoSeleccionado

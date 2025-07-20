@@ -36,11 +36,18 @@
                         <input
                             name="fechaMantenimiento"
                             type="date"
-                            [(ngModel)]="mantenimiento.fechaMantenimiento"
                             class="form-control my-2"
+                            [ngModel]="
+                                mantenimiento.fechaMantenimiento
+                                    | date : 'yyyy-MM-dd'
+                            "
+                            (ngModelChange)="
+                                mantenimiento.fechaMantenimiento = $event
+                            "
                             required
                             #fechaMantenimiento="ngModel"
                         />
+
                         <div
                             *ngIf="
                                 fechaMantenimiento.invalid &&
@@ -192,7 +199,7 @@
                             class="form-check-input"
                             id="esServicio"
                             name="esServicio"
-                            [(ngModel)]="mantenimiento.esServicio"
+                            [(ngModel)]="mantenimiento.esService"
                         />
                         <label for="esServicio" class="form-check-label">
                             ¿Es servicio?

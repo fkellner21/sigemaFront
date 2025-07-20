@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Mantenimiento } from '../models/mantenimiento';
+import { MantenimientoDTO } from '../models/DTO/mantenimientoDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -17,11 +18,11 @@ export class MantenimientoService {
         return this.http.get<any[]>(this.baseUrl);
     }
 
-    addNew(mantenimiento: Mantenimiento): Observable<Mantenimiento> {
+    addNew(mantenimiento: MantenimientoDTO): Observable<Mantenimiento> {
         return this.http.post<Mantenimiento>(this.baseUrl, mantenimiento);
     }
 
-    edit(id: number, mantenimiento: Mantenimiento): Observable<Mantenimiento> {
+    edit(id: number, mantenimiento: MantenimientoDTO): Observable<Mantenimiento> {
         return this.http.put<Mantenimiento>(
             `${this.baseUrl}/${id}`, 
             mantenimiento
