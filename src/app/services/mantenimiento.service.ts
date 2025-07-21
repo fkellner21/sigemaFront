@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Mantenimiento } from '../models/mantenimiento';
@@ -36,4 +36,12 @@ export class MantenimientoService {
     obtenerPorEquipo(idEquipo: number): Observable<Mantenimiento[]> {
         return this.http.get<Mantenimiento[]>(`${this.baseUrl}/equipo/${idEquipo}`);
     }
+
+findAllByDates(desde: string | null, hasta: string | null): Observable<any[]> {
+    let params = new HttpParams();
+    if (desde) params = params.set('desde', desde);
+    if (hasta) params = params.set('hasta', hasta);
+    return this.http.get<any[]>(`${this.baseUrl}/filtrar`, { params });
+}
+
 }

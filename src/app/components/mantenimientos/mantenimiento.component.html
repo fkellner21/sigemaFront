@@ -1,15 +1,54 @@
 <div class="titulo text-center my-1">Listado de mantenimientos</div>
 
 <div class="row me-0">
-    <div class="row pe-0 justify-content-between align-items-center">
-        <div class="col-4">
+    <!-- Filtros de fecha -->
+    <div class="row pe-0 mb-3">
+        <div class="col-md-3">
             <mat-form-field class="w-100">
-                <mat-label>Buscar</mat-label>
-                <input matInput (keyup)="applyFilter($event)" />
+                <mat-label>Fecha desde</mat-label>
+                <input 
+                    matInput 
+                    [matDatepicker]="pickerDesde" 
+                    [(ngModel)]="fechaDesde"
+                    (dateChange)="aplicarFiltro()"
+                    readonly
+                >
+                <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDesde></mat-datepicker>
             </mat-form-field>
         </div>
-        <div class="col-4 text-end">
-            <button class="btn btn-dark">Nuevo mantenimiento</button>
+        
+        <div class="col-md-3">
+            <mat-form-field class="w-100">
+                <mat-label>Fecha hasta</mat-label>
+                <input 
+                    matInput 
+                    [matDatepicker]="pickerHasta" 
+                    [(ngModel)]="fechaHasta"
+                    (dateChange)="aplicarFiltro()"
+                    readonly
+                >
+                <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+                <mat-datepicker #pickerHasta></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-center">
+            <button 
+                class="btn btn-secondary" 
+                (click)="limpiarFiltros()"
+                [disabled]="isLoading"
+            >
+                <i class="bi bi-arrow-clockwise me-1"></i>
+                Limpiar
+            </button>
+        </div>
+
+        <div class="col-md-3 text-end">
+            <button class="btn btn-dark">
+                <i class="bi bi-plus me-1"></i>
+                Nuevo mantenimiento
+            </button>
         </div>
     </div>
 
@@ -20,50 +59,32 @@
             class="mat-elevation-z8 table table-striped table-hover"
         >
             <ng-container matColumnDef="fecha">
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef
-                    class="bg-dark text-white"
-                >
+                <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
                     Fecha
                 </th>
                 <td mat-cell *matCellDef="let m">
-                    {{ m.fechaMantenimiento | date }}
+                    {{ m.fechaMantenimiento | date:'dd/MM/yyyy' }}
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="vehiculo">
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef
-                    class="bg-dark text-white"
-                >
+                <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
                     Equipo
                 </th>
                 <td mat-cell *matCellDef="let m">
-                    {{
-                        m.equipo?.matricula || m.equipo?.nombre || "Sin equipo"
-                    }}
+                    {{ m.equipo?.matricula || m.equipo?.nombre || "Sin equipo" }}
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="detalle">
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef
-                    class="bg-dark text-white"
-                >
+                <th mat-header-cell *matHeaderCellDef class="bg-dark text-white">
                     Detalle
                 </th>
                 <td mat-cell *matCellDef="let m">{{ m.descripcion }}</td>
             </ng-container>
 
             <ng-container matColumnDef="acciones">
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef
-                    class="bg-dark text-white text-center"
-                >
+                <th mat-header-cell *matHeaderCellDef class="bg-dark text-white text-center">
                     Acciones
                 </th>
                 <td mat-cell *matCellDef="let m" class="text-center">
@@ -74,6 +95,7 @@
                         class="btn btn-danger btn-sm"
                         (click)="eliminarMantenimiento(m.id)"
                         title="Eliminar"
+                        [disabled]="isLoading"
                     >
                         <i class="bi bi-trash"></i>
                     </button>
@@ -84,8 +106,11 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
             <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-                    No hay mantenimientos que coincidan con "{{ filtro }}"
+                <td class="mat-cell" [attr.colspan]="displayedColumns.length" class="text-center py-4">
+                    <div *ngIf="!isLoading">
+                        <i class="bi bi-info-circle me-2"></i>
+                        No se encontraron mantenimientos en el rango de fechas seleccionado
+                    </div>
                 </td>
             </tr>
         </table>
@@ -96,4 +121,5 @@
     <div class="spinner-border text-dark" role="status">
         <span class="visually-hidden">Cargando...</span>
     </div>
+    <p class="mt-2">Buscando mantenimientos...</p>
 </div>
