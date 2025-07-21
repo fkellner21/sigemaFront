@@ -7,14 +7,16 @@ import { UnidadMedida } from '../../../models/enum/UnidadMedida';
 import { TipoRepuesto } from '../../../models/enum/TipoRepuesto';
 import { Repuesto } from '../../../models/Repuesto';
 import { modeloService } from '../../../services/modelo.service';
-import { MantenimientoService } from '../../../services/mantenimiento.service'; // AGREGAR
-import Swal from 'sweetalert2'; // AGREGAR
+import { MantenimientoService } from '../../../services/mantenimiento.service';
+import Swal from 'sweetalert2';
 import { MantenimientoDTO } from '../../../models/DTO/mantenimientoDTO';
+import { RepuestoMantenimiento } from '../../../models/RepuestoMantenimiento';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 @Component({
     selector: 'mantenimiento-form',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, MatTableModule],
     templateUrl: './mantenimiento-form.component.html',
 })
 export class MantenimientoFormComponent implements OnInit {
@@ -24,6 +26,8 @@ export class MantenimientoFormComponent implements OnInit {
     // CAMBIAR LOS NOMBRES DE LOS OUTPUTS PARA COINCIDIR CON EL HTML
     @Output() cerrarFormulario = new EventEmitter<void>();
     @Output() mantenimientoAgregado = new EventEmitter<void>();
+    displayedRepuestoColumns: string[] = ['repuesto', 'cantidad', 'acciones'];
+    dataSourceRepuestos = new MatTableDataSource<RepuestoMantenimiento>();
 
     unidadesDeMedida = [
         { label: 'Kilómetros', value: UnidadMedida.KMs },
@@ -38,6 +42,7 @@ export class MantenimientoFormComponent implements OnInit {
     tipoRepuestoSeleccionado: TipoRepuesto = TipoRepuesto.Pieza;
     TipoRepuesto = TipoRepuesto;
     repuestos: Repuesto[] = [];
+    repuestoSeleccionado: RepuestoMantenimiento = new RepuestoMantenimiento();
 
     constructor(
         private modeloService: modeloService,
@@ -48,7 +53,7 @@ export class MantenimientoFormComponent implements OnInit {
         console.log('MantenimientoFormComponent initialized with:', {
             mantenimiento: this.mantenimiento,
             equipo: this.equipo,
-        }); // DEBUG
+        });
 
         if (
             typeof this.mantenimiento.unidadMedida === 'string' &&
@@ -66,6 +71,11 @@ export class MantenimientoFormComponent implements OnInit {
                 this.tipoRepuestoSeleccionado
             );
         }
+
+        console.log(this.mantenimiento)
+
+        this.dataSourceRepuestos.data =
+            this.mantenimiento.repuestosMantenimiento || [];
     }
 
     formatDateOnly(input: string | Date): string {
@@ -88,6 +98,7 @@ export class MantenimientoFormComponent implements OnInit {
             mantenimientoDTO.cantidadUnidadMedida =
                 this.mantenimiento.cantidadUnidadMedida;
             mantenimientoDTO.esService = this.mantenimiento.esService;
+            mantenimientoDTO.repuestosMantenimiento = this.mantenimiento.repuestosMantenimiento || [];
 
             if (this.mantenimiento.fechaMantenimiento) {
                 mantenimientoDTO.fechaMantenimiento = this.formatDateOnly(
@@ -145,6 +156,10 @@ export class MantenimientoFormComponent implements OnInit {
         }
     }
 
+    compareRpuestos(r1: Repuesto, r2: Repuesto): boolean {
+        return r1 && r2 ? r1.id === r2.id : r1 === r2;
+    }
+
     onOpen(): void {
         this.cerrarFormulario.emit();
     }
@@ -174,6 +189,59 @@ export class MantenimientoFormComponent implements OnInit {
                 this.equipo,
                 this.tipoRepuestoSeleccionado
             );
+        }
+    }
+
+    onAddRepuesto() {
+        if (
+            this.repuestoSeleccionado.idRepuesto &&
+            this.repuestoSeleccionado.cantidadUsada > 0
+        ) {
+            const repuesto = this.repuestos.find(
+                (r) => r.id === this.repuestoSeleccionado.idRepuesto
+            );
+
+            if (!repuesto) {
+                Swal.fire(
+                    'Error',
+                    'El repuesto seleccionado no existe en la lista',
+                    'error'
+                );
+                return;
+            }
+
+            const repuestoMantenimiento = new RepuestoMantenimiento();
+            repuestoMantenimiento.idRepuesto =
+                this.repuestoSeleccionado.idRepuesto;
+            repuestoMantenimiento.cantidadUsada =
+                this.repuestoSeleccionado.cantidadUsada;
+            repuestoMantenimiento.repuesto = repuesto;
+
+            if (!this.mantenimiento.repuestosMantenimiento) {
+                this.mantenimiento.repuestosMantenimiento = [];
+            }
+
+            this.mantenimiento.repuestosMantenimiento.push(
+                repuestoMantenimiento
+            );
+
+            this.dataSourceRepuestos.data =
+                this.mantenimiento.repuestosMantenimiento;
+            this.repuestoSeleccionado = new RepuestoMantenimiento();
+        } else {
+            Swal.fire(
+                'Error',
+                'Debe seleccionar un repuesto y una cantidad válida',
+                'error'
+            );
+        }
+    }
+
+    onRemoveRepuesto(index: number) {
+        if (this.mantenimiento.repuestosMantenimiento) {
+            this.mantenimiento.repuestosMantenimiento.splice(index, 1);
+            this.dataSourceRepuestos.data =
+                this.mantenimiento.repuestosMantenimiento;
         }
     }
 }

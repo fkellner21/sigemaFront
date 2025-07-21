@@ -1,4 +1,5 @@
 import { UnidadMedida } from "./enum/UnidadMedida";
+import { RepuestoMantenimiento } from "./RepuestoMantenimiento";
 
 export class Mantenimiento{
     id?: number;
@@ -9,5 +10,5 @@ export class Mantenimiento{
     unidadMedida?: UnidadMedida;
     cantidadUnidadMedida?: number;
     esService?: boolean;
-    //repuestosMantenimiento?: RepuestoMantenimiento[];
+    repuestosMantenimiento?: RepuestoMantenimiento[];
 }

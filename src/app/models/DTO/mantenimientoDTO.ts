@@ -1,6 +1,7 @@
-import { UnidadMedida } from "../enum/UnidadMedida";
+import { UnidadMedida } from '../enum/UnidadMedida';
+import { RepuestoMantenimiento } from '../RepuestoMantenimiento';
 
-export class MantenimientoDTO{
+export class MantenimientoDTO {
     id?: number;
     fechaRegistro?: string;
     fechaMantenimiento?: string;
@@ -9,5 +10,5 @@ export class MantenimientoDTO{
     unidadMedida?: UnidadMedida;
     cantidadUnidadMedida?: number;
     esService?: boolean;
-    //repuestosMantenimiento?: RepuestoMantenimiento[];
+    repuestosMantenimiento: RepuestoMantenimiento[] = [];
 }
