@@ -158,6 +158,14 @@
                 >
                     <button
                         class="btn btn-dark"
+                        (click)="abrirMantenimientos(element)"
+                        title="Mantenimientos"
+                    >
+                        <i class="bi bi-wrench"></i>
+                    </button>
+
+                    <button
+                        class="btn btn-dark ms-2"
                         (click)="setSelectedMaquina(element)"
                         title="Modificar"
                     >
@@ -199,3 +207,10 @@
     (cancelar)="setOpen()"
 >
 </app-maquina-form>
+
+<app-list-mantenimientos
+    *ngIf="openMantenimientos"
+    [equipo]="maquinaSelected"
+    (cerrar)="setOpenMantenimientos()"
+>
+</app-list-mantenimientos>

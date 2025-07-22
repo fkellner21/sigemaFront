@@ -16,7 +16,8 @@ export class ModeloEquipoDTO{
     equipos!:Array<Equipo>;
     repuestos!:Array<Repuesto>;
     unidadMedida!:UnidadMedida;
-
+    frecuenciaUnidadMedida!: number;
+    frecuenciaTiempo!: number;
     constructor(){}
 
     static toDTO(modelo:modeloEquipo):ModeloEquipoDTO{
@@ -31,6 +32,8 @@ export class ModeloEquipoDTO{
         salida.equipos = modelo.equipos ?? [];
         salida.repuestos = modelo.repuestos ?? [];
         salida.unidadMedida=modelo.unidadMedida;
+        salida.frecuenciaUnidadMedida = modelo.frecuenciaUnidadMedida;
+        salida.frecuenciaTiempo = modelo.frecuenciaTiempo;
         return salida;
   }
 }

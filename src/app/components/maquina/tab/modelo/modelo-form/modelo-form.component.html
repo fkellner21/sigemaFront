@@ -17,6 +17,7 @@
 
             <div class="modal-body">
                 <form (ngSubmit)="onSubmit(modeloForm)" #modeloForm="ngForm">
+                    <!-- Año -->
                     <div>
                         <p>Año</p>
                         <input
@@ -28,11 +29,13 @@
                             type="number"
                             #anio="ngModel"
                         />
-                        @if(anio.invalid && (anio.dirty || anio.touched)){
-                        @if(anio.errors!['required']){
+                        @if (anio.invalid && (anio.dirty || anio.touched)) { @if
+                        (anio.errors!['required']) {
                         <div class="alert alert-danger">Año requerido</div>
                         } }
                     </div>
+
+                    <!-- Modelo -->
                     <div>
                         <p>Modelo</p>
                         <input
@@ -43,30 +46,13 @@
                             required
                             #modelo="ngModel"
                         />
-                        @if(modelo.invalid && (modelo.dirty || modelo.touched)){
-                        @if(modelo.errors!['required']){
+                        @if (modelo.invalid && (modelo.dirty || modelo.touched))
+                        { @if (modelo.errors!['required']) {
                         <div class="alert alert-danger">Modelo requerido</div>
                         } }
                     </div>
-                    <div>
-                        <p>Capacidad</p>
-                        <input
-                            placeholder="Capacidad"
-                            name="capacidad"
-                            [(ngModel)]="modeloEquipo.capacidad"
-                            class="form-control my-2"
-                            type="number"
-                            required
-                            #capacidad="ngModel"
-                        />
-                        @if(capacidad.invalid && (capacidad.dirty ||
-                        capacidad.touched)){ @if(capacidad.errors!['required']){
-                        <div class="alert alert-danger">
-                            Capacidad requerida
-                        </div>
-                        } }
-                    </div>
-                    <!-- Selección de Marca -->
+
+                    <!-- Marca -->
                     <p>Marca</p>
                     <select
                         class="form-control my-2"
@@ -82,7 +68,7 @@
                         </option>
                     </select>
 
-                    <!-- Selección de TipoEquipo -->
+                    <!-- Tipo -->
                     <p>Tipo</p>
                     <select
                         class="form-control my-2"
@@ -98,13 +84,13 @@
                         </option>
                     </select>
 
-                    <!-- Selección de UnidadMedida -->
+                    <!-- Unidad de medida -->
                     <p>Unidad de medida de trabajo</p>
                     <select
                         class="form-control my-2"
                         name="unidadMedida"
-                        type="number"
                         [(ngModel)]="modeloEquipo.unidadMedida"
+                        (ngModelChange)="onUnidadMedidaChange()"
                         required
                     >
                         <option [ngValue]="null" disabled>
@@ -117,6 +103,102 @@
                             {{ u.label }}
                         </option>
                     </select>
+
+                    <!-- Capacidad -->
+                    <div>
+                        <p>Capacidad</p>
+                        <input
+                            placeholder="Capacidad"
+                            name="capacidad"
+                            [(ngModel)]="modeloEquipo.capacidad"
+                            class="form-control my-2"
+                            type="number"
+                            required
+                            #capacidad="ngModel"
+                        />
+                        @if (capacidad.invalid && (capacidad.dirty ||
+                        capacidad.touched)) { @if
+                        (capacidad.errors!['required']) {
+                        <div class="alert alert-danger">
+                            Capacidad requerida
+                        </div>
+                        } }
+                    </div>
+
+                    <!-- Frecuencias -->
+                    <div>
+                        <p>
+                            Frecuencia de mantenimiento ({{
+                                modeloEquipo.unidadMedida === "HT"
+                                    ? "Horas de trabajo"
+                                    : "Kilómetros"
+                            }})
+                        </p>
+                        <input
+                            type="number"
+                            class="form-control my-2"
+                            name="frecuenciaUnidadMedida"
+                            [(ngModel)]="modeloEquipo.frecuenciaUnidadMedida"
+                            required
+                            min="1"
+                            #frecuenciaUnidadMedida="ngModel"
+                        />
+                        <div
+                            *ngIf="
+                                frecuenciaUnidadMedida.invalid &&
+                                (frecuenciaUnidadMedida.dirty ||
+                                    frecuenciaUnidadMedida.touched)
+                            "
+                        >
+                            <div
+                                *ngIf="frecuenciaUnidadMedida.errors?.['required']"
+                                class="alert alert-danger"
+                            >
+                                Este campo es obligatorio
+                            </div>
+                            <div
+                                *ngIf="frecuenciaUnidadMedida.errors?.['min']"
+                                class="alert alert-danger"
+                            >
+                                Debe ser mayor a 0
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p>Frecuencia de mantenimiento (Tiempo)</p>
+                        <input
+                            type="number"
+                            class="form-control my-2"
+                            name="frecuenciaTiempo"
+                            [(ngModel)]="modeloEquipo.frecuenciaTiempo"
+                            required
+                            min="1"
+                            #frecuenciaTiempo="ngModel"
+                        />
+                        <div
+                            *ngIf="
+                                frecuenciaTiempo.invalid &&
+                                (frecuenciaTiempo.dirty ||
+                                    frecuenciaTiempo.touched)
+                            "
+                        >
+                            <div
+                                *ngIf="frecuenciaTiempo.errors?.['required']"
+                                class="alert alert-danger"
+                            >
+                                Este campo es obligatorio
+                            </div>
+                            <div
+                                *ngIf="frecuenciaTiempo.errors?.['min']"
+                                class="alert alert-danger"
+                            >
+                                Debe ser mayor a 0
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
                     <div class="row justify-content-between mt-3">
                         <div class="col-4">
                             <button

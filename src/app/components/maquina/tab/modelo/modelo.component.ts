@@ -60,6 +60,8 @@ export class ModeloComponent {
         ${data.capacidad}
         ${data.marca?.nombre}
         ${data.tipoEquipo?.codigo}
+        ${data.frecuenciaUnidadMedida}
+        ${data.frecuenciaTiempo}
       `.toLowerCase();
 
       return dataStr.includes(filter.trim().toLowerCase());
@@ -131,6 +133,7 @@ export class ModeloComponent {
     'Modelo',
     'Capacidad',
     'Tipo',
+    'Mantenimiento',
     'VerEquipos',
     'VerRepuestos',
     'VerLubricantes',
@@ -144,7 +147,7 @@ export class ModeloComponent {
   } 
 
   setSelectedModelo(modelo: modeloEquipo) {
-    this.modeloSelected = modelo;
+    this.modeloSelected = { ...modelo };
     this.setOpen();
   }
 

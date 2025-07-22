@@ -24,10 +24,10 @@ import { MatOptionModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
 import { AuthService } from '../../../../services/auth.service';
+import { ListMantenimientosComponent } from '../../../mantenimientos/list-mantenimientos/list-mantenimientos.component';
 
 @Component({
     selector: 'maquina',
-    standalone: true,
     imports: [
         CommonModule,
         FormsModule,
@@ -37,6 +37,7 @@ import { AuthService } from '../../../../services/auth.service';
         MatTableModule,
         MatSelectModule,
         MatOptionModule,
+        ListMantenimientosComponent, 
     ],
     templateUrl: './maquina.component.html',
     styleUrls: ['./maquina.component.css'],
@@ -45,6 +46,7 @@ export class MaquinaComponent {
     maquinaSelected: Equipo = new Equipo();
     open: boolean = false;
     dataSource!: MatTableDataSource<Equipo>;
+    openMantenimientos: boolean = false;
 
     @Input() maquinas: Equipo[] = [];
     @Input() isLoadingMaquinas = false;
@@ -133,6 +135,17 @@ export class MaquinaComponent {
     setSelectedMaquina(maquina: Equipo) {
         this.maquinaSelected = maquina;
         this.setOpen();
+    }
+
+    abrirMantenimientos(maquina: Equipo) {
+        console.log('Abriendo mantenimientos para equipo:', maquina);
+        this.maquinaSelected = maquina;
+        this.openMantenimientos = true;
+    }
+
+    setOpenMantenimientos() {
+        console.log('Cerrando mantenimientos'); // DEBUG
+        this.openMantenimientos = false;
     }
 
     addMaquina(maquina: Equipo) {

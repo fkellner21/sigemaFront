@@ -16,4 +16,6 @@ import { TipoEquipo } from "./tipoEquipo";
         repuestos!:Array<Repuesto>;
         unidadMedida!:UnidadMedida;
         documentos!:Array<DocumentoModeloEquipo>;
+        frecuenciaUnidadMedida!: number;
+        frecuenciaTiempo!: number;
     }
