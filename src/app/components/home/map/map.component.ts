@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
+import 'leaflet.markercluster';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
 
 @Component({
@@ -19,7 +20,6 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-
     if (this.map && this.equiposDTO && this.equiposDTO.length > 0) {
       this.cargarEquiposAlMapa();
     }
@@ -74,20 +74,17 @@ export class MapComponent implements OnInit, OnChanges {
   cargarEquiposAlMapa(): void {
     if (!this.map || !this.overlayControl) return;
 
-    const overlayGroups: Record<string, L.LayerGroup> = {};
+    const overlayGroups: Record<string, L.MarkerClusterGroup> = {};
     const unidadColores: Record<string, string> = {};
-
     const colores = ['red', 'blue', 'green', 'orange', 'purple', 'brown', 'darkred', 'cadetblue'];
     let colorIndex = 0;
 
     // Eliminar capas anteriores
-    this.overlayControl.remove(); // quitar el control anterior
+    this.overlayControl.remove();
     this.overlayControl = L.control.layers(this.baseMaps).addTo(this.map);
 
     this.equiposDTO.forEach((equipo: EquipoDashboardDTO) => {
-      if (!equipo.latitud || !equipo.longitud || !equipo.unidad) {
-        return;
-      }
+      if (!equipo.latitud || !equipo.longitud || !equipo.unidad) return;
 
       if (!unidadColores[equipo.unidad]) {
         unidadColores[equipo.unidad] = colores[colorIndex % colores.length];
@@ -97,22 +94,22 @@ export class MapComponent implements OnInit, OnChanges {
       const color = unidadColores[equipo.unidad];
 
       if (!overlayGroups[equipo.unidad]) {
-        overlayGroups[equipo.unidad] = L.layerGroup();
+        overlayGroups[equipo.unidad] = L.markerClusterGroup();
       }
 
-      const marker = L.circleMarker([equipo.latitud, equipo.longitud], {
-        radius: 8,
-        color,
-        fillColor: color,
-        fillOpacity: 0.8,
-      }).bindPopup(
+      const icon = L.divIcon({
+        html: `<div style="background-color:${color}; width:16px; height:16px; border-radius:50%; border:2px solid white;"></div>`,
+        className: '',
+        iconSize: [16, 16],
+      });
+
+      const marker = L.marker([equipo.latitud, equipo.longitud], { icon }).bindPopup(
         `<strong>${equipo.tipoEquipo ?? ''} - ${equipo.matricula ?? ''}</strong><br/>Unidad: ${equipo.unidad}`
       );
 
       overlayGroups[equipo.unidad].addLayer(marker);
     });
 
-    // Agregar nuevos overlays
     Object.entries(overlayGroups).forEach(([unidad, group]) => {
       group.addTo(this.map!);
       this.overlayControl!.addOverlay(group, unidad);

@@ -42,32 +42,27 @@ export class ListMantenimientosComponent implements OnInit {
     constructor(private mantenimientoService: MantenimientoService) {}
 
     ngOnInit() {
-        console.log(
-            'ListMantenimientosComponent initialized with equipo:',
-            this.equipo
-        );
         this.cargarMantenimientos();
     }
 
     cargarMantenimientos() {
         if (this.equipo?.id) {
-            console.log(
-                'Cargando mantenimientos para equipo ID:',
-                this.equipo.id
-            );
             this.isLoading = true;
             this.mantenimientoService
                 .obtenerPorEquipo(this.equipo.id)
                 .subscribe({
                     next: (mantenimientos) => {
-                        console.log('Mantenimientos cargados:', mantenimientos);
                         this.mantenimientos = mantenimientos;
                         this.dataSource.data = this.mantenimientos;
                         this.isLoading = false;
                     },
                     error: (error) => {
-                        console.error('Error al cargar mantenimientos:', error);
                         this.isLoading = false;
+                        Swal.fire(
+                            'Error',
+                            'No se pudo cargar los datos: ' + error.error,
+                            'error'
+                        );
                     },
                 });
         } else {
@@ -104,12 +99,10 @@ export class ListMantenimientosComponent implements OnInit {
     }
 
     cerrarFormulario() {
-        console.log('Cerrando formulario de mantenimiento');
         this.mostrarFormulario = false;
     }
 
     recargarLista() {
-        console.log('Recargando lista de mantenimientos');
         this.mostrarFormulario = false;
         this.cargarMantenimientos();
     }

@@ -50,10 +50,6 @@ export class MantenimientoFormComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        console.log('MantenimientoFormComponent initialized with:', {
-            mantenimiento: this.mantenimiento,
-            equipo: this.equipo,
-        });
 
         if (
             typeof this.mantenimiento.unidadMedida === 'string' &&
@@ -71,8 +67,6 @@ export class MantenimientoFormComponent implements OnInit {
                 this.tipoRepuestoSeleccionado
             );
         }
-
-        console.log(this.mantenimiento)
 
         this.dataSourceRepuestos.data =
             this.mantenimiento.repuestosMantenimiento || [];
@@ -125,10 +119,10 @@ export class MantenimientoFormComponent implements OnInit {
                             this.mantenimientoAgregado.emit();
                             form.resetForm();
                         },
-                        error: () => {
+                        error: (e) => {
                             Swal.fire(
                                 'Error',
-                                'No se pudo actualizar el mantenimiento',
+                                'No se pudo actualizar el mantenimiento. '+e.error,
                                 'error'
                             );
                         },
@@ -144,10 +138,10 @@ export class MantenimientoFormComponent implements OnInit {
                         this.mantenimientoAgregado.emit();
                         form.resetForm();
                     },
-                    error: () => {
+                    error: (e) => {
                         Swal.fire(
                             'Error',
-                            'No se pudo agregar el mantenimiento',
+                            'No se pudo agregar el mantenimiento. '+e.error,
                             'error'
                         );
                     },

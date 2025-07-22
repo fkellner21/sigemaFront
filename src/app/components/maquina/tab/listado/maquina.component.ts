@@ -138,13 +138,11 @@ export class MaquinaComponent {
     }
 
     abrirMantenimientos(maquina: Equipo) {
-        console.log('Abriendo mantenimientos para equipo:', maquina);
         this.maquinaSelected = maquina;
         this.openMantenimientos = true;
     }
 
     setOpenMantenimientos() {
-        console.log('Cerrando mantenimientos'); // DEBUG
         this.openMantenimientos = false;
     }
 
