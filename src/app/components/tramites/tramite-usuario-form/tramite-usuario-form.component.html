@@ -189,7 +189,10 @@
                                         [disabled]="
                                             !nuevaActuacion.trim() ||
                                             (tramite.id ?? 0) == 0 ||
-                                            (tramite.estado !== estadoTramite.Iniciado && tramite.estado !== estadoTramite.EnTramite)
+                                            tramite.estado ===
+                                                estadoTramite.Aprobado ||
+                                            tramite.estado ===
+                                                estadoTramite.Rechazado
                                         "
                                     >
                                         Guardar actuación
