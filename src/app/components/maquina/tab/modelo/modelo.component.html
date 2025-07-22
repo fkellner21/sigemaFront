@@ -102,17 +102,17 @@
                     *matHeaderCellDef
                     class="bg-dark text-white"
                 >
-                    Mantenimiento
+                    Frecuentcia de Mantenimiento
                 </th>
                 <td mat-cell *matCellDef="let element">
                     <ng-container [ngSwitch]="element.unidadMedida">
                         <span *ngSwitchCase="'HT'">
                             {{ element.frecuenciaUnidadMedida }} HT |
-                            {{ element.frecuenciaTiempo }} Días
+                            {{ element.frecuenciaTiempo }} Meses
                         </span>
                         <span *ngSwitchCase="'KMs'">
                             {{ element.frecuenciaUnidadMedida }} KMs |
-                            {{ element.frecuenciaTiempo }} Días
+                            {{ element.frecuenciaTiempo }} Meses
                         </span>
                         <span *ngSwitchDefault>-</span>
                     </ng-container>
