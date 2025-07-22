@@ -167,7 +167,8 @@
                         <!-- Texto -->
                         <div class="col-12">
                             <p>Texto</p>
-                            <textarea disabled
+                            <textarea
+                                disabled
                                 class="form-control my-2"
                                 [(ngModel)]="tramite.texto"
                                 name="texto"
@@ -216,7 +217,10 @@
                                         [disabled]="
                                             !nuevaActuacion.trim() ||
                                             (tramite.id ?? 0) == 0 ||
-                                            (tramite.estado !== estadoTramite.Iniciado && tramite.estado !== estadoTramite.EnTramite)
+                                            tramite.estado ===
+                                                estadoTramite.Aprobado ||
+                                            tramite.estado ===
+                                                estadoTramite.Rechazado
                                         "
                                     >
                                         Guardar actuación
