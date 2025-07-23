@@ -10,11 +10,14 @@ import { FormsModule } from '@angular/forms';
 import { MantenimientoService } from '../../services/mantenimiento.service';
 import Swal from 'sweetalert2';
 import { Equipo } from '../../models/equipo';
+import { MantenimientoFormComponent } from './mantenimiento-form/mantenimiento-form.component';
+import { Mantenimiento } from '../../models/mantenimiento';
 
 @Component({
     selector: 'app-mantenimientos',
     standalone: true,
     imports: [
+        MantenimientoFormComponent,
         CommonModule,
         FormsModule,
         MatTableModule,
@@ -28,16 +31,24 @@ import { Equipo } from '../../models/equipo';
     styleUrls: ['./mantenimiento.component.css'],
 })
 export class MantenimientosComponent implements OnInit {
-    displayedColumns: string[] = ['fecha', 'vehiculo', 'detalle', 'acciones'];
+    displayedColumns: string[] = [     
+        'equipo',   
+        'fecha',
+        'detalle',
+        'cantidad',
+        'service',
+        'acciones',];
     dataSource: any[] = [];
     isLoading: boolean = false;
+    mostrarFormulario:boolean=false;
+    nuevoMantenimiento: any;
     
     // Filtros de fecha
     fechaDesde: Date | null = null;
     fechaHasta: Date | null = null;
     
     @Input() equipo!: Equipo;
-    @Output() openEventEmitter = new EventEmitter();
+    //@Output() openEventEmitter = new EventEmitter();
 
     constructor(private mantenimientoService: MantenimientoService) {
         // Establecer fechas por defecto (últimos 7 días)
@@ -118,12 +129,26 @@ export class MantenimientosComponent implements OnInit {
                     error: (err) => {
                         Swal.fire(
                             'Error',
-                            'No se pudo eliminar: ' + (err.error || 'Error desconocido'),
+                            'No se pudo eliminar: ' + err.error,
                             'error'
                         );
                     },
                 });
             }
         });
+    }
+
+    abrirFormulario(id: number) {
+        if (id && id > 0) {
+            this.nuevoMantenimiento = {
+                ...(this.dataSource.find((m) => m.id == id))
+            };
+        } 
+        this.equipo=this.nuevoMantenimiento.equipo;
+        this.mostrarFormulario = true;
+    }
+    
+    cerrarFormulario() {
+        this.mostrarFormulario = false;
     }
 }

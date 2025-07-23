@@ -13,9 +13,12 @@
                 <button
                     type="button"
                     class="btn-close"
+                    data-bs-dismiss="modal"
                     aria-label="Close"
                     (click)="cerrarModal()"
-                ></button>
+                >
+                    X
+                </button>
             </div>
 
             <!-- Body -->
@@ -78,29 +81,17 @@
                                     *matHeaderCellDef
                                     class="bg-dark text-white"
                                 >
-                                    Cantidad
+                                    Uso
                                 </th>
                                 <td mat-cell *matCellDef="let m">
                                     {{ m.cantidadUnidadMedida }}
-                                </td>
-                            </ng-container>
-
-                            <!-- UNIDAD -->
-                            <ng-container matColumnDef="unidad">
-                                <th
-                                    mat-header-cell
-                                    *matHeaderCellDef
-                                    class="bg-dark text-white"
-                                >
-                                    Unidad
-                                </th>
-                                <td mat-cell *matCellDef="let m">
                                     {{
-                                        m.unidadMedida === "HT" ? "Horas" : "Km"
+                                        m.unidadMedida === "HT"
+                                            ? " Horas"
+                                            : " Km"
                                     }}
                                 </td>
                             </ng-container>
-
                             <!-- ES SERVICE -->
                             <ng-container matColumnDef="service">
                                 <th
@@ -108,7 +99,7 @@
                                     *matHeaderCellDef
                                     class="bg-dark text-white"
                                 >
-                                    ¿Es servicio?
+                                    ¿Es service?
                                 </th>
                                 <td mat-cell *matCellDef="let m">
                                     <span

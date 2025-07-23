@@ -26,7 +26,6 @@ export class ListMantenimientosComponent implements OnInit {
         'fecha',
         'detalle',
         'cantidad',
-        'unidad',
         'service',
         'acciones',
     ];
