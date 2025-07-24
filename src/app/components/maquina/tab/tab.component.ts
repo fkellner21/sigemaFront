@@ -17,8 +17,8 @@ import { modeloEquipo } from '../../../models/modeloEquipo';
 @Component({
   selector: 'tabEquipos',
   templateUrl: 'tab.component.html',
+  styleUrls: ['tab.component.css'],
   imports: [MatTabsModule, TipoEquipoComponent, MarcaComponent, ModeloComponent, MaquinaComponent],
-
 })
 export class TabEquipos implements OnInit{
 
