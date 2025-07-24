@@ -54,7 +54,7 @@ export class MapComponent implements OnInit, OnChanges {
     });
 
     this.map = L.map('map', {
-      center: [-32.82, -56.5],
+      center: [-32.82, -56.4],
       zoom: 7,
       minZoom: 7,
       maxZoom: 18,
