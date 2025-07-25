@@ -1,4 +1,4 @@
-name: Deploy
+name: DEPLOY AZURE FRANCISCO
 
 on:
   workflow_dispatch:
