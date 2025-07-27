@@ -3,7 +3,7 @@ import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
 import * as markerCluster from 'leaflet.markercluster';
-(L as any).markerClusterGroup = (markerCluster as any).markerClusterGroup;
+
 
 @Component({
   selector: 'mapa',
@@ -14,6 +14,7 @@ export class MapComponent implements OnInit, OnChanges {
   private map: L.Map | undefined;
   private overlayControl: L.Control.Layers | undefined;
   private baseMaps: Record<string, L.TileLayer> = {};
+  
 
   @Input() equiposDTO: EquipoDashboardDTO[] = [];
 
@@ -96,7 +97,7 @@ export class MapComponent implements OnInit, OnChanges {
       const color = unidadColores[equipo.unidad];
 
       if (!overlayGroups[equipo.unidad]) {
-        overlayGroups[equipo.unidad] = L.markerClusterGroup();
+        overlayGroups[equipo.unidad] = (markerCluster as any).markerClusterGroup();
       }
 
       const icon = L.divIcon({
