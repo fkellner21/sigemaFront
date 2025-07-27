@@ -2,6 +2,8 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
+import * as markerCluster from 'leaflet.markercluster';
+(L as any).markerClusterGroup = (markerCluster as any).markerClusterGroup;
 
 @Component({
   selector: 'mapa',
