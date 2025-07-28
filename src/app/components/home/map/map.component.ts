@@ -2,8 +2,6 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
-import * as markerCluster from 'leaflet.markercluster';
-
 
 @Component({
   selector: 'mapa',
@@ -97,7 +95,7 @@ export class MapComponent implements OnInit, OnChanges {
       const color = unidadColores[equipo.unidad];
 
       if (!overlayGroups[equipo.unidad]) {
-        overlayGroups[equipo.unidad] = (markerCluster as any).markerClusterGroup();
+        overlayGroups[equipo.unidad] = (L as any).markerClusterGroup();
       }
 
       const icon = L.divIcon({
