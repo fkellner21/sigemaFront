@@ -75,7 +75,7 @@ export class MapComponent implements OnInit, OnChanges {
   cargarEquiposAlMapa(): void {
     if (!this.map || !this.overlayControl) return;
 
-    const overlayGroups: Record<string, L.MarkerClusterGroup> = {};
+    const overlayGroups: Record<string, any> = {};
     const unidadColores: Record<string, string> = {};
     const colores = ['red', 'blue', 'green', 'orange', 'purple', 'brown', 'darkred', 'cadetblue'];
     let colorIndex = 0;
