@@ -69,4 +69,10 @@ export class MaquinaService {
             responseType: 'text',
         });
     }
+
+    generarReporteIndicadoresGestion(): Observable<any> {
+        return this.http.get(`${this.baseUrl}/reporteIndicadoresGestion`, {
+            responseType: 'blob',
+        });
+    }
 }
