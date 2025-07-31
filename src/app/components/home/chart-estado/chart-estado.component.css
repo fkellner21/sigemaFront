@@ -1,5 +1,6 @@
 .chart-container {
     height: 110px;
+    width: 110px;
     overflow: visible;
     border: 1px;
     border-style: solid;

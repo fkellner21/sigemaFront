@@ -2,25 +2,25 @@
     <div class="row my-2">
         <mapa [equiposDTO]="equiposDTO" class="col-9"></mapa>
         <div class="chartsEstado col-2 text-aline-center">
-            <div class="row">
+            <div class="row justify-content-center">
                 <p><strong>Estado de los equipos</strong></p>
                 <chart-estado
-                    class="col-12"
+                    class="col-auto"
                     [titulo]="verde"
                     [cantidad]="equiposEnVerde"
                 ></chart-estado>
                 <chart-estado
-                    class="col-12"
+                    class="col-auto"
                     [titulo]="amarillo"
                     [cantidad]="equiposEnAmarillo"
                 ></chart-estado>
                 <chart-estado
-                    class="col-12"
+                    class="col-auto"
                     [titulo]="rojo"
                     [cantidad]="equiposEnRojo"
                 ></chart-estado>
                 <chart-estado
-                    class="col-12"
+                    class="col-auto"
                     [titulo]="negro"
                     [cantidad]="equiposEnNegro"
                 ></chart-estado>
