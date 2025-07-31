@@ -25,13 +25,13 @@ export class ChartEstadoComponent implements OnInit{
   ngOnInit(): void {
       switch (this.titulo) {
     case "Verde":
-        this.colors = ['#20E647'];
+        this.colors = ['#11ad30ff'];
       break;
     case "Amarillo":
-        this.colors = ['#e3e620ff'];
+        this.colors = ['#d1d423ff'];
       break;
     case "Rojo":
-        this.colors = ['#e62d20ff'];
+        this.colors = ['#bd2217ff'];
       break;
     case "Negro":
         this.colors = ['#101110ff'];
@@ -64,16 +64,6 @@ export class ChartEstadoComponent implements OnInit{
           show: true
         }
       }
-    }
-  };
-
-  fill: ApexFill = {
-    type: 'gradient',
-    gradient: {
-      shade: 'dark',
-      type: 'horizontal',
-      gradientToColors: ['#d8e2e7ff'],
-      stops: [0, 100]
     }
   };
 
