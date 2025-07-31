@@ -1,30 +1,34 @@
-<div class="row my-2">
-    <mapa [equiposDTO]="equiposDTO" class="col-9"></mapa>
-    <div class="chartsEstado col-2 text-aline-center">
-        <div class="row">
-            <chart-estado
-                class="col-12"
-                [titulo]="verde"
-                [cantidad]="equiposEnVerde"
-            ></chart-estado>
-            <chart-estado
-                class="col-12"
-                [titulo]="amarillo"
-                [cantidad]="equiposEnAmarillo"
-            ></chart-estado>
-            <chart-estado
-                class="col-12"
-                [titulo]="rojo"
-                [cantidad]="equiposEnRojo"
-            ></chart-estado>
-            <chart-estado
-                class="col-12"
-                [titulo]="negro"
-                [cantidad]="equiposEnNegro"
-            ></chart-estado>
+<div class="backDashboard">
+    <div class="row my-2">
+        <mapa [equiposDTO]="equiposDTO" class="col-9"></mapa>
+        <div class="chartsEstado col-2 text-aline-center">
+            <div class="row">
+                <p><strong>Estado de los equipos</strong></p>
+                <chart-estado
+                    class="col-12"
+                    [titulo]="verde"
+                    [cantidad]="equiposEnVerde"
+                ></chart-estado>
+                <chart-estado
+                    class="col-12"
+                    [titulo]="amarillo"
+                    [cantidad]="equiposEnAmarillo"
+                ></chart-estado>
+                <chart-estado
+                    class="col-12"
+                    [titulo]="rojo"
+                    [cantidad]="equiposEnRojo"
+                ></chart-estado>
+                <chart-estado
+                    class="col-12"
+                    [titulo]="negro"
+                    [cantidad]="equiposEnNegro"
+                ></chart-estado>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <chart-capacidad class="col-12"> </chart-capacidad>
+    <div class="row">
+        <chart-capacidad class="col-12" [equiposDTO]="equiposDTO">
+        </chart-capacidad>
+    </div>
 </div>
