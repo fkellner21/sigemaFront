@@ -1,4 +1,30 @@
+<div class="row my-2">
+    <mapa [equiposDTO]="equiposDTO" class="col-9"></mapa>
+    <div class="chartsEstado col-2 text-aline-center">
+        <div class="row">
+            <chart-estado
+                class="col-12"
+                [titulo]="verde"
+                [cantidad]="equiposEnVerde"
+            ></chart-estado>
+            <chart-estado
+                class="col-12"
+                [titulo]="amarillo"
+                [cantidad]="equiposEnAmarillo"
+            ></chart-estado>
+            <chart-estado
+                class="col-12"
+                [titulo]="rojo"
+                [cantidad]="equiposEnRojo"
+            ></chart-estado>
+            <chart-estado
+                class="col-12"
+                [titulo]="negro"
+                [cantidad]="equiposEnNegro"
+            ></chart-estado>
+        </div>
+    </div>
+</div>
 <div class="row">
-    <mapa [equiposDTO]="equiposDTO" class="col-8 my-2"></mapa>
-    <div class="col-2"></div>
+    <chart-capacidad class="col-12"> </chart-capacidad>
 </div>
