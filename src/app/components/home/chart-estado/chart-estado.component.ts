@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ApexChart, ApexPlotOptions, ApexFill, ApexStroke, ChartComponent } from 'ng-apexcharts';
+import { ApexChart, ApexPlotOptions, ApexStroke, NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
   selector: 'chart-estado',
-  imports: [ChartComponent],
+  imports: [NgApexchartsModule],
   standalone: true,
   templateUrl: './chart-estado.component.html',
   styleUrl: './chart-estado.component.css'

@@ -1,13 +1,13 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
-import { ChartComponent, ApexChart, NgApexchartsModule } from 'ng-apexcharts';
+import { ChartComponent, ApexChart, NgApexchartsModule, ApexXAxis, ApexAxisChartSeries, ApexPlotOptions, ApexFill, ApexDataLabels, ApexTooltip, ApexLegend } from 'ng-apexcharts';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
 import { TareaEquipo } from '../../../models/enum/TareaEquipo';
 import { EstadoEquipo } from '../../../models/enum/EstadoEquipo';
 
 @Component({
   selector: 'chart-capacidad',
-  imports: [ChartComponent, NgApexchartsModule],
+  imports: [NgApexchartsModule],
   templateUrl: './chart-capacidad.component.html',
   styleUrl: './chart-capacidad.component.css'
 })
