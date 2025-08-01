@@ -24,7 +24,13 @@ export class ChartCapacidadComponent implements OnChanges {
     categories: ["Corte", "Carga", "Acarreo", "Nivelación", "Compactación", "Otras"]
   };
 
-  series: ApexAxisChartSeries = [];
+series: ApexAxisChartSeries = [
+  {
+    name: 'Cargando...',
+    data: []
+  }
+];
+
 
   plotOptions: ApexPlotOptions = {
     bar: {
