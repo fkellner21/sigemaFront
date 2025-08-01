@@ -12,41 +12,30 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
 
-      # Instala todas las dependencias del proyecto (package.json)
       - name: Install project dependencies
         run: npm install --legacy-peer-deps
 
-      # Compila el proyecto (asegúrate que "build" esté definido en tu package.json)
       - name: Build the project
         run: npm run build
 
-      # Instala paquetes necesarios para obtener el ID token
-      - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client
-
-      # Obtiene el ID token
+      # Obtener el ID Token directamente sin usar paquetes externos
       - name: Get Id Token
-        uses: actions/github-script@v6
         id: idtoken
-        with:
-          script: |
-            const coredemo = require('@actions/core')
-            return await coredemo.getIDToken()
-          result-encoding: string
+        run: echo "result=${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" >> $GITHUB_OUTPUT
 
-      # Despliega a Azure Static Web Apps
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_SMOKE_0B3E9EB0F }}
           action: "upload"
-          app_location: "." # Ruta raíz del proyecto
-          api_location: "" # Ruta al backend, si hay
-          output_location: "dist/maquinas/browser/" # Directorio de salida luego del build
+          app_location: "." # Ruta del código fuente
+          api_location: ""  # Ruta del backend si existe
+          output_location: "dist/maquinas/browser/" # Directorio generado tras el build
           github_id_token: ${{ steps.idtoken.outputs.result }}
