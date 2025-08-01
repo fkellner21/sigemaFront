@@ -24,10 +24,17 @@ jobs:
       - name: Build the project
         run: npm run build
 
-      # Obtener el ID Token directamente sin usar paquetes externos
+      - name: Install OIDC Client from Core Package
+        run: npm install @actions/core@1.6.0 @actions/http-client
+
       - name: Get Id Token
+        uses: actions/github-script@v6
         id: idtoken
-        run: echo "result=${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" >> $GITHUB_OUTPUT
+        with:
+          script: |
+            const core = require('@actions/core');
+            return await core.getIDToken();
+          result-encoding: string
 
       - name: Build And Deploy
         id: builddeploy
