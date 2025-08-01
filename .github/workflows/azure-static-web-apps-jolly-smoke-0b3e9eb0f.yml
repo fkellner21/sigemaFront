@@ -19,7 +19,7 @@ jobs:
 
       # Instala todas las dependencias del proyecto (package.json)
       - name: Install project dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       # Compila el proyecto (asegúrate que "build" esté definido en tu package.json)
       - name: Build the project
