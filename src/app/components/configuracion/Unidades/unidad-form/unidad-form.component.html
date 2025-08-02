@@ -50,6 +50,24 @@
                             type="number"
                         />
                     </div>
+<div>
+  <p>Email</p>
+  <input
+    type="email"
+    placeholder="Email de la unidad"
+    [(ngModel)]="nuevoEmail"
+    name="email"
+    required
+    #emailModel="ngModel"
+    email
+  />
+  <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="alert alert-danger">
+    <div *ngIf="emailModel.errors?.['required']">El email es obligatorio.</div>
+    <div *ngIf="emailModel.errors?.['email']">El email no es válido.</div>
+  </div>
+</div>
+
+
                     <p class="mb-0 mt-3" for="flexSwitchCheck">¿Es gran unidad?</p>
                     <div class="form-check form-switch mt-0 mb-3">
                         <input style="width: 2.7rem; height: 1.5rem;"
@@ -62,13 +80,10 @@
                     </div>
                     <div class="row justify-content-between mt-5">
                         <div class="col-4">
-                            <button
-                                type="submit"
-                                class="btn btn-primary w-100"
-                                [disabled]="unidadForm.invalid"
-                            >
-                                {{ unidad.id > 0 ? "Modificar" : "Agregar" }}
-                            </button>
+<button type="submit" class="btn btn-primary w-100" [disabled]="unidadForm.invalid || emailModel.invalid">
+  {{ unidad.id > 0 ? "Modificar" : "Agregar" }}
+</button>
+
                         </div>
                         <div class="col-4">
                             <button
