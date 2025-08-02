@@ -25,6 +25,7 @@ import { CommonModule } from '@angular/common';
 import { MaquinaFormComponent } from './maquina-form/maquina-form.component';
 import { AuthService } from '../../../../services/auth.service';
 import { ListMantenimientosComponent } from '../../../mantenimientos/list-mantenimientos/list-mantenimientos.component';
+import { ArchivoDTO } from '../../../../models/DTO/archivoDTO';
 
 @Component({
     selector: 'maquina',
@@ -37,7 +38,7 @@ import { ListMantenimientosComponent } from '../../../mantenimientos/list-manten
         MatTableModule,
         MatSelectModule,
         MatOptionModule,
-        ListMantenimientosComponent, 
+        ListMantenimientosComponent,
     ],
     templateUrl: './maquina.component.html',
     styleUrls: ['./maquina.component.css'],
@@ -147,9 +148,13 @@ export class MaquinaComponent {
     }
 
     addMaquina(maquina: Equipo) {
+        console.log(maquina)
         if (maquina.id > 0) {
             this.service.edit(maquina.id, maquina).subscribe({
-                next: () => {
+                next: (archivos) => {
+                    if (archivos && archivos.length > 0) {
+                        this.descargarArchivos(archivos);
+                    }
                     Swal.fire(
                         'Editado',
                         'Máquina actualizada correctamente',
@@ -168,7 +173,10 @@ export class MaquinaComponent {
             });
         } else {
             this.service.addNew(maquina).subscribe({
-                next: () => {
+                next: (archivos) => {
+                    if (archivos && archivos.length > 0) {
+                        this.descargarArchivos(archivos);
+                    }
                     Swal.fire(
                         'Guardado',
                         'Máquina agregada con éxito',
@@ -186,6 +194,16 @@ export class MaquinaComponent {
                 },
             });
         }
+    }
+
+    descargarArchivos(archivos: ArchivoDTO[]) {
+        archivos.forEach((archivo) => {
+            const link = document.createElement('a');
+            link.href =
+                'data:application/octet-stream;base64,' + archivo.archivo;
+            link.download = archivo.nombre;
+            link.click();
+        });
     }
 
     deleteMaquina(id: number) {
@@ -209,7 +227,11 @@ export class MaquinaComponent {
         }).then((result) => {
             if (result.isConfirmed) {
                 this.service.delete(id).subscribe({
-                    next: () => {
+                    next: (archivos) => {
+                        if (archivos && archivos.length > 0) {
+                            this.descargarArchivos(archivos);
+                        }
+
                         if (
                             this.authservice.getRol() === 'ROLE_ADMIN' ||
                             this.authservice.getRol() === 'ROLE_BRIGADA'
@@ -226,6 +248,7 @@ export class MaquinaComponent {
                                 'success'
                             );
                         }
+
                         this.refresh();
                     },
                     error: (err) => {

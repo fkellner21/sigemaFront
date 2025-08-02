@@ -32,6 +32,7 @@ import { DateRange, MatDateRangePicker } from '@angular/material/datepicker';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ArchivoDTO } from '../../models/DTO/archivoDTO';
 
 @Component({
     selector: 'tramites',
@@ -380,7 +381,10 @@ export class TramitesComponent implements OnInit {
                 this.tramiteService
                     .changeEstado(id, EstadoTramite.Aprobado)
                     .subscribe({
-                        next: () => {
+                        next: (archivos) => {
+                            if (archivos && archivos.length > 0) {
+                                this.descargarArchivos(archivos);
+                            }
                             Swal.fire(
                                 'Aprobado',
                                 'Se aprobó el trámite',
@@ -415,7 +419,10 @@ export class TramitesComponent implements OnInit {
                 this.tramiteService
                     .changeEstado(id, EstadoTramite.Rechazado)
                     .subscribe({
-                        next: () => {
+                        next: (archivos) => {
+                            if (archivos && archivos.length > 0) {
+                                this.descargarArchivos(archivos);
+                            }
                             Swal.fire(
                                 'Rechazado',
                                 'El trámite fue rechazado',
@@ -432,6 +439,16 @@ export class TramitesComponent implements OnInit {
                         },
                     });
             }
+        });
+    }
+
+    descargarArchivos(archivos: ArchivoDTO[]) {
+        archivos.forEach((archivo) => {
+            const link = document.createElement('a');
+            link.href =
+                'data:application/octet-stream;base64,' + archivo.archivo;
+            link.download = archivo.nombre;
+            link.click();
         });
     }
 }

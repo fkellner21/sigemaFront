@@ -6,6 +6,7 @@ import { Tramite } from '../models/tramite';
 import { Actuacion } from '../models/actuacion';
 import { EstadoTramite } from '../models/enum/EstadoTramite';
 import { TramiteDTO } from '../models/DTO/tramiteDTO';
+import { ArchivoDTO } from '../models/DTO/archivoDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -62,11 +63,11 @@ export class TramiteService {
         );
     }
 
-    changeEstado(id: number, estado: EstadoTramite): Observable<Tramite> {
+    changeEstado(id: number, estado: EstadoTramite): Observable<ArchivoDTO[]> {
         let estadoNuevo = {
             estadoTramite: estado,
         };
-        return this.http.post<Tramite>(
+        return this.http.post<ArchivoDTO[]>(
             `${environment.apiUrl}/api/tramites/${id}/estado`,
             estadoNuevo
         );

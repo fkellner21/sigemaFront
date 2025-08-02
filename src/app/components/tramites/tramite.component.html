@@ -391,3 +391,14 @@
     (cancelEventEmiter)="cerrarFormularios()"
     (newTramiteEventEmitter)="guardarTramite($event)"
 ></tramite-info-form>
+
+<style>
+    ::ng-deep .mat-mdc-tab-body.mat-mdc-tab-body-active {
+        z-index: 0 !important;
+        position: relative !important;
+    }
+
+    ::ng-deep .mat-mdc-tab-header{
+        z-index: 0 !important;
+    }
+</style>
