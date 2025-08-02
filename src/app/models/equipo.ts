@@ -15,4 +15,5 @@ export class Equipo{
     idModeloEquipo?:number;
     idUnidad!:number;
     activo:boolean = true;
+    numeroMotor!:string;
 }
