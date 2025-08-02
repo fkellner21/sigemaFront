@@ -109,22 +109,22 @@ export class NotificacionesComponent implements OnInit, OnChanges {
                 this.tramiteSeleccionado.estado = tramite.estado;
 
                 if (
-                    tramite.tipoTramite === TipoTramite.AltaEquipo.valueOf() ||
-                    tramite.tipoTramite === TipoTramite.BajaEquipo.valueOf()
+                    tramite.tipoTramite?.toString() === "AltaEquipo" ||
+                    tramite.tipoTramite?.toString() === "BajaEquipo"
                 ) {
                     this.mostrarFormularioEquipo = true;
                 } else if (
-                    tramite.tipoTramite === TipoTramite.SolicitudRepuesto.valueOf()
+                    tramite.tipoTramite?.toString() === "SolicitudRepuesto"
                 ) {
                     this.mostrarFormularioRepuesto = true;
                 } else if (
-                    tramite.tipoTramite === TipoTramite.AltaUsuario.valueOf() ||
-                    tramite.tipoTramite === TipoTramite.BajaUsuario.valueOf()
+                    tramite.tipoTramite?.toString() === "AltaUsuario" ||
+                    tramite.tipoTramite?.toString() === "BajaUsuario"
                 ) {
                     this.mostrarFormularioUsuario = true;
                 } else if (
-                    tramite.tipoTramite === TipoTramite.Otros.valueOf() ||
-                    tramite.tipoTramite === TipoTramite.PedidoInformacion.valueOf()
+                    tramite.tipoTramite?.toString() === "Otros" ||
+                    tramite.tipoTramite?.toString() === "PedidoInformacion"
                 ) {
                     this.mostrarFormularioInfo = true;
                 }
