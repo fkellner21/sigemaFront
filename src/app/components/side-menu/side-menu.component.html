@@ -77,11 +77,12 @@
     (guardarUsuario)="guardarUsuario($event)"
 ></app-usuario-form>
 
-<notificaciones
-    *ngIf="abrirFormularioNotificaciones"
-    [notificaciones]="notificaciones"
-    [unidades]="unidades"
-    (actualizarNotificaciones)="cargarNotificaciones()"
-    (cancelEventEmiter)="cerrarFormularioNotificaciones()"
->
-</notificaciones>
+<div *ngIf="abrirFormularioNotificaciones">
+    <notificaciones
+        [notificaciones]="notificaciones"
+        [unidades]="unidades"
+        (actualizarNotificaciones)="cargarNotificaciones()"
+        (cancelEventEmiter)="cerrarFormularioNotificaciones()"
+    >
+    </notificaciones>
+</div>

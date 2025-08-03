@@ -18,7 +18,6 @@ import { UsuarioFormComponent } from '../usuarios/form/usuario-form.component';
 import { NotificacionesService } from '../../services/notificacion.service';
 import { Notificacion } from '../../models/notificacion';
 import { interval, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { NotificacionesComponent } from '../notificaciones/notificaciones.component';
 
 @Component({
