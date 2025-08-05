@@ -1,25 +1,25 @@
 <div class="sidebar-container">
     <mat-nav-list class="menu-items">
-        <!-- Ítems del menú -->
-        <a mat-list-item routerLink="/home"
-            ><mat-icon>dashboard</mat-icon
-            ><span class="ms-2">Panel principal</span></a
-        >
-        <a mat-list-item routerLink="/tabEquipos"
-            ><mat-icon>build</mat-icon><span class="ms-2">Maquinaria</span></a
-        >
-        <a mat-list-item routerLink="/tramites"
-            ><mat-icon>assignment</mat-icon
-            ><span class="ms-2">Trámites</span></a
-        >
+        <a mat-list-item routerLink="/home">
+            <mat-icon>dashboard</mat-icon>
+            <span class="ms-2">Panel principal</span>
+        </a>
+        <a mat-list-item routerLink="/tabEquipos">
+            <mat-icon>build</mat-icon>
+            <span class="ms-2">Maquinaria</span>
+        </a>
+        <a mat-list-item routerLink="/tramites">
+            <mat-icon>assignment</mat-icon>
+            <span class="ms-2">Trámites</span>
+        </a>
         <a mat-list-item routerLink="/mantenimientos">
             <mat-icon>build_circle</mat-icon>
-
             <span class="ms-2">Mantenimientos</span>
         </a>
-        <a mat-list-item routerLink="/reportes"
-            ><mat-icon>bar_chart</mat-icon><span class="ms-2">Reportes</span></a
-        >
+        <a mat-list-item routerLink="/reportes">
+            <mat-icon>bar_chart</mat-icon>
+            <span class="ms-2">Reportes</span>
+        </a>
         <a mat-list-item (click)="mostrarFormularioNotificaciones()">
             <mat-icon>notifications</mat-icon>
             <span class="ms-2">
@@ -39,26 +39,27 @@
         </mat-list-item>
 
         <div *ngIf="isConfigOpen" class="sub-menu">
-            <a mat-list-item (click)="abrirModalPerfil()"
-                ><mat-icon>person</mat-icon><span class="ms-2">Perfil</span></a
-            >
-            <a mat-list-item routerLink="/usuarios"
-                ><mat-icon>group</mat-icon><span class="ms-2">Usuarios</span></a
-            >
-            <a mat-list-item routerLink="/unidades"
-                ><mat-icon>home_work</mat-icon
-                ><span class="ms-2">Unidades</span></a
-            >
-            <a mat-list-item routerLink="/grados"
-                ><mat-icon>admin_panel_settings</mat-icon
-                ><span class="ms-2">Grados</span></a
-            >
+            <a mat-list-item (click)="abrirModalPerfil()">
+                <mat-icon>person</mat-icon>
+                <span class="ms-2">Perfil</span>
+            </a>
+            <a mat-list-item routerLink="/usuarios">
+                <mat-icon>group</mat-icon>
+                <span class="ms-2">Usuarios</span>
+            </a>
+            <a mat-list-item routerLink="/unidades">
+                <mat-icon>home_work</mat-icon>
+                <span class="ms-2">Unidades</span>
+            </a>
+            <a mat-list-item routerLink="/grados">
+                <mat-icon>admin_panel_settings</mat-icon>
+                <span class="ms-2">Grados</span>
+            </a>
         </div>
     </mat-nav-list>
 
-    <!-- Botón Salir abajo -->
     <div class="logout-wrapper">
-        <mat-nav-list class="menu-items">
+        <mat-nav-list class="logout-list">
             <a mat-list-item (click)="onClick($event)">
                 <mat-icon>exit_to_app</mat-icon>
                 <span class="ms-2">Salir</span>
@@ -66,22 +67,3 @@
         </mat-nav-list>
     </div>
 </div>
-
-<app-usuario-form
-    *ngIf="mostrarFormularioPerfil"
-    [usuario]="usuario"
-    [rolesOriginal]="roles"
-    [grados]="grados"
-    [unidades]="unidades"
-    (cerrar)="cerrarModalPerfil()"
-    (guardarUsuario)="guardarUsuario($event)"
-></app-usuario-form>
-
-<notificaciones
-    *ngIf="abrirFormularioNotificaciones"
-    [notificaciones]="notificaciones"
-    [unidades]="unidades"
-    (actualizarNotificaciones)="cargarNotificaciones()"
-    (cancelEventEmiter)="cerrarFormularioNotificaciones()"
->
-</notificaciones>
