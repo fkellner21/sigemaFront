@@ -217,6 +217,7 @@ export class ModeloComponent {
   }
 
   cerrarModalService(){
+    this.refresh();
     this.modeloSelected = new modeloEquipo();
     this.modeloSeleccionadoId = null;
     this.abrirService = false;

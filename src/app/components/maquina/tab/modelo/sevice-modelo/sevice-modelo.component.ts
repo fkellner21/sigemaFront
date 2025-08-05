@@ -19,7 +19,6 @@ import { ServiceModelo } from '../../../../../models/serviceModelo';
 export class SeviceModeloComponent implements OnInit {
     @Input() modeloEquipo!: modeloEquipo;
     @Output() cerrarFormulario = new EventEmitter<void>();
-    @Output() cambioEnService = new EventEmitter<void>();
 
     displayedRepuestoColumns: string[] = ['repuesto', 'cantidad', 'acciones'];
     dataSourceRepuestos = new MatTableDataSource<RepuestoMantenimiento>();
@@ -139,9 +138,7 @@ export class SeviceModeloComponent implements OnInit {
                             'Service actualizado correctamente',
                             'success'
                         );
-                        //this.mantenimientoAgregado.emit();
                         this.cerrarFormulario.emit();
-                        form.resetForm();
                     },
                     error: (e) => {
                         Swal.fire(
@@ -156,5 +153,6 @@ export class SeviceModeloComponent implements OnInit {
 
     onOpen() {
         this.cerrarFormulario.emit();
+        this.modeloEquipoCopia = { ...this.modeloEquipo };
     }
 }

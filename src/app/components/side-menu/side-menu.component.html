@@ -6,7 +6,8 @@
             ><span class="ms-2">Panel principal</span></a
         >
         <a mat-list-item routerLink="/tabEquipos"
-            ><mat-icon>build</mat-icon><span class="ms-2">Maquinaria</span></a
+            ><mat-icon>front_loader</mat-icon
+            ><span class="ms-2">Maquinaria</span></a
         >
         <a mat-list-item routerLink="/tramites"
             ><mat-icon>assignment</mat-icon
@@ -19,7 +20,7 @@
         </a>
         <mat-list-item (click)="toggleReportes()" style="cursor: pointer">
             <mat-icon>download</mat-icon>
-            <span class="ms-2">Descargar reportes</span>
+            <span class="ms-2">Descarga de reportes</span>
             <mat-icon style="margin-left: auto">{{
                 isReportesOpen ? "expand_less" : "expand_more"
             }}</mat-icon>
@@ -32,7 +33,7 @@
             >
             <a mat-list-item (click)="generarReportePrevisiones()"
                 ><mat-icon>bar_chart</mat-icon
-                ><span class="ms-2">Prevision de repuestos</span></a
+                ><span class="ms-2">Previsión anual</span></a
             >
         </div>
         <a mat-list-item (click)="mostrarFormularioNotificaciones()">
