@@ -105,6 +105,13 @@
                     Frecuentcia de Mantenimiento
                 </th>
                 <td mat-cell *matCellDef="let element">
+                    <button
+                        class="btn btn-dark"
+                        (click)="abrirModalService(element)"
+                        title="Ver service standard"
+                    >
+                        <i class="bi bi-wrench"></i>
+                    </button>
                     <ng-container [ngSwitch]="element.unidadMedida">
                         <span *ngSwitchCase="'HT'">
                             {{ element.frecuenciaUnidadMedida }} HT |
@@ -341,3 +348,8 @@
     </div>
 </div>
 }
+<sevice-modelo
+    *ngIf="abrirService"
+    [modeloEquipo]="modeloSelected"
+    (cerrarFormulario)="cerrarModalService()"
+></sevice-modelo>

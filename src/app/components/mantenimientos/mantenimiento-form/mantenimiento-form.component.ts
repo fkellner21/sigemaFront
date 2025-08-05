@@ -23,7 +23,6 @@ export class MantenimientoFormComponent implements OnInit {
     @Input() mantenimiento: Mantenimiento = new Mantenimiento();
     @Input() equipo!: Equipo;
 
-    // CAMBIAR LOS NOMBRES DE LOS OUTPUTS PARA COINCIDIR CON EL HTML
     @Output() cerrarFormulario = new EventEmitter<void>();
     @Output() mantenimientoAgregado = new EventEmitter<void>();
     displayedRepuestoColumns: string[] = ['repuesto', 'cantidad', 'acciones'];

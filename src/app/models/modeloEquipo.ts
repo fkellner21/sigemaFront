@@ -3,6 +3,7 @@ import { UnidadMedida } from "./enum/UnidadMedida";
 import { Equipo } from "./equipo";
 import { Marca } from "./marca";
 import { Repuesto } from "./Repuesto";
+import { ServiceModelo } from "./serviceModelo";
 import { TipoEquipo } from "./tipoEquipo";
 
     export class modeloEquipo{
@@ -18,4 +19,6 @@ import { TipoEquipo } from "./tipoEquipo";
         documentos!:Array<DocumentoModeloEquipo>;
         frecuenciaUnidadMedida!: number;
         frecuenciaTiempo!: number;
+        idServiceModelo!:number;
+        serviceModelo!:ServiceModelo;
     }
