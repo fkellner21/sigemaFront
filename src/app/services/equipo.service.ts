@@ -73,4 +73,10 @@ export class MaquinaService {
             responseType: 'blob',
         });
     }
+
+    generarReportePrevisiones(): Observable<Blob> {
+        return this.http.get(`${this.baseUrl}/reporteInformePrevisiones`, {
+            responseType: 'blob',
+        });
+    }
 }
