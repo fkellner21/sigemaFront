@@ -19,6 +19,7 @@ import { NotificacionesService } from '../../services/notificacion.service';
 import { Notificacion } from '../../models/notificacion';
 import { interval, Subscription } from 'rxjs';
 import { NotificacionesComponent } from '../notificaciones/notificaciones.component';
+import { MaquinaService } from '../../services/equipo.service';
 
 @Component({
     selector: 'side-menu',
@@ -37,6 +38,7 @@ import { NotificacionesComponent } from '../notificaciones/notificaciones.compon
 })
 export class SideMenuComponent implements OnInit, OnDestroy {
     isConfigOpen = false;
+    isReportesOpen = false;
     roles!: { key: string; label: string }[];
     grados: Grado[] = [];
     unidades: Unidad[] = [];
@@ -53,7 +55,8 @@ export class SideMenuComponent implements OnInit, OnDestroy {
         private usuarioService: UsuarioService,
         private gradosService: gradoService,
         private unidadService: UnidadService,
-        private notificacionesService: NotificacionesService
+        private notificacionesService: NotificacionesService,
+        private maquinaService: MaquinaService
     ) {}
 
     ngOnInit() {
@@ -138,6 +141,10 @@ export class SideMenuComponent implements OnInit, OnDestroy {
 
     toggleConfig() {
         this.isConfigOpen = !this.isConfigOpen;
+    }
+
+    toggleReportes(){
+        this.isReportesOpen = !this.isReportesOpen;
     }
 
     onClick(event: MouseEvent) {
@@ -254,4 +261,54 @@ export class SideMenuComponent implements OnInit, OnDestroy {
             },
         });
     }
+
+        generarReporteIndicadoresGestion() {
+            this.maquinaService.generarReporteIndicadoresGestion().subscribe({
+                next: (blob: Blob) => {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+    
+                    link.href = url;
+                    link.download = 'INDICADORES_DE_GESTIÓN.xlsx';
+    
+                    document.body.appendChild(link);
+                    link.click();
+    
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                },
+                error: (err) => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudo generar el reporte. ' + err.error,
+                        icon: 'error',
+                    });
+                },
+            });
+        }
+    
+        generarReportePrevisiones() {
+            this.maquinaService.generarReportePrevisiones().subscribe({
+                next: (blob: Blob) => {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+    
+                    link.href = url;
+                    link.download = 'PREVISIONES_AÑO_PROXIMO.xlsx';
+    
+                    document.body.appendChild(link);
+                    link.click();
+    
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                },
+                error: (err) => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudo generar el reporte. ' + err.error,
+                        icon: 'error',
+                    });
+                },
+            });
+        }
 }

@@ -17,9 +17,24 @@
 
             <span class="ms-2">Mantenimientos</span>
         </a>
-        <a mat-list-item routerLink="/reportes"
-            ><mat-icon>bar_chart</mat-icon><span class="ms-2">Reportes</span></a
-        >
+        <mat-list-item (click)="toggleReportes()" style="cursor: pointer">
+            <mat-icon>download</mat-icon>
+            <span class="ms-2">Descargar reportes</span>
+            <mat-icon style="margin-left: auto">{{
+                isReportesOpen ? "expand_less" : "expand_more"
+            }}</mat-icon>
+        </mat-list-item>
+
+        <div *ngIf="isReportesOpen" class="sub-menu">
+            <a mat-list-item (click)="generarReporteIndicadoresGestion()"
+                ><mat-icon>query_stats</mat-icon
+                ><span class="ms-2">Indicadores de gestión</span></a
+            >
+            <a mat-list-item (click)="generarReportePrevisiones()"
+                ><mat-icon>bar_chart</mat-icon
+                ><span class="ms-2">Prevision de repuestos</span></a
+            >
+        </div>
         <a mat-list-item (click)="mostrarFormularioNotificaciones()">
             <mat-icon>notifications</mat-icon>
             <span class="ms-2">

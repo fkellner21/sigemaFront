@@ -19,6 +19,7 @@ import { ServiceModelo } from '../../../../../models/serviceModelo';
 export class SeviceModeloComponent implements OnInit {
     @Input() modeloEquipo!: modeloEquipo;
     @Output() cerrarFormulario = new EventEmitter<void>();
+    @Output() cambioEnService = new EventEmitter<void>();
 
     displayedRepuestoColumns: string[] = ['repuesto', 'cantidad', 'acciones'];
     dataSourceRepuestos = new MatTableDataSource<RepuestoMantenimiento>();
