@@ -3,7 +3,8 @@ import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { SideMenuComponent } from './side-menu/side-menu.component';
-import { UsuarioFormComponent } from '../components/usuarios/form/usuario-form.component'; // Asegúrate de que esta ruta sea correcta
+import { UsuarioFormComponent } from '../components/usuarios/form/usuario-form.component'; 
+import { NotificacionesComponent } from '../components/notificaciones/notificaciones.component';
 import { Usuario } from '../models/usuario';
 import { Rol } from '../models/enum/Rol';
 import { Grado } from '../models/grado';
@@ -12,34 +13,41 @@ import { AuthService } from '../services/auth.service';
 import { UsuarioService } from '../services/usuario.service';
 import { gradoService } from '../services/grado.service';
 import { UnidadService } from '../services/unidad.service';
+import { NotificacionesService } from '../services/notificacion.service';
 import Swal from 'sweetalert2';
+import { Notificacion } from '../models/notificacion';
 
 @Component({
   selector: 'maquinas-app',
   standalone: true,
-  imports: [RouterOutlet, SideMenuComponent, CommonModule, UsuarioFormComponent],
+  imports: [RouterOutlet, SideMenuComponent, CommonModule, UsuarioFormComponent, NotificacionesComponent],
   templateUrl: './maquinas-app.component.html',
   styleUrls: ['./maquinas-app.component.css'],
 })
 export class MaquinasAppComponent implements OnInit {
   mostrarFormularioPerfil = false;
   usuario!: Usuario;
+   
+    abrirFormularioNotificaciones = false;
   usuarioOriginal!: Usuario;
   roles!: { key: string; label: string }[];
   grados: Grado[] = [];
   unidades: Unidad[] = [];
+  notificaciones: Notificacion[] = [];
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private usuarioService: UsuarioService,
     private gradosService: gradoService,
-    private unidadService: UnidadService
+    private unidadService: UnidadService,
+    private notificacionesService: NotificacionesService
   ) {}
 
-  ngOnInit(): void {
-    // Aquí puedes cargar datos iniciales si es necesario
-  }
+    ngOnInit(): void {
+        this.cargarNotificaciones();
+    }
+
 
   isLoginRoute(): boolean {
     return this.router.url === '/login';
@@ -98,4 +106,29 @@ export class MaquinasAppComponent implements OnInit {
       },
     });
   }
+
+      // Lógica para el modal de notificaciones
+    cargarNotificaciones(): void {
+        this.notificacionesService.findAll().subscribe({
+            next: (resp) => {
+                this.notificaciones = resp;
+            },
+            error: (err) => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudieron cargar las notificaciones. ' + err.error,
+                    icon: 'error',
+                });
+            },
+        });
+    }
+
+    abrirModalNotificaciones(): void {
+        this.abrirFormularioNotificaciones = true;
+    }
+
+    cerrarModalNotificaciones(): void {
+        this.abrirFormularioNotificaciones = false;
+        this.cargarNotificaciones();
+    }
 }
