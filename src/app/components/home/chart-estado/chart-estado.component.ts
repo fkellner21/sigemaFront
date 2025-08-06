@@ -56,12 +56,15 @@ export class ChartEstadoComponent implements OnInit{
       },
       dataLabels: {
         name: {
-          show: true
+          show: true,
+          color: '#000',
+          fontSize: '12px'
         },
         value: {
-          fontSize: '15px',
+          fontSize: '12px',
           offsetY: 0,
-          show: true
+          show: true,
+          color: '#000'
         }
       }
     }
