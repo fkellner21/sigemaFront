@@ -20,6 +20,8 @@ import { ListaRepuestosDeModeloComponent } from './lista-repuestos-de-modelo/lis
 import { ListaEquiposDeModeloComponent } from './lista-equipos-de-modelo/lista-equipos-de-modelo.component';
 import { TipoRepuesto } from '../../../../models/enum/TipoRepuesto';
 import { AuthService } from '../../../../services/auth.service';
+import { SeviceModeloComponent } from "./sevice-modelo/sevice-modelo.component";
+
 
 @Component({
   selector: 'modelo',
@@ -32,7 +34,8 @@ import { AuthService } from '../../../../services/auth.service';
     CommonModule,
     ListaRepuestosDeModeloComponent,
     ListaEquiposDeModeloComponent,
-  ],
+    SeviceModeloComponent
+],
   templateUrl: './modelo.component.html',
   styleUrl: './modelo.component.css',
 })
@@ -47,6 +50,13 @@ export class ModeloComponent {
   tipoRepuestoSeleccionado: TipoRepuesto = TipoRepuesto.Pieza;
   open: boolean = false;
   dataSource!: MatTableDataSource<any>;
+  
+  modeloSeleccionadoId: number | null = null;
+  abrirDocs: boolean = false;
+  abrirRepuestos: boolean = false;
+  abrirLubricantes: boolean = false;
+  abrirEquipos: boolean = false;
+  abrirService: boolean = false;
 
   constructor(private service: modeloService, public authservice:AuthService) {}
 
@@ -151,12 +161,6 @@ export class ModeloComponent {
     this.setOpen();
   }
 
-  modeloSeleccionadoId: number | null = null;
-  abrirDocs: boolean = false;
-  abrirRepuestos: boolean = false;
-  abrirLubricantes: boolean = false;
-  abrirEquipos: boolean = false;
-
   abrirModalDocumentos(modelo: modeloEquipo) {
     this.modeloSelected = modelo;
     this.modeloSeleccionadoId = modelo.id;
@@ -204,5 +208,18 @@ export class ModeloComponent {
     this.modeloSelected = new modeloEquipo();
     this.modeloSeleccionadoId = null;
     this.abrirEquipos = false;
+  }
+
+  abrirModalService(modelo: modeloEquipo){
+    this.modeloSelected = modelo;
+    this.modeloSeleccionadoId = modelo.id;
+    this.abrirService = true;
+  }
+
+  cerrarModalService(){
+    this.refresh();
+    this.modeloSelected = new modeloEquipo();
+    this.modeloSeleccionadoId = null;
+    this.abrirService = false;
   }
 }

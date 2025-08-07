@@ -1,26 +1,45 @@
 <div class="sidebar-container">
     <mat-nav-list class="menu-items">
-        <a mat-list-item routerLink="/home">
-            <mat-icon>dashboard</mat-icon>
-            <span class="ms-2">Panel principal</span>
-        </a>
-        <a mat-list-item routerLink="/tabEquipos">
-            <mat-icon>build</mat-icon>
-            <span class="ms-2">Maquinaria</span>
-        </a>
-        <a mat-list-item routerLink="/tramites">
-            <mat-icon>assignment</mat-icon>
-            <span class="ms-2">Trámites</span>
-        </a>
+
+        <!-- Ítems del menú -->
+        <a mat-list-item routerLink="/home"
+            ><mat-icon>dashboard</mat-icon
+            ><span class="ms-2">Panel principal</span></a
+        >
+        <a mat-list-item routerLink="/tabEquipos"
+            ><mat-icon>front_loader</mat-icon
+            ><span class="ms-2">Maquinaria</span></a
+        >
+        <a mat-list-item routerLink="/tramites"
+            ><mat-icon>assignment</mat-icon
+            ><span class="ms-2">Trámites</span></a
+        >
+
         <a mat-list-item routerLink="/mantenimientos">
             <mat-icon>build_circle</mat-icon>
             <span class="ms-2">Mantenimientos</span>
         </a>
-        <a mat-list-item routerLink="/reportes">
-            <mat-icon>bar_chart</mat-icon>
-            <span class="ms-2">Reportes</span>
-        </a>
-        <a mat-list-item (click)="abrirModalNotificaciones()">
+
+        <mat-list-item (click)="toggleReportes()" style="cursor: pointer">
+            <mat-icon>download</mat-icon>
+            <span class="ms-2">Descarga de reportes</span>
+            <mat-icon style="margin-left: auto">{{
+                isReportesOpen ? "expand_less" : "expand_more"
+            }}</mat-icon>
+        </mat-list-item>
+
+        <div *ngIf="isReportesOpen" class="sub-menu">
+            <a mat-list-item (click)="generarReporteIndicadoresGestion()"
+                ><mat-icon>query_stats</mat-icon
+                ><span class="ms-2">Indicadores de gestión</span></a
+            >
+            <a mat-list-item (click)="generarReportePrevisiones()"
+                ><mat-icon>bar_chart</mat-icon
+                ><span class="ms-2">Previsión anual</span></a
+            >
+        </div>
+        <a mat-list-item (click)="mostrarFormularioNotificaciones()">
+
             <mat-icon>notifications</mat-icon>
             <span class="ms-2">
                 Notificaciones
@@ -66,4 +85,23 @@
             </a>
         </mat-nav-list>
     </div>
+</div>
+<app-usuario-form
+    *ngIf="mostrarFormularioPerfil"
+    [usuario]="usuario"
+    [rolesOriginal]="roles"
+    [grados]="grados"
+    [unidades]="unidades"
+    (cerrar)="cerrarModalPerfil()"
+    (guardarUsuario)="guardarUsuario($event)"
+></app-usuario-form>
+
+<div *ngIf="abrirFormularioNotificaciones">
+    <notificaciones
+        [notificaciones]="notificaciones"
+        [unidades]="unidades"
+        (actualizarNotificaciones)="cargarNotificaciones()"
+        (cancelEventEmiter)="cerrarFormularioNotificaciones()"
+    >
+    </notificaciones>
 </div>
