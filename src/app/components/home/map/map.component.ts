@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
 
 @Component({
@@ -17,6 +17,8 @@ export class MapComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.cargarMapasBase();
+      console.log('Leaflet:', L);
+      console.log('markerClusterGroup:', (L as any).markerClusterGroup);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
