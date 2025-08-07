@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Unidad } from '../../../../models/Unidad';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'unidad-form',
@@ -18,15 +19,30 @@ export class UnidadFormComponent {
     this.unidad=new Unidad();
   }
 
-    onSubmit(unidadForm:NgForm):void{
-    
-    if(unidadForm.valid){
-      this.newUnidadEventEmitter.emit(this.unidad);
-    }
-    unidadForm.reset();
+nuevoEmail: string = '';
+
+onSubmit(unidadForm: NgForm): void {
+  if (unidadForm.valid && this.nuevoEmail) {
+    this.unidad.emails = [{ email: this.nuevoEmail }];
+    this.newUnidadEventEmitter.emit(this.unidad);
+    unidadForm.resetForm();
+    this.nuevoEmail = '';
     this.onOpen();
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Por favor, ingrese un email válido.',
+      confirmButtonText: 'Aceptar'
+    });
   }
+}
+
+
+
     onOpen(){
     this.openEventEmitter.emit();
   }
+
+  
 }
