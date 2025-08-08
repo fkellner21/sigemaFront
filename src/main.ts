@@ -4,8 +4,8 @@ import { AppComponent } from './app/app.component';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import * as L from 'leaflet';
-(window as any).L = L;
 import 'leaflet.markercluster';
+
 
 registerLocaleData(localeEs);
 

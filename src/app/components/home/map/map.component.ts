@@ -1,7 +1,6 @@
-import * as L from 'leaflet';
-(window as any).L = L;
-import 'leaflet.markercluster';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import * as L from 'leaflet';
+import 'leaflet.markercluster';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
 
 @Component({
@@ -18,8 +17,8 @@ export class MapComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.cargarMapasBase();
-      console.log('Leaflet:', L);
-      console.log('markerClusterGroup:', (L as any).markerClusterGroup);
+    console.log('Leaflet:', L);
+    console.log('markerClusterGroup:', L.markerClusterGroup);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -28,7 +27,7 @@ export class MapComponent implements OnInit, OnChanges {
     }
   }
 
-  cargarMapasBase(): void {
+  private cargarMapasBase(): void {
     const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap',
     });
@@ -74,7 +73,7 @@ export class MapComponent implements OnInit, OnChanges {
     this.overlayControl = L.control.layers(this.baseMaps).addTo(this.map);
   }
 
-  cargarEquiposAlMapa(): void {
+  private cargarEquiposAlMapa(): void {
     if (!this.map || !this.overlayControl) return;
 
     const overlayGroups: Record<string, L.MarkerClusterGroup> = {};
