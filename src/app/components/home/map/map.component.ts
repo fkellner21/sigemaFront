@@ -1,7 +1,11 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
-import 'leaflet.markercluster';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
+
+// Declarar extensión para markerClusterGroup
+declare module 'leaflet' {
+  function markerClusterGroup(options?: any): L.MarkerClusterGroup;
+}
 
 @Component({
   selector: 'mapa',
@@ -18,7 +22,7 @@ export class MapComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.cargarMapasBase();
     console.log('Leaflet:', L);
-    console.log('markerClusterGroup:', L.markerClusterGroup);
+    console.log('markerClusterGroup:', (L as any).markerClusterGroup);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -96,7 +100,7 @@ export class MapComponent implements OnInit, OnChanges {
       const color = unidadColores[equipo.unidad];
 
       if (!overlayGroups[equipo.unidad]) {
-        overlayGroups[equipo.unidad] = L.markerClusterGroup();
+        overlayGroups[equipo.unidad] = (L as any).markerClusterGroup();
       }
 
       const icon = L.divIcon({
