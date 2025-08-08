@@ -1,4 +1,5 @@
 import * as L from 'leaflet';
+(window as any).L = L;
 import 'leaflet.markercluster';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
