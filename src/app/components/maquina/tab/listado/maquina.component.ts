@@ -148,7 +148,6 @@ export class MaquinaComponent {
     }
 
     addMaquina(maquina: Equipo) {
-        console.log(maquina)
         if (maquina.id > 0) {
             this.service.edit(maquina.id, maquina).subscribe({
                 next: (archivos) => {
