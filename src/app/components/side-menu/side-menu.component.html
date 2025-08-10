@@ -1,6 +1,5 @@
 <div class="sidebar-container">
     <mat-nav-list class="menu-items">
-
         <!-- Ítems del menú -->
         <a mat-list-item routerLink="/home"
             ><mat-icon>dashboard</mat-icon
@@ -38,8 +37,7 @@
                 ><span class="ms-2">Previsión anual</span></a
             >
         </div>
-        <a mat-list-item (click)="mostrarFormularioNotificaciones()">
-
+        <a mat-list-item (click)="abrirModalNotificaciones()">
             <mat-icon>notifications</mat-icon>
             <span class="ms-2">
                 Notificaciones
@@ -85,23 +83,4 @@
             </a>
         </mat-nav-list>
     </div>
-</div>
-<app-usuario-form
-    *ngIf="mostrarFormularioPerfil"
-    [usuario]="usuario"
-    [rolesOriginal]="roles"
-    [grados]="grados"
-    [unidades]="unidades"
-    (cerrar)="cerrarModalPerfil()"
-    (guardarUsuario)="guardarUsuario($event)"
-></app-usuario-form>
-
-<div *ngIf="abrirFormularioNotificaciones">
-    <notificaciones
-        [notificaciones]="notificaciones"
-        [unidades]="unidades"
-        (actualizarNotificaciones)="cargarNotificaciones()"
-        (cancelEventEmiter)="cerrarFormularioNotificaciones()"
-    >
-    </notificaciones>
 </div>

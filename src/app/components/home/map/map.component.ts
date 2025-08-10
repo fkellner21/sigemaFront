@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
-import 'leaflet.fullscreen';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
 
 // Declarar extensión para markerClusterGroup
