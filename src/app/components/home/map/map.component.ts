@@ -1,7 +1,13 @@
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import 'leaflet.fullscreen';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
+
+// Declarar extensión para markerClusterGroup
+declare module 'leaflet' {
+  function markerClusterGroup(options?: any): L.MarkerClusterGroup;
+}
 
 @Component({
   selector: 'mapa',
@@ -25,7 +31,7 @@ export class MapComponent implements OnInit, OnChanges {
     }
   }
 
-  cargarMapasBase(): void {
+  private cargarMapasBase(): void {
     const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap',
     });
@@ -71,7 +77,7 @@ export class MapComponent implements OnInit, OnChanges {
     this.overlayControl = L.control.layers(this.baseMaps).addTo(this.map);
   }
 
-  cargarEquiposAlMapa(): void {
+  private cargarEquiposAlMapa(): void {
     if (!this.map || !this.overlayControl) return;
 
     const overlayGroups: Record<string, L.MarkerClusterGroup> = {};
@@ -94,7 +100,7 @@ export class MapComponent implements OnInit, OnChanges {
       const color = unidadColores[equipo.unidad];
 
       if (!overlayGroups[equipo.unidad]) {
-        overlayGroups[equipo.unidad] = L.markerClusterGroup();
+        overlayGroups[equipo.unidad] = (L as any).markerClusterGroup();
       }
 
       const icon = L.divIcon({
