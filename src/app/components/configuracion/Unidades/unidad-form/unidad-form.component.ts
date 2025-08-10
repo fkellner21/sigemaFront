@@ -2,11 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Unidad } from '../../../../models/Unidad';
 import Swal from 'sweetalert2';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'unidad-form',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule],
   templateUrl: './unidad-form.component.html',
   styleUrl: './unidad-form.component.css'
 })
@@ -39,8 +38,11 @@ onSubmit(unidadForm: NgForm): void {
   }
 }
 
+
+
     onOpen(){
     this.openEventEmitter.emit();
   }
 
+  
 }

@@ -7,8 +7,10 @@ import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
+import { NotificacionesService } from '../../services/notificacion.service';
 import { Notificacion } from '../../models/notificacion';
-import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
+import { NotificacionesComponent } from '../notificaciones/notificaciones.component';
 import { MaquinaService } from '../../services/equipo.service';
 
 
@@ -37,13 +39,20 @@ export class SideMenuComponent implements OnInit, OnDestroy {
 
     isReportesOpen = false;
     roles!: { key: string; label: string }[];
- 
+    grados: Grado[] = [];
+    unidades: Unidad[] = [];
+    usuarioOriginal!: Usuario;
+    usuario!: Usuario;
 
     intervaloSub?: Subscription;
 
     constructor(
         private router: Router,
         private authService: AuthService,
+        private usuarioService: UsuarioService,
+        private gradosService: gradoService,
+        private unidadService: UnidadService,
+        private notificacionesService: NotificacionesService,
         private maquinaService: MaquinaService
     ) {}
 
