@@ -28,7 +28,7 @@ export class MaquinasAppComponent implements OnInit {
   mostrarFormularioPerfil = false;
   usuario!: Usuario;
    
-    abrirFormularioNotificaciones = false;
+  abrirFormularioNotificaciones = false;
   usuarioOriginal!: Usuario;
   roles!: { key: string; label: string }[];
   grados: Grado[] = [];
@@ -45,7 +45,7 @@ export class MaquinasAppComponent implements OnInit {
   ) {}
 
     ngOnInit(): void {
-        this.cargarNotificaciones();
+
     }
 
 

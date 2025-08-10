@@ -100,7 +100,6 @@ body {
 
 .sidebar {
     height: 100%;
-    color: white;
     overflow-y: auto; /* scroll vertical si necesario */
     position: sticky;
     top: 0;

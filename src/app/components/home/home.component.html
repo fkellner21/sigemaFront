@@ -1,7 +1,7 @@
 <div class="backDashboard">
     <div class="row my-2">
-        <mapa [equiposDTO]="equiposDTO" class="col-9"></mapa>
-        <div class="chartsEstado col-2 text-aline-center">
+        <mapa [equiposDTO]="equiposDTO" class="col-12 ps-0 col-lg-9"></mapa>
+        <div class="chartsEstado col-3 text-aline-center">
             <div class="row justify-content-center">
                 <p><strong>Estado de los equipos</strong></p>
                 <chart-estado
@@ -26,9 +26,8 @@
                 ></chart-estado>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <chart-capacidad class="col-12" [equiposDTO]="equiposDTO">
+
+        <chart-capacidad class="col-9 col-lg-12" [equiposDTO]="equiposDTO">
         </chart-capacidad>
     </div>
 </div>

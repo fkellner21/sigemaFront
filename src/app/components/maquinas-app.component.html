@@ -3,10 +3,12 @@
     <div class="row">
         <div class="col-4 col-lg-3 col-xxl-2 ps-0">
             <div class="sidebar sticky-top">
-                <side-menu 
+                <side-menu
                     [notificaciones]="notificaciones"
                     (abrirPerfilEvent)="abrirModalPerfil()"
-                    (abrirNotificacionesEvent)="abrirModalNotificaciones()">
+                    (abrirNotificacionesEvent)="abrirModalNotificaciones()"
+                    (cargarNotificacionesEvent)="cargarNotificaciones()"
+                >
                 </side-menu>
             </div>
         </div>
@@ -27,7 +29,8 @@
     [grados]="grados"
     [unidades]="unidades"
     (cerrar)="cerrarModalPerfil()"
-    (guardarUsuario)="guardarUsuario($event)">
+    (guardarUsuario)="guardarUsuario($event)"
+>
 </app-usuario-form>
 
 <notificaciones
@@ -35,6 +38,6 @@
     [notificaciones]="notificaciones"
     [unidades]="unidades"
     (actualizarNotificaciones)="cargarNotificaciones()"
-    (cancelEventEmiter)="cerrarModalNotificaciones()">
+    (cancelEventEmiter)="cerrarModalNotificaciones()"
+>
 </notificaciones>
-
