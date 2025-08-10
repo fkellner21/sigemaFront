@@ -17,8 +17,6 @@ export class MapComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.cargarMapasBase();
-      console.log('Leaflet:', L);
-      console.log('markerClusterGroup:', (L as any).markerClusterGroup);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

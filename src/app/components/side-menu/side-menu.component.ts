@@ -34,6 +34,7 @@ export class SideMenuComponent implements OnInit, OnDestroy {
     // Ahora, solo emite eventos para que el padre gestione los modales
     @Output() abrirPerfilEvent = new EventEmitter<void>();
     @Output() abrirNotificacionesEvent = new EventEmitter<void>();
+    @Output() cargarNotificacionesEvent = new EventEmitter<void>();
 
     isReportesOpen = false;
     roles!: { key: string; label: string }[];
@@ -53,14 +54,16 @@ export class SideMenuComponent implements OnInit, OnDestroy {
             .then((isValid) => {
                 if (!isValid) {
                     this.router.navigate(['/login']);
+                }else{
+                    this.cargarNotificacionesEvent.emit();
+                    setInterval(() => {
+                    this.cargarNotificacionesEvent.emit();
+                    }, 15 * 60 * 1000);
                 }
             })
             .catch(() => {
                 this.router.navigate(['/login']);
             });
-
-        // La carga de notificaciones y el polling se mueven al componente padre
-        // para que sea el que gestione el estado global de la aplicación.
     }
 
     ngOnDestroy(): void {
