@@ -1,12 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
-import 'leaflet.markercluster';
 import { EquipoDashboardDTO } from '../../../models/DTO/EquipoDashboardDTO';
-
-// Declarar extensión para markerClusterGroup
-declare module 'leaflet' {
-  function markerClusterGroup(options?: any): L.MarkerClusterGroup;
-}
 
 @Component({
   selector: 'mapa',
@@ -17,6 +11,7 @@ export class MapComponent implements OnInit, OnChanges {
   private map: L.Map | undefined;
   private overlayControl: L.Control.Layers | undefined;
   private baseMaps: Record<string, L.TileLayer> = {};
+  private markerLayer = L.layerGroup(); // Capa para todos los marcadores
 
   @Input() equiposDTO: EquipoDashboardDTO[] = [];
 
@@ -63,7 +58,7 @@ export class MapComponent implements OnInit, OnChanges {
       zoom: 7,
       minZoom: 7,
       maxZoom: 18,
-      layers: [osm],
+      layers: [osm, this.markerLayer], // agrego la capa de marcadores desde inicio
     });
 
     this.baseMaps = {
@@ -73,51 +68,100 @@ export class MapComponent implements OnInit, OnChanges {
       'PCN250': IGM250,
     };
 
-    this.overlayControl = L.control.layers(this.baseMaps).addTo(this.map);
+    this.overlayControl = L.control.layers(this.baseMaps, { "Equipos": this.markerLayer }).addTo(this.map);
   }
 
   private cargarEquiposAlMapa(): void {
-    if (!this.map || !this.overlayControl) return;
+    if (!this.map) return;
 
-    const overlayGroups: Record<string, L.MarkerClusterGroup> = {};
     const unidadColores: Record<string, string> = {};
     const colores = ['red', 'blue', 'green', 'orange', 'purple', 'brown', 'darkred', 'cadetblue'];
     let colorIndex = 0;
 
-    // Eliminar capas anteriores
-    this.overlayControl.remove();
-    this.overlayControl = L.control.layers(this.baseMaps).addTo(this.map);
+    // Filtrar equipos válidos
+    const equiposValidos = this.equiposDTO.filter(e => e.latitud && e.longitud && e.unidad);
 
-    this.equiposDTO.forEach((equipo: EquipoDashboardDTO) => {
-      if (!equipo.latitud || !equipo.longitud || !equipo.unidad) return;
+    // Función para calcular radio dinámico según zoom
+    const getRadioAgrupamiento = () => {
+      const zoom = this.map!.getZoom();
+      return 0.0005 * (18 - zoom + 1); // más zoom = radio menor
+    };
 
-      if (!unidadColores[equipo.unidad]) {
-        unidadColores[equipo.unidad] = colores[colorIndex % colores.length];
-        if (colorIndex < colores.length - 1) colorIndex++;
-      }
+    // Agrupar equipos cercanos
+    const agruparEquipos = () => {
+      const grupos: { lat: number; lng: number; equipos: EquipoDashboardDTO[] }[] = [];
+      const radio = getRadioAgrupamiento();
 
-      const color = unidadColores[equipo.unidad];
+      equiposValidos.forEach(equipo => {
+        if (!equipo.unidad) return;
+        if (!unidadColores[equipo.unidad]) {
+          unidadColores[equipo.unidad] = colores[colorIndex % colores.length];
+          if (colorIndex < colores.length - 1) colorIndex++;
+        }
 
-      if (!overlayGroups[equipo.unidad]) {
-        overlayGroups[equipo.unidad] = (L as any).markerClusterGroup();
-      }
+        let agregado = false;
+        for (let grupo of grupos) {
+          if(!equipo.latitud||!equipo.longitud) return;
+          const distancia = Math.sqrt(
+            Math.pow(equipo.latitud - grupo.lat, 2) +
+            Math.pow(equipo.longitud - grupo.lng, 2)
+          );
+          if (distancia < radio) {
+            grupo.equipos.push(equipo);
+            agregado = true;
+            break;
+          }
+        }
 
-      const icon = L.divIcon({
-        html: `<div style="background-color:${color}; width:16px; height:16px; border-radius:50%; border:2px solid white;"></div>`,
-        className: '',
-        iconSize: [16, 16],
+        if (!agregado) {
+          if (equipo.latitud !== undefined && equipo.longitud !== undefined) {
+            grupos.push({
+              lat: equipo.latitud,
+              lng: equipo.longitud,
+              equipos: [equipo]
+            });
+          }
+        }
       });
 
-      const marker = L.marker([equipo.latitud, equipo.longitud], { icon }).bindPopup(
-        `<strong>${equipo.tipoEquipo ?? ''} - ${equipo.matricula ?? ''}</strong><br/>Unidad: ${equipo.unidad}`
-      );
+      return grupos;
+    };
 
-      overlayGroups[equipo.unidad].addLayer(marker);
-    });
+    // Dibuja marcadores
+    const dibujarGrupos = () => {
+      this.markerLayer.clearLayers();
 
-    Object.entries(overlayGroups).forEach(([unidad, group]) => {
-      group.addTo(this.map!);
-      this.overlayControl!.addOverlay(group, unidad);
-    });
+      const grupos = agruparEquipos();
+      grupos.forEach(grupo => {
+        const color = unidadColores[grupo.equipos[0]?.unidad ?? ''] ?? '#000';
+        const icon = L.divIcon({
+          html: grupo.equipos.length > 1
+            ? `<div style="background-color:${color}; width:28px; height:28px; border-radius:50%; border:2px solid white; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:12px;">
+                 ${grupo.equipos.length}
+               </div>`
+            : `<div style="background-color:${color}; width:16px; height:16px; border-radius:50%; border:2px solid white;"></div>`,
+          className: '',
+          iconSize: [28, 28],
+        });
+
+        const popupHtml = grupo.equipos
+          .map(eq => `<strong>${eq.tipoEquipo ?? ''} - ${eq.matricula ?? ''}</strong><br/>Unidad: ${eq.unidad}`)
+          .join('<hr/>');
+
+        const marker = L.marker([grupo.lat, grupo.lng], { icon }).bindPopup(popupHtml);
+
+        // Si el grupo tiene más de 1 equipo, al hacer clic se hace zoom
+        if (grupo.equipos.length > 1) {
+          marker.on('click', () => {
+            this.map!.setView([grupo.lat, grupo.lng], this.map!.getZoom() + 2);
+          });
+        }
+
+        this.markerLayer.addLayer(marker);
+      });
+    };
+
+    dibujarGrupos();
+    this.map!.on('zoomend', dibujarGrupos);
   }
 }
