@@ -9,14 +9,24 @@
             ><mat-icon>front_loader</mat-icon
             ><span class="ms-2">Maquinaria</span></a
         >
+
+        <a mat-list-item routerLink="/mantenimientos">
+            <mat-icon>build_circle</mat-icon>
+            <span class="ms-2">Mantenimientos</span>
+        </a>
         <a mat-list-item routerLink="/tramites"
             ><mat-icon>assignment</mat-icon
             ><span class="ms-2">Trámites</span></a
         >
 
-        <a mat-list-item routerLink="/mantenimientos">
-            <mat-icon>build_circle</mat-icon>
-            <span class="ms-2">Mantenimientos</span>
+        <a mat-list-item (click)="abrirModalNotificaciones()">
+            <mat-icon>notifications</mat-icon>
+            <span class="ms-2">
+                Notificaciones
+                <span *ngIf="notificaciones.length > 0" class="badge-red">
+                    {{ notificaciones.length }}
+                </span>
+            </span>
         </a>
 
         <mat-list-item (click)="toggleReportes()" style="cursor: pointer">
@@ -37,15 +47,6 @@
                 ><span class="ms-2">Previsión anual</span></a
             >
         </div>
-        <a mat-list-item (click)="abrirModalNotificaciones()">
-            <mat-icon>notifications</mat-icon>
-            <span class="ms-2">
-                Notificaciones
-                <span *ngIf="notificaciones.length > 0" class="badge-red">
-                    {{ notificaciones.length }}
-                </span>
-            </span>
-        </a>
 
         <mat-list-item (click)="toggleConfig()" style="cursor: pointer">
             <mat-icon>settings</mat-icon>
