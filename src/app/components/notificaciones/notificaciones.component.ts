@@ -21,7 +21,6 @@ import { Tramite } from '../../models/tramite';
 import Swal from 'sweetalert2';
 import { TramiteDTO } from '../../models/DTO/tramiteDTO';
 import { TramiteService } from '../../services/tramite.service';
-import { TipoTramite } from '../../models/enum/TipoTramite';
 
 @Component({
     selector: 'notificaciones',

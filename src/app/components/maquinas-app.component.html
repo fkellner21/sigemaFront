@@ -7,6 +7,7 @@
                     [notificaciones]="notificaciones"
                     (abrirPerfilEvent)="abrirModalPerfil()"
                     (abrirNotificacionesEvent)="abrirModalNotificaciones()"
+                    (abrirLogsEvent)="abrirModalLogs()"
                     (cargarNotificacionesEvent)="cargarNotificaciones()"
                 >
                 </side-menu>
@@ -41,3 +42,5 @@
     (cancelEventEmiter)="cerrarModalNotificaciones()"
 >
 </notificaciones>
+
+<logs *ngIf="mostrarModalLogs" (cancelEventEmiter)="cerrarModalLogs()"></logs>

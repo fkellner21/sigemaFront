@@ -11,7 +11,6 @@ import { Notificacion } from '../../models/notificacion';
 import { Subscription } from 'rxjs';
 import { MaquinaService } from '../../services/equipo.service';
 
-
 @Component({
     selector: 'side-menu',
     standalone: true,
@@ -26,15 +25,15 @@ import { MaquinaService } from '../../services/equipo.service';
     templateUrl: './side-menu.component.html',
     styleUrl: './side-menu.component.css',
 })
+
 export class SideMenuComponent implements OnInit, OnDestroy {
     isConfigOpen = false;
-    // Recibe las notificaciones del componente padre (maquinas-app)
     @Input() notificaciones: Notificacion[] = [];
     
-    // Ahora, solo emite eventos para que el padre gestione los modales
     @Output() abrirPerfilEvent = new EventEmitter<void>();
     @Output() abrirNotificacionesEvent = new EventEmitter<void>();
     @Output() cargarNotificacionesEvent = new EventEmitter<void>();
+    @Output() abrirLogsEvent = new EventEmitter<void>();
 
     isReportesOpen = false;
     roles!: { key: string; label: string }[];
@@ -86,14 +85,16 @@ export class SideMenuComponent implements OnInit, OnDestroy {
         this.router.navigate(['/login']);
     }
 
-    // Este método ya no gestiona el formulario, solo emite un evento
     abrirModalNotificaciones() {
         this.abrirNotificacionesEvent.emit();
     }
 
-    // Este método ya no gestiona el formulario, solo emite un evento
     abrirModalPerfil() {
         this.abrirPerfilEvent.emit();
+    }
+
+    abrirLogs(){
+        this.abrirLogsEvent.emit();
     }
 
         generarReporteIndicadoresGestion() {
@@ -146,4 +147,3 @@ export class SideMenuComponent implements OnInit, OnDestroy {
             });
         }
 }
-

@@ -3,7 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { SideMenuComponent } from './side-menu/side-menu.component';
-import { UsuarioFormComponent } from '../components/usuarios/form/usuario-form.component'; 
+import { UsuarioFormComponent } from '../components/usuarios/form/usuario-form.component';
 import { NotificacionesComponent } from '../components/notificaciones/notificaciones.component';
 import { Usuario } from '../models/usuario';
 import { Rol } from '../models/enum/Rol';
@@ -16,98 +16,118 @@ import { UnidadService } from '../services/unidad.service';
 import { NotificacionesService } from '../services/notificacion.service';
 import Swal from 'sweetalert2';
 import { Notificacion } from '../models/notificacion';
+import { LogComponent } from './logs/logs.component';
 
 @Component({
-  selector: 'maquinas-app',
-  standalone: true,
-  imports: [RouterOutlet, SideMenuComponent, CommonModule, UsuarioFormComponent, NotificacionesComponent],
-  templateUrl: './maquinas-app.component.html',
-  styleUrls: ['./maquinas-app.component.css'],
+    selector: 'maquinas-app',
+    standalone: true,
+    imports: [
+        RouterOutlet,
+        SideMenuComponent,
+        CommonModule,
+        UsuarioFormComponent,
+        NotificacionesComponent,
+        LogComponent,
+    ],
+    templateUrl: './maquinas-app.component.html',
+    styleUrls: ['./maquinas-app.component.css'],
 })
 export class MaquinasAppComponent implements OnInit {
-  mostrarFormularioPerfil = false;
-  usuario!: Usuario;
-   
-  abrirFormularioNotificaciones = false;
-  usuarioOriginal!: Usuario;
-  roles!: { key: string; label: string }[];
-  grados: Grado[] = [];
-  unidades: Unidad[] = [];
-  notificaciones: Notificacion[] = [];
+    mostrarFormularioPerfil = false;
+    usuario!: Usuario;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private usuarioService: UsuarioService,
-    private gradosService: gradoService,
-    private unidadService: UnidadService,
-    private notificacionesService: NotificacionesService
-  ) {}
+    abrirFormularioNotificaciones = false;
+    mostrarModalLogs = false;
+    usuarioOriginal!: Usuario;
+    roles!: { key: string; label: string }[];
+    grados: Grado[] = [];
+    unidades: Unidad[] = [];
+    notificaciones: Notificacion[] = [];
 
-    ngOnInit(): void {
+    constructor(
+        private router: Router,
+        private authService: AuthService,
+        private usuarioService: UsuarioService,
+        private gradosService: gradoService,
+        private unidadService: UnidadService,
+        private notificacionesService: NotificacionesService
+    ) {}
 
+    ngOnInit(): void {}
+
+    isLoginRoute(): boolean {
+        return this.router.url === '/login';
     }
 
-
-  isLoginRoute(): boolean {
-    return this.router.url === '/login';
-  }
-
-  abrirModalPerfil(): void {
-    const idUsuario = this.authService.getIdUsuario();
-    if (idUsuario) {
-      // Cargar el usuario, grados y unidades para el formulario
-      this.usuarioService.findById(idUsuario).subscribe({
-        next: (resp) => {
-          this.usuarioOriginal = resp;
-          this.usuario = { ...this.usuarioOriginal }; // Clonar para evitar mutaciones directas
-          this.roles = Object.keys(Rol).map((key) => ({ key, label: Rol[key as keyof typeof Rol] }));
-          this.gradosService.findAll().subscribe(resp => this.grados = resp);
-          this.unidadService.findAll().subscribe(resp => this.unidades = resp);
-          this.mostrarFormularioPerfil = true;
-        },
-        error: (err) => {
-          Swal.fire('Error', 'No se pudo cargar el usuario para el perfil. ' + err.error, 'error');
-        },
-      });
-    } else {
-      this.router.navigate(['/login']);
+    abrirModalPerfil(): void {
+        const idUsuario = this.authService.getIdUsuario();
+        if (idUsuario) {
+            this.usuarioService.findById(idUsuario).subscribe({
+                next: (resp) => {
+                    this.usuarioOriginal = resp;
+                    this.usuario = { ...this.usuarioOriginal };
+                    this.roles = Object.keys(Rol).map((key) => ({
+                        key,
+                        label: Rol[key as keyof typeof Rol],
+                    }));
+                    this.gradosService
+                        .findAll()
+                        .subscribe((resp) => (this.grados = resp));
+                    this.unidadService
+                        .findAll()
+                        .subscribe((resp) => (this.unidades = resp));
+                    this.mostrarFormularioPerfil = true;
+                },
+                error: (err) => {
+                    Swal.fire(
+                        'Error',
+                        'No se pudo cargar el usuario para el perfil. ' +
+                            err.error,
+                        'error'
+                    );
+                },
+            });
+        } else {
+            this.router.navigate(['/login']);
+        }
     }
-  }
 
-  cerrarModalPerfil(): void {
-    this.mostrarFormularioPerfil = false;
-  }
+    cerrarModalPerfil(): void {
+        this.mostrarFormularioPerfil = false;
+    }
 
-  guardarUsuario(usuario: any): void {
-    const request$ = usuario.id
-      ? this.usuarioService.edit(usuario.id, usuario)
-      : this.usuarioService.addNew(usuario);
+    guardarUsuario(usuario: any): void {
+        const request$ = usuario.id
+            ? this.usuarioService.edit(usuario.id, usuario)
+            : this.usuarioService.addNew(usuario);
 
-    request$.subscribe({
-      next: () => {
-        this.cerrarModalPerfil();
-        Swal.fire({
-          icon: 'success',
-          title: usuario.id ? 'Usuario actualizado' : 'Usuario creado',
-          text: usuario.id
-            ? 'El usuario ha sido actualizado correctamente.'
-            : 'El usuario ha sido creado correctamente.',
-          timer: 2000,
-          showConfirmButton: false,
+        request$.subscribe({
+            next: () => {
+                this.cerrarModalPerfil();
+                Swal.fire({
+                    icon: 'success',
+                    title: usuario.id
+                        ? 'Usuario actualizado'
+                        : 'Usuario creado',
+                    text: usuario.id
+                        ? 'El usuario ha sido actualizado correctamente.'
+                        : 'El usuario ha sido creado correctamente.',
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+            },
+            error: (err) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text:
+                        'Ocurrió un error al guardar el usuario. ' + err.error,
+                });
+            },
         });
-      },
-      error: (err) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Ocurrió un error al guardar el usuario. ' + err.error,
-        });
-      },
-    });
-  }
+    }
 
-      // Lógica para el modal de notificaciones
+    // Lógica para el modal de notificaciones
     cargarNotificaciones(): void {
         this.notificacionesService.findAll().subscribe({
             next: (resp) => {
@@ -116,7 +136,9 @@ export class MaquinasAppComponent implements OnInit {
             error: (err) => {
                 Swal.fire({
                     title: 'Error',
-                    text: 'No se pudieron cargar las notificaciones. ' + err.error,
+                    text:
+                        'No se pudieron cargar las notificaciones. ' +
+                        err.error,
                     icon: 'error',
                 });
             },
@@ -130,5 +152,13 @@ export class MaquinasAppComponent implements OnInit {
     cerrarModalNotificaciones(): void {
         this.abrirFormularioNotificaciones = false;
         this.cargarNotificaciones();
+    }
+
+    abrirModalLogs(): void {
+        this.mostrarModalLogs = true;
+    }
+
+    cerrarModalLogs(): void {
+        this.mostrarModalLogs = false;
     }
 }
