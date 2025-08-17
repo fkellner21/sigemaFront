@@ -70,6 +70,10 @@ export class SideMenuComponent implements OnInit, OnDestroy {
         }
     }
 
+    obtenerRolUsuario(){
+        return this.authService.getRol();
+    }
+
     toggleConfig() {
         this.isConfigOpen = !this.isConfigOpen;
     }

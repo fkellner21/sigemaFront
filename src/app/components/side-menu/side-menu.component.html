@@ -73,7 +73,8 @@
                 <mat-icon>admin_panel_settings</mat-icon>
                 <span class="ms-2">Grados</span>
             </a>
-            <a mat-list-item (click)="abrirLogs()">
+            
+            <a *ngIf="obtenerRolUsuario() == 'ROLE_ADMINISTRADOR'" mat-list-item (click)="abrirLogs()">
                 <mat-icon>description</mat-icon>
                 <span class="ms-2">Logs</span>
             </a>
