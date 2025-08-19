@@ -84,6 +84,27 @@ export class DocumentoFormComponent implements OnInit {
     getDocumento(id: number): string {
         return `${environment.apiUrl}/api/modelosEquipo/documentos/${id}/descargar`;
     }
+    descargarDocumento(id: number, nombre: string) {
+        this.http.get(`${environment.apiUrl}/api/modelosEquipo/documentos/${id}/descargar`, {
+            headers: {
+            Authorization: `Bearer ${this.authservice.getToken()}`
+            },
+            responseType: 'blob'
+        }).subscribe({
+            next: (blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = nombre;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            },
+            error: (err) => {
+            console.error('Error al descargar documento', err);
+            Swal.fire('Error', 'No se pudo descargar el documento', 'error');
+            }
+        });
+    }
 
     eliminarDocumento(id: number) {
         Swal.fire({
