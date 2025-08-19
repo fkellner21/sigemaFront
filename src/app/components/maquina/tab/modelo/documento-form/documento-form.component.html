@@ -9,12 +9,12 @@
                     {{ doc.nombreArchivo }}
                 </div>
                 <div class="col-2">
-                    <a
-                        [href]="descargarDocumento(doc.id, doc.nombreArchivo)"
-                        target="_blank"
+                    <button
+                        (click)="descargarDocumento(doc.id, doc.nombreArchivo)"
                         class="btn btn-sm btn-outline-primary"
-                        >Descargar</a
                     >
+                        Descargar
+                    </button>
                 </div>
                 <div class="col-2">
                     <button
