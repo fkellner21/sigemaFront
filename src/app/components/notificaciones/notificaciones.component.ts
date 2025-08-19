@@ -96,9 +96,9 @@ export class NotificacionesComponent implements OnInit, OnChanges {
 
     abrirTramite(idTramite: number) {
         this.tramiteService.findById(idTramite).subscribe({
-            next: (tramite) => {
+            next: (tramite:Tramite) => {
                 this.tramiteSeleccionado = tramite;
-                this.tramiteSeleccionado.idUnidadDestino =
+                this.tramiteSeleccionado.idUnidadDestino = 
                     tramite.unidadDestino?.id ?? 0;
                 this.tramiteSeleccionado.idUnidadOrigen =
                     tramite.unidadOrigen?.id ?? 0;
@@ -106,7 +106,6 @@ export class NotificacionesComponent implements OnInit, OnChanges {
                 this.tramiteSeleccionado.idRepuesto = tramite.repuesto?.id ?? 0;
                 this.tramiteSeleccionado.tipoTramite = tramite.tipoTramite;
                 this.tramiteSeleccionado.estado = tramite.estado;
-
                 if (
                     tramite.tipoTramite?.toString() === "AltaEquipo" ||
                     tramite.tipoTramite?.toString() === "BajaEquipo"

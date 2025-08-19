@@ -54,11 +54,11 @@ export class HomeComponent implements OnInit{
     })
   }
   transformarAporcentajes() {
-    let total:number = this.equiposEnVerde+this.equiposEnAmarillo+this.equiposEnRojo+this.equiposEnNegro;
-    this.equiposEnVerde=Number((this.equiposEnVerde/total*100).toFixed(0));
-    this.equiposEnAmarillo=Number((this.equiposEnAmarillo/total*100).toFixed(0));
-    this.equiposEnRojo=Number((this.equiposEnRojo/total*100).toFixed(0));
-    this.equiposEnNegro=Number((this.equiposEnNegro/total*100).toFixed(0));
+    let total:number = this.equiposEnVerde+this.equiposEnAmarillo+this.equiposEnRojo+this.equiposEnNegro||0;
+    this.equiposEnVerde=Number((this.equiposEnVerde/total*100).toFixed(0))||0;
+    this.equiposEnAmarillo=Number((this.equiposEnAmarillo/total*100).toFixed(0))||0;
+    this.equiposEnRojo=Number((this.equiposEnRojo/total*100).toFixed(0))||0;
+    this.equiposEnNegro=Number((this.equiposEnNegro/total*100).toFixed(0))||0;
   }
 
 

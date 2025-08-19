@@ -53,7 +53,11 @@ export class MaquinasAppComponent implements OnInit {
         private notificacionesService: NotificacionesService
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.unidadService.findAll().subscribe((unidadesRecibidas) => {
+            this.unidades = unidadesRecibidas ?? [];
+        });
+    }
 
     isLoginRoute(): boolean {
         return this.router.url === '/login';
