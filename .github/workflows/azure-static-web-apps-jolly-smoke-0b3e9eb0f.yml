@@ -45,3 +45,11 @@ jobs:
           output_location: "dist/maquinas/browser/" # Built app content directory - optional
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
+
+      - name: Generate Static Web App Config
+        run: |
+          echo '{
+            "routes": [
+              { "route": "/*", "serve": "/index.html", "statusCode": 200 }
+            ]
+          }' > dist/maquinas/browser/staticwebapp.config.json
