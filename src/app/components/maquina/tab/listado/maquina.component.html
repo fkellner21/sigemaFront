@@ -137,7 +137,7 @@
                     KMs/HT
                 </th>
                 <td mat-cell *matCellDef="let element">
-                    {{ element.cantidadUnidadMedida }}
+                    {{ element.cantidadUnidadMedida?.toFixed(2) }}
                     {{ element.modeloEquipo?.unidadMedida }}
                 </td>
             </ng-container>
