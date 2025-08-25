@@ -21,7 +21,7 @@ jobs:
         run: npm install --legacy-peer-deps
         
       - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client --legacy-peer-deps
+        run: npm install @actions/core @actions/http-client --legacy-peer-deps
         
       - name: Get Id Token
         uses: actions/github-script@v6
@@ -54,5 +54,6 @@ jobs:
           api_location: "" 
           output_location: "dist/maquinas/browser/" 
           github_id_token: ${{ steps.idtoken.outputs.result }}
+
 
 
