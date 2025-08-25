@@ -39,9 +39,10 @@ jobs:
         run: |
           mkdir -p dist/maquinas/browser
           echo '{
-            "routes": [
-              { "route": "/*", "serve": "/index.html", "statusCode": 200 }
-            ]
+            "navigationFallback": {
+              "rewrite": "/index.html",
+              "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
+            }
           }' > dist/maquinas/browser/staticwebapp.config.json
 
       - name: Deploy to Azure Static Web App
@@ -53,4 +54,5 @@ jobs:
           api_location: "" 
           output_location: "dist/maquinas/browser/" 
           github_id_token: ${{ steps.idtoken.outputs.result }}
+
 
