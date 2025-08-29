@@ -9,3 +9,6 @@ body {
   overflow-x: hidden !important;
 }
 
+.cdk-overlay-container, .cdk-overlay-pane {
+  z-index: 1200 !important;
+}
