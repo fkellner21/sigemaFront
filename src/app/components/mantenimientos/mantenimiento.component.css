@@ -20,6 +20,7 @@ th {
 }
 .mat-datepicker-content {
   z-index: 1200 !important;
+  background-color: #f0f0f0;
 }
 
 .row, table {
