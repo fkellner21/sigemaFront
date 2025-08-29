@@ -38,7 +38,7 @@
                 </button>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 date">
             <form [formGroup]="form">
                 <mat-form-field>
                     <mat-label>Defina un rango de fechas</mat-label>
@@ -61,7 +61,10 @@
                         matIconSuffix
                         [for]="picker"
                     ></mat-datepicker-toggle>
-                    <mat-date-range-picker (closed)="onDateRangeSelected()" #picker></mat-date-range-picker>
+                    <mat-date-range-picker
+                        (closed)="onDateRangeSelected()"
+                        #picker
+                    ></mat-date-range-picker>
                 </mat-form-field>
             </form>
         </div>
@@ -398,7 +401,7 @@
         position: relative !important;
     }
 
-    ::ng-deep .mat-mdc-tab-header{
+    ::ng-deep .mat-mdc-tab-header {
         z-index: 0 !important;
     }
 </style>
