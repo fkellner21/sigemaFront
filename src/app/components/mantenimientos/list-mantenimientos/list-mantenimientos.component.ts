@@ -6,6 +6,7 @@ import { Mantenimiento } from '../../../models/mantenimiento';
 import { MantenimientoService } from '../../../services/mantenimiento.service';
 import Swal from 'sweetalert2';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-list-mantenimientos',
@@ -38,7 +39,7 @@ export class ListMantenimientosComponent implements OnInit {
         this.filtro = filterValue;
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
-    constructor(private mantenimientoService: MantenimientoService) {}
+    constructor(private mantenimientoService: MantenimientoService, public authservice: AuthService) {}
 
     ngOnInit() {
         this.cargarMantenimientos();

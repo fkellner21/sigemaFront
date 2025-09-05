@@ -250,6 +250,10 @@
                                 </div>
                                 <div class="col-md-2 align-self-end">
                                     <button
+                                        *ngIf="
+                                            authservice.getRol() !=
+                                            'ROLE_UNIDAD'
+                                        "
                                         type="button"
                                         class="btn btn-dark my-2 w-100 align-self-end"
                                         (click)="onAddRepuesto()"
@@ -308,6 +312,10 @@
                                             class="text-center"
                                         >
                                             <button
+                                                *ngIf="
+                                                    authservice.getRol() !=
+                                                    'ROLE_UNIDAD'
+                                                "
                                                 type="button"
                                                 class="btn btn-danger btn-sm"
                                                 (click)="onRemoveRepuesto(i)"
@@ -348,6 +356,9 @@
                         <div class="row justify-content-between mt-3">
                             <div class="col-4">
                                 <button
+                                    *ngIf="
+                                        authservice.getRol() != 'ROLE_UNIDAD'
+                                    "
                                     type="submit"
                                     class="btn btn-primary"
                                     [disabled]="mantenimientoForm.invalid"

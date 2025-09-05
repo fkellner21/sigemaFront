@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { MantenimientoDTO } from '../../../models/DTO/mantenimientoDTO';
 import { RepuestoMantenimiento } from '../../../models/RepuestoMantenimiento';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'mantenimiento-form',
@@ -45,7 +46,7 @@ export class MantenimientoFormComponent implements OnInit {
 
     constructor(
         private modeloService: modeloService,
-        private mantenimientoService: MantenimientoService
+        private mantenimientoService: MantenimientoService, public authservice: AuthService
     ) {}
 
     ngOnInit(): void {
