@@ -12,7 +12,8 @@ import Swal from 'sweetalert2';
 import { Equipo } from '../../models/equipo';
 import { MantenimientoFormComponent } from './mantenimiento-form/mantenimiento-form.component';
 import { Mantenimiento } from '../../models/mantenimiento';
-
+import { AuthService } from '../../services/auth.service';
+ 
 @Component({
     selector: 'app-mantenimientos',
     standalone: true,
@@ -31,8 +32,8 @@ import { Mantenimiento } from '../../models/mantenimiento';
     styleUrls: ['./mantenimiento.component.css'],
 })
 export class MantenimientosComponent implements OnInit {
-    displayedColumns: string[] = [     
-        'equipo',   
+    displayedColumns: string[] = [    
+        'equipo',  
         'fecha',
         'detalle',
         'cantidad',
@@ -42,36 +43,35 @@ export class MantenimientosComponent implements OnInit {
     isLoading: boolean = false;
     mostrarFormulario:boolean=false;
     nuevoMantenimiento: any;
-    
+   
     // Filtros de fecha
     fechaDesde: Date | null = null;
     fechaHasta: Date | null = null;
-    
+   
     @Input() equipo!: Equipo;
     //@Output() openEventEmitter = new EventEmitter();
-
-    constructor(private mantenimientoService: MantenimientoService) {
+ 
+    constructor(private mantenimientoService: MantenimientoService, public authservice: AuthService) {
         // Establecer fechas por defecto (últimos 7 días)
         const hoy = new Date();
         const haceUnaSemana = new Date();
         haceUnaSemana.setDate(hoy.getDate() - 7);
-        
+       
         this.fechaDesde = haceUnaSemana;
         this.fechaHasta = hoy;
     }
-
+ 
     ngOnInit(): void {
         this.cargarMantenimientos();
     }
-
+ 
     cargarMantenimientos() {
-        this.mostrarFormulario=false;
         this.isLoading = true;
-        
+       
         // Formatear fechas para el backend (yyyy-MM-dd)
         const desde = this.fechaDesde ? this.formatDateForBackend(this.fechaDesde) : null;
         const hasta = this.fechaHasta ? this.formatDateForBackend(this.fechaHasta) : null;
-        
+       
         this.mantenimientoService.findAllByDates(desde, hasta).subscribe({
             next: (resp) => {
                 this.dataSource = resp;
@@ -87,27 +87,27 @@ export class MantenimientosComponent implements OnInit {
             },
         });
     }
-
+ 
     private formatDateForBackend(date: Date): string {
         return date.toISOString().split('T')[0]; // yyyy-MM-dd
     }
-
+ 
     aplicarFiltro() {
         this.cargarMantenimientos();
     }
-
+ 
     limpiarFiltros() {
         // Restablecer a los últimos 7 días
         const hoy = new Date();
         const haceUnaSemana = new Date();
         haceUnaSemana.setDate(hoy.getDate() - 7);
-        
+       
         this.fechaDesde = haceUnaSemana;
         this.fechaHasta = hoy;
-        
+       
         this.cargarMantenimientos();
     }
-
+ 
     eliminarMantenimiento(id: number) {
         Swal.fire({
             title: '¿Eliminar mantenimiento?',
@@ -138,17 +138,17 @@ export class MantenimientosComponent implements OnInit {
             }
         });
     }
-
+ 
     abrirFormulario(id: number) {
         if (id && id > 0) {
             this.nuevoMantenimiento = {
                 ...(this.dataSource.find((m) => m.id == id))
             };
-        } 
+        }
         this.equipo=this.nuevoMantenimiento.equipo;
         this.mostrarFormulario = true;
     }
-    
+   
     cerrarFormulario() {
         this.mostrarFormulario = false;
     }
