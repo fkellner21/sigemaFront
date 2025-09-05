@@ -134,8 +134,8 @@
                 </th>
                 <td mat-cell *matCellDef="let m" class="text-center">
                     <button
-                        *ngIf="authservice.getRol() == 'ADMINISTRADOR' ||
-                            authservice.getRol() == 'BRIGADA' || authservice.getRol() == 'ADMINISTRADOR_UNIDAD'"
+                        *ngIf="authservice.getRol() == 'ROLE_ADMINISTRADOR' ||
+                            authservice.getRol() == 'ROLE_BRIGADA' || authservice.getRol() == 'ROLE_ADMINISTRADOR_UNIDAD'"
                         class="btn btn-dark btn-sm me-2"
                         (click)="abrirFormulario(m.id ?? 0)"
                         title="Editar"
