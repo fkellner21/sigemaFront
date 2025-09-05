@@ -106,7 +106,30 @@
                     >
                         <i class="bi bi-pencil"></i>
                     </button>
-                    <button
+<!-- Botón eliminar usuario -->
+<button
+    *ngIf="
+        authservice.getIdUsuario() != element.id &&
+        (
+            authservice.getRol() == 'ROLE_ADMINISTRADOR' || 
+            (
+                authservice.getRol() == 'ROLE_BRIGADA' &&
+                element.rol != 'ADMINISTRADOR' &&
+                element.rol != 'BRIGADA'
+            )
+        )
+    "
+    class="btn btn-danger btn-sm"
+    (click)="eliminarUsuario(element.id)"
+    title="Eliminar usuario"
+>
+    <i class="bi bi-trash"></i>
+</button>
+
+                </td>
+            </ng-container>
+
+                                <!-- <button
                         *ngIf="
                             authservice.getIdUsuario() != element.id &&
                             (authservice.getRol() == 'ROLE_ADMINISTRADOR' ||
@@ -123,9 +146,8 @@
                         title="Eliminar usuario"
                     >
                         <i class="bi bi-trash"></i>
-                    </button>
-                </td>
-            </ng-container>
+                    </button> -->
+
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
