@@ -116,7 +116,9 @@ export class TramiteRepuestoFormComponent {
                 )
                 .subscribe({
                     next: (resp) => {
-                        this.repuestos.push(...resp);
+                        resp.forEach(r => {
+                            this.repuestos.push(r);
+                        });
                     },
                     error: (error) => {
                         Swal.fire({
@@ -156,7 +158,6 @@ export class TramiteRepuestoFormComponent {
                 .cargarRepuestos(modeloId, TipoRepuesto.Lubricante)
                 .subscribe({
                     next: (resp) => {
-                        console.log(resp);
                         this.repuestos = resp;
                         this.tramite.repuesto = null as any;
                     },
@@ -180,7 +181,9 @@ export class TramiteRepuestoFormComponent {
                 .cargarRepuestos(modeloId, TipoRepuesto.Pieza)
                 .subscribe({
                     next: (resp) => {
-                        this.repuestos.push(...resp);
+                        resp.forEach(r => {
+                            this.repuestos.push(r);
+                        });
                         this.tramite.repuesto = null as any;
                     },
                     error: (error) => {

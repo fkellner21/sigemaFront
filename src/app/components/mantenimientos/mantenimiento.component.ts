@@ -65,6 +65,7 @@ export class MantenimientosComponent implements OnInit {
     }
 
     cargarMantenimientos() {
+        this.mostrarFormulario=false;
         this.isLoading = true;
         
         // Formatear fechas para el backend (yyyy-MM-dd)
