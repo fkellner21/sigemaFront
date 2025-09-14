@@ -33,13 +33,12 @@ export class MapComponent implements OnInit, OnChanges {
 
     private cargarMapasBase(): void {
         const osm = L.tileLayer(
-            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=iSUENjx5EjDEEMY8VEuT',
             {
-                attribution: '© OpenStreetMap contributors',
-                userAgent: 'Sigema/1.0'
+                attribution: '© MapTiler © OpenStreetMap contributors',
             }
         );
-
+        
         const IDEuy = L.tileLayer.wms(
             'https://mapas.ide.uy/geoserver-raster/ortofotos/wms',
             {
