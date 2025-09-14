@@ -35,7 +35,8 @@ export class MapComponent implements OnInit, OnChanges {
         const osm = L.tileLayer(
             'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
-                attribution: '© OpenStreetMap',
+                attribution: '© OpenStreetMap contributors',
+                userAgent: 'Sigema/1.0'
             }
         );
 
