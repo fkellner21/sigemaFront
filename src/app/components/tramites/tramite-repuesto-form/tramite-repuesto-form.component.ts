@@ -139,6 +139,7 @@ export class TramiteRepuestoFormComponent {
             const fechaB = b.fecha ? new Date(b.fecha).getTime() : 0;
             return fechaB - fechaA;
         });
+
     }
 
 
@@ -147,12 +148,11 @@ export class TramiteRepuestoFormComponent {
     }
 
     compareRpuestos(r1: Repuesto, r2: Repuesto): boolean {
-        return r1 && r2 ? r1.id === r2.id : r1 === r2;
+        return r1 && r2 ? r1.id == r2.id : r1 == r2;
     }
 
     onEquipoChange() {
         const modeloId = this.tramite.equipo?.modeloEquipo?.id;
-        console.log(modeloId)
         if (modeloId) {
             this.modeloService
                 .cargarRepuestos(modeloId, TipoRepuesto.Lubricante)
