@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
     styleUrls: ['./login.component.css'],
     imports: [FormsModule, CommonModule],
 })
+
 export class LoginComponent implements OnInit{
     loginDTO: LoginDTO = new LoginDTO();
     isLoading: boolean=false;

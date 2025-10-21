@@ -1,49 +1,75 @@
-<div class="fondo">
-    <div *ngIf="isLoading" class="form text-center">
-        <p><strong> Cargando... </strong></p>
-        <div class="spinner-border text-dark" role="status">
-            <span class="visually-hidden">Cargando...</span>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body class="body">
+        <div *ngIf="isLoading" class="form text-center">
+            <p><strong> Cargando... </strong></p>
+            <div class="spinner-border text-dark" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
         </div>
-    </div>
-    <div *ngIf="!isLoading">
-        <form (ngSubmit)="onSubmit(login)" #login="ngForm">
-            <h3>Login</h3>
 
-            <label for="username">Cédula</label>
-            <input
-                type="text"
-                placeholder="Cédula"
-                id="username"
-                name="username"
-                [(ngModel)]="loginDTO.username"
-                required
-                #username="ngModel"
-            />
-            @if(username.invalid && (username.dirty || username.touched)){
-            @if(username.errors!['required']){
-            <div class="alert" style="background-color: rgb(255, 122, 122)">
-                Debe ingresar la Cédula
-            </div>
-            } }
+        <div *ngIf="!isLoading">
+            <form (ngSubmit)="onSubmit(login)" class="form" #login="ngForm">
+                <!-- Grid: col1 & col2 tienen 3 filas; col3 utiliza solo las dos primeras filas -->
 
-            <label for="password">Contraseña</label>
-            <input
-                type="password"
-                placeholder="Contraseña"
-                id="password"
-                name="password"
-                [(ngModel)]="loginDTO.password"
-                required
-                #password="ngModel"
-            />
-            @if(password.invalid && (password.dirty || password.touched)){
-            @if(password.errors!['required']){
-            <div class="alert" style="background-color: rgb(255, 122, 122)">
-                Debe ingresar la Contraseña
-            </div>
-            } }
+                <label for="username" class="u-label"
+                    ><img src="../../../assets/img/flechitaazul.gif" alt="" />
+                    Usuario:</label
+                >
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    [(ngModel)]="loginDTO.username"
+                    required
+                    #username="ngModel"
+                    size="30"
+                    class="u-input"
+                />
+                <img
+                    src="../../../assets/img/sistema.gif"
+                    alt=""
+                    class="u-img"
+                />
 
-            <button type="submit" [disabled]="login.invalid">Ingresar</button>
-        </form>
-    </div>
-</div>
+                <label for="password" class="p-label">
+                    <img src="../../../assets/img/flechitaazul.gif" alt="" />
+                    Contraseña:</label
+                >
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    [(ngModel)]="loginDTO.password"
+                    required
+                    #password="ngModel"
+                    size="30"
+                    class="p-input"
+                />
+                <img
+                    src="../../../assets/img/gestion.GIF"
+                    alt=""
+                    class="p-img"
+                />
+                <div class="btn-spacer"></div>
+                <input
+                    class="submit btn-login"
+                    type="submit"
+                    [disabled]="login.invalid"
+                    value="Login"
+                />
+                <div class="btn-empty"></div>
+                <div class="explain full-width">
+                    Ante problemas de login, elimine los archivos temporales de
+                    internet y revise la configuración del explorador
+                    <a href="#">Click aquí</a>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
